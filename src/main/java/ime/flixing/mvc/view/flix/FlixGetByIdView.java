@@ -9,8 +9,6 @@ import ime.flixing.entity.Flix;
 import ime.flixing.mvc.controller.FlixController;
 import ime.flixing.tool.Checker;
 import ime.flixing.tool.DecoHelper;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.swing.JLabel;
 import javax.swing.SpringLayout;
@@ -22,18 +20,14 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-@Getter
-@Setter
+
 public class FlixGetByIdView extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	private JLabel lblCod;
-	private JButton btnSearch;
 	private JSpinner spFlixCod;
 	private JScrollPane spFlix;
 	private JTextArea taFlix;
-	private JButton btnBack;
 	
 	/**
 	 * Launch the application.
@@ -66,12 +60,12 @@ public class FlixGetByIdView extends JDialog {
 		SpringLayout sl_contentPanel = new SpringLayout();
 		contentPanel.setLayout(sl_contentPanel);
 		
-		lblCod = new JLabel("Flix Code");
+		JLabel lblCod = new JLabel("Flix Code");
 		sl_contentPanel.putConstraint(SpringLayout.NORTH, lblCod, 10, SpringLayout.NORTH, contentPanel);
 		sl_contentPanel.putConstraint(SpringLayout.WEST, lblCod, 22, SpringLayout.WEST, contentPanel);
 		contentPanel.add(lblCod);
 		
-		btnSearch = new JButton("Search");
+		JButton btnSearch = new JButton("Search");
 		sl_contentPanel.putConstraint(SpringLayout.WEST, btnSearch, 129, SpringLayout.EAST, lblCod);
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -83,8 +77,7 @@ public class FlixGetByIdView extends JDialog {
 		sl_contentPanel.putConstraint(SpringLayout.NORTH, btnSearch, 0, SpringLayout.NORTH, lblCod);
 		contentPanel.add(btnSearch);	
 		
-		SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(0, 0, 33, 1);
-		spFlixCod = new JSpinner(spinnerNumberModel);
+		spFlixCod = new JSpinner(new SpinnerNumberModel(0, 0, 33, 1));
 		lblCod.setLabelFor(spFlixCod);
 		sl_contentPanel.putConstraint(SpringLayout.NORTH, spFlixCod, -3, SpringLayout.NORTH, lblCod);
 		sl_contentPanel.putConstraint(SpringLayout.WEST, spFlixCod, 28, SpringLayout.EAST, lblCod);
@@ -103,7 +96,7 @@ public class FlixGetByIdView extends JDialog {
 		taFlix.setLineWrap(true);
 		spFlix.setViewportView(taFlix);
 		
-		btnBack = new JButton("Back");
+		JButton btnBack = new JButton("Back");
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -125,17 +118,17 @@ public class FlixGetByIdView extends JDialog {
 			
 			if ( optFlix.isPresent() ) {				
 				
-				getTaFlix().setText(optFlix.get().toString());
+				taFlix.setText(optFlix.get().toString());
 
 			}else {
 				
-				getTaFlix().setText("\t" + DecoHelper.MSG_NULL_ERROR);
+				taFlix.setText("\t" + DecoHelper.MSG_ERROR_NULL);
 				
 			}
 			
 		}
 		else {
-			getTaFlix().setText("\t" + DecoHelper.MSG_COD_ERROR);
+			taFlix.setText("\t" + DecoHelper.MSG_ERROR_COD);
 		}
 	}
 }
