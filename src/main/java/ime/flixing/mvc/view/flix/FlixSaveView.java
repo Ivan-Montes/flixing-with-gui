@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SpringLayout;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.JSpinner;
 
 public class FlixSaveView extends JDialog {
@@ -67,8 +68,8 @@ public class FlixSaveView extends JDialog {
 		sl_contentPanel.putConstraint(SpringLayout.EAST, tfFlixName, -17, SpringLayout.EAST, contentPanel);
 		contentPanel.add(tfFlixName);
 		tfFlixName.setColumns(10);
-		
-		spGenreId = new JSpinner();
+
+		spGenreId = new JSpinner(new SpinnerNumberModel(0, 0, 33, 1));
 		sl_contentPanel.putConstraint(SpringLayout.WEST, tfFlixName, 0, SpringLayout.WEST, spGenreId);
 		sl_contentPanel.putConstraint(SpringLayout.NORTH, spGenreId, 48, SpringLayout.NORTH, contentPanel);
 		sl_contentPanel.putConstraint(SpringLayout.WEST, spGenreId, 79, SpringLayout.WEST, contentPanel);
@@ -110,14 +111,23 @@ public class FlixSaveView extends JDialog {
 			if (optFlixSaved.isPresent() ) {
 				
 				JOptionPane.showMessageDialog(this, DecoHelper.MSG_SUCCESSFULLY);
+				cleanFields();
 				
 			}else {
-				JOptionPane.showMessageDialog(this, "Any error");
+				JOptionPane.showMessageDialog(this, DecoHelper.MSG_ERROR_PROCESS);
 			}		
 			
 			
 		}else {
-			JOptionPane.showMessageDialog(this, "\t" + DecoHelper.MSG_DATA_ERROR);
+			JOptionPane.showMessageDialog(this, "\t" + DecoHelper.MSG_ERROR_DATA);
 		}
+	}
+	
+
+	private void cleanFields() {
+		
+		tfFlixName.setText("");
+		spGenreId.setValue(0);
+		
 	}
 }
