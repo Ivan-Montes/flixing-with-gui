@@ -118,7 +118,7 @@ public class FlixGetAllView extends JDialog {
 			
 			String [] aTitles = {"FlixId", "Title", "GenreId", "GenreName"};
 			Object[][] aFlix = IntStream.range(0, optListFlix.get().size() )
-                    .mapToObj((i) -> new Object []{
+                    .mapToObj( i -> new Object []{
                     		optListFlix.get().get(i).getFlixId(),
                     		optListFlix.get().get(i).getTitle(),
                     		optListFlix.get().get(i).getGenre() !=null?optListFlix.get().get(i).getGenre().getGenreId():null,
