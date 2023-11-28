@@ -80,17 +80,13 @@ public class GenreController {
 		Optional<Genre>optGenre = Optional.empty();
 		Genre genre = new Genre();
 		
-		if( Checker.checkName(genreName) && Checker.checkDescription(genreDescription) ) {
+		if( Checker.checkName(genreName) && Checker.checkDescription(genreDescription) ) {			
 			
-			GenreDao genreDao = new GenreDaoImpl();			
-			List<Genre>list = genreDao.getGenreByName(genreName);
-			
-			
-			if ( list.isEmpty() ) {
+			if ( new GenreDaoImpl().getGenreByName(genreName).isEmpty() ) {
 				
 				genre.setName(genreName);
 				genre.setDescription(genreDescription);
-				optGenre = Optional.ofNullable(genreDao.saveGenre(genre));
+				optGenre = Optional.ofNullable( new GenreDaoImpl().saveGenre(genre) );
 				
 			}else {
 				genre.setGenreId(-1L);
@@ -105,7 +101,7 @@ public class GenreController {
 		return optGenre;
 	}
 	
-public static Optional<Genre> updateGenre(String strGenreCod, String genreName, String genreDescription){
+	public static Optional<Genre> updateGenre(String strGenreCod, String genreName, String genreDescription){
 		
 		Optional<Genre>optGenre = Optional.empty();
 		Genre genre = new Genre();
@@ -114,8 +110,29 @@ public static Optional<Genre> updateGenre(String strGenreCod, String genreName, 
 				Checker.checkName(genreName) 
 				&& Checker.checkDescription(genreDescription) ) {
 			
+			GenreDao genreDao = new GenreDaoImpl();			
+			List<Genre>list = genreDao.getGenreByName(genreName);
 			
+			if ( list.isEmpty() || list.stream()
+									.filter( g -> g.getGenreId().equals(Long.parseLong(strGenreCod) ) )
+									.findFirst()
+									.isPresent() ) {
+				
+				genre.setName(genreName);
+				genre.setDescription(genreDescription);
+				optGenre = Optional.ofNullable( new GenreDaoImpl().updateGenre( Long.parseLong(strGenreCod), genre) );
+				
+			}else {
+				
+				genre.setGenreId(-1L);
+				optGenre = Optional.ofNullable(genre);
+				
+			}
 			
+		}else{
+			
+			genre.setGenreId(-2L);
+			optGenre = Optional.ofNullable(genre);
 			
 		}
 		
