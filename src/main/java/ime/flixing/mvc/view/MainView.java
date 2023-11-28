@@ -69,6 +69,8 @@ public class MainView extends JFrame {
 		contentPane.add(btnFlix);
 		
 		JButton btnGenre = new JButton("Genre");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnGenre, 6, SpringLayout.SOUTH, btnFlix);
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnGenre, 0, SpringLayout.WEST, lbTitle);
 		btnGenre.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -76,28 +78,26 @@ public class MainView extends JFrame {
 				
 			}
 		});
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnGenre, 6, SpringLayout.SOUTH, btnFlix);
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnGenre, 0, SpringLayout.EAST, btnFlix);
 		contentPane.add(btnGenre);
 		
 		JButton btnPerson = new JButton("Person");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnPerson, 13, SpringLayout.SOUTH, btnGenre);
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnPerson, 0, SpringLayout.EAST, btnFlix);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnPerson, 6, SpringLayout.SOUTH, btnGenre);
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnPerson, 0, SpringLayout.WEST, lbTitle);
 		contentPane.add(btnPerson);
 		
 		JButton btnPosition = new JButton("Position");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnPosition, 6, SpringLayout.SOUTH, btnPerson);
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnPosition, 0, SpringLayout.EAST, btnFlix);
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnPosition, 0, SpringLayout.WEST, lbTitle);
 		contentPane.add(btnPosition);
 		
 		JButton btnSalir = new JButton("Salir");
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnSalir, -10, SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnSalir, -10, SpringLayout.EAST, contentPane);
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(NORMAL);
 			}
 		});
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnSalir, 6, SpringLayout.SOUTH, btnPosition);
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnSalir, 0, SpringLayout.EAST, btnFlix);
 		contentPane.add(btnSalir);
 	}
 }
