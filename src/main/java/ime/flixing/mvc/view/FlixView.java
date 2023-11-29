@@ -49,12 +49,13 @@ public class FlixView extends JDialog {
 		contentPane.setLayout(sl_contentPane);
 		
 		JLabel lblFlixTitle = new JLabel("FLIX");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, lblFlixTitle, 10, SpringLayout.NORTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.WEST, lblFlixTitle, 176, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblFlixTitle, 166, SpringLayout.WEST, contentPane);
 		lblFlixTitle.setFont(new Font("Tahoma", Font.BOLD, 14));
 		contentPane.add(lblFlixTitle);
 		
 		JButton btnGetAllFlix = new JButton("getAllFlix");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnGetAllFlix, 33, SpringLayout.NORTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblFlixTitle, -6, SpringLayout.NORTH, btnGetAllFlix);
 		btnGetAllFlix.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -62,7 +63,6 @@ public class FlixView extends JDialog {
 				
 			}
 		});
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnGetAllFlix, 6, SpringLayout.SOUTH, lblFlixTitle);
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnGetAllFlix, 142, SpringLayout.WEST, contentPane);
 		contentPane.add(btnGetAllFlix);
 		
@@ -114,6 +114,8 @@ public class FlixView extends JDialog {
 		contentPane.add(btnDeleteFlix);
 		
 		JButton btnBack = new JButton("Back");
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnBack, -10, SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnBack, -10, SpringLayout.EAST, contentPane);
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -121,8 +123,6 @@ public class FlixView extends JDialog {
 				
 			}
 		});
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnBack, 6, SpringLayout.SOUTH, btnDeleteFlix);
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnBack, 0, SpringLayout.WEST, btnGetAllFlix);
 		contentPane.add(btnBack);
 	}
 }
