@@ -138,4 +138,13 @@ public class GenreController {
 		
 		return optGenre;
 	}
+	
+	public static final int deleteGenre(String strGenreCod) {
+
+		int returnValue = -1;
+		
+		
+		return returnValue;
+	}
+		
 }
