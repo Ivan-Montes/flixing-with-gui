@@ -30,6 +30,7 @@ public class GenreDeleteView extends JDialog {
 	 * Create the dialog.
 	 */
 	public GenreDeleteView() {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setAlwaysOnTop(true);
 		setBounds(100, 100, 450, 300);
