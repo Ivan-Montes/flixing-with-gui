@@ -29,6 +29,8 @@ public class DecoHelper {
 	public static final String MSG_ERROR_DATA = "Some data is Wrong";
 	public static final String MSG_ERROR_PROCESS = "Unable to terminate the process";
 	public static final String MSG_ERROR_UNEXPECTED = "Unexpected error";
+	public static final String MSG_ERROR_DELETE_ASSOCIATED_ITEMS = "Some items are still associated to this entity. Impossible to delete. Please, first empty the list";
+	public static final String MSG_ERROR_CHECKER = "Checker fail: Some data is incorrect";
 	public static final String MSG_WRITE_COD = "Next, Write a valid code ";
 	public static final String MSG_WRITE_COD_FLIX = "Please, Write a valid FLIX code ";
 	public static final String MSG_WRITE_COD_PERSON = "Next, Write a valid PERSON code ";
@@ -42,7 +44,6 @@ public class DecoHelper {
 	public static final String MSG_WRITE_NEWDESCRIPTION = "Now, Write a new description ";
 	public static final String MSG_ASK_CONFIRMATION = "Enter Y/N to confirm: ";
 	public static final String MSG_SUCCESSFULLY = "Process complete successfully";
-	public static final String MSG_ERROR_DELETE_ASSOCIATED_ITEMS = "Some items are still associated to this entity. Impossible to delete. Please, first empty the list";
 	public static final String MSG_REGISTRY_REPEATED = "Repeated info: This registry is already in the database";
 	public static final String MSG_DUPLICATED_NAME = "Repeated info: This NAME is already in the database";
 	public static final String MSG_CONFIRM_OPTION = "Please, confirm option";
