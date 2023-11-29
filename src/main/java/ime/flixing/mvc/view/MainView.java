@@ -90,14 +90,14 @@ public class MainView extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnPosition, 0, SpringLayout.WEST, lbTitle);
 		contentPane.add(btnPosition);
 		
-		JButton btnSalir = new JButton("Salir");
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnSalir, -10, SpringLayout.SOUTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnSalir, -10, SpringLayout.EAST, contentPane);
-		btnSalir.addActionListener(new ActionListener() {
+		JButton btnExit = new JButton("Exit");
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnExit, -10, SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnExit, -10, SpringLayout.EAST, contentPane);
+		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(NORMAL);
 			}
 		});
-		contentPane.add(btnSalir);
+		contentPane.add(btnExit);
 	}
 }
