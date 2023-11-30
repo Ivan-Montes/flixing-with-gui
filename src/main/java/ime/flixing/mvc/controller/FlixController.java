@@ -15,44 +15,30 @@ import ime.flixing.tool.*;
 
 public class FlixController {
 	
-	private static FlixView flixView;
-	private static FlixGetAllView flixGetAllView;
-	private static FlixGetByIdView flixGetByIdView;
-	private static FlixSaveView flixSaveView;
-	private static FlixUpdateView flixUpdateView;
-	private static FlixDeleteView flixDeleteView;
-	
 	public static final void initFlixController(){
 		
-		flixView = new FlixView();
+		FlixView flixView = new FlixView();
 		flixView.setVisible(true);
 		
 	}
 	
-	 public static final void closeFlixView(){
-		 
-		 flixView.setVisible(false);
-		 flixView = null;
-		 
-	 }
-
 	 public static final void initFlixGetAllView(){
 			
-		 flixGetAllView = new FlixGetAllView();
+		 FlixGetAllView flixGetAllView = new FlixGetAllView();
 		 flixGetAllView.setVisible(true);
 		
 	 }
 
 	 public static final void initFlixGetByIdView(){
 			
-		 flixGetByIdView = new FlixGetByIdView();
+		 FlixGetByIdView flixGetByIdView = new FlixGetByIdView();
 		 flixGetByIdView.setVisible(true);
 		
 	 }
 	 
 	 public static final void initFlixSaveView(){
 			
-		 flixSaveView = new FlixSaveView();
+		 FlixSaveView flixSaveView = new FlixSaveView();
 		 flixSaveView.setVisible(true);
 		
 	 }
@@ -60,7 +46,7 @@ public class FlixController {
 
 	 public static final void initFlixUpdateView(){
 			
-		 flixUpdateView = new FlixUpdateView();
+		 FlixUpdateView flixUpdateView = new FlixUpdateView();
 		 flixUpdateView.setVisible(true);
 		
 	 }
@@ -68,7 +54,7 @@ public class FlixController {
 
 	 public static final void initFlixDeleteView(){
 			
-		 flixDeleteView = new FlixDeleteView();
+		 FlixDeleteView flixDeleteView = new FlixDeleteView();
 		 flixDeleteView.setVisible(true);
 		
 	 }
@@ -96,19 +82,75 @@ public class FlixController {
 		 
 		 Optional<Flix>result = Optional.empty();
 		 
-		 GenreDao genreDaoImpl = new GenreDaoImpl();
-		 Optional<Genre> optGenre = Optional.ofNullable( genreDaoImpl.getGenreById( Long.parseLong(strGenreId) ) );
-		 
-		 if ( optGenre.isPresent() ) {
+		 if ( Checker.checkFlixTitle( strFlixName ) 
+					&& Checker.checkDigits( strGenreId) ) {
+
+			 GenreDao genreDaoImpl = new GenreDaoImpl();
+			 Optional<Genre> optGenre = Optional.ofNullable( genreDaoImpl.getGenreById( Long.parseLong(strGenreId) ) );
 			 
-			 FlixDao flixDao = new FlixDaoImpl();
-			 Flix flix = new Flix();
-			 flix.setTitle(strFlixName);
-			 flix.setGenre( optGenre.get() );
-			 result = Optional.ofNullable(flixDao.saveFlix(flix));
-		 }		 
-		  
+			 if ( optGenre.isPresent() ) {
+				 
+				 FlixDao flixDao = new FlixDaoImpl();
+				 Flix flix = new Flix();
+				 flix.setTitle(strFlixName);
+				 flix.setGenre( optGenre.get() );
+				 result = Optional.ofNullable(flixDao.saveFlix(flix));
+			 } 
+		 }
+		 
+		 return result;
+		 
+	 }
+	 
+	 public static final Optional<Flix>updateFlix(String strFlixCod, String strFlixName, String strGenreId){
+		 
+		 Optional<Flix>result = Optional.empty();
+		 
+		 if ( Checker.checkDigits( strFlixCod ) 
+					&& Checker.checkFlixTitle( strFlixName ) 
+					&& Checker.checkDigits( strGenreId) ) {
+			 
+			 GenreDao genreDaoImpl = new GenreDaoImpl();
+			 Optional<Genre> optGenre = Optional.ofNullable( genreDaoImpl.getGenreById( Long.parseLong(strGenreId) ) );
+			 
+			 if ( optGenre.isPresent() ) {
+				 
+				 FlixDao flixDao = new FlixDaoImpl();
+				 Flix flix = new Flix();
+				 flix.setTitle( strFlixName );
+				 flix.setGenre( optGenre.get() );
+				 result = Optional.ofNullable(flixDao.updateFlix(Long.parseLong(strFlixCod), flix));
+			 }	 
+		 }
+		 
 		 return result;
 	 }
+	 
+	public static final int deleteFlix(String strFlixCod) {
+		
+		int returnValue = -1;
+		
+		if ( Checker.checkDigits( strFlixCod ) ) {
+			
+			FlixDao flixDao = new FlixDaoImpl();
+			Optional<Flix> optFlixFound = Optional.ofNullable(flixDao.getFlixByIdEagger(Long.parseLong(strFlixCod)));
+			
+			if ( optFlixFound.isPresent() ) {
+				
+				if ( optFlixFound.get().getFlixPersonPosition().isEmpty() ) {
+					
+					flixDao.deleteFlix( Long.parseLong(strFlixCod) );
+					returnValue =  0;
+					
+				}else {
+					returnValue = -2;
+				}
+			}
+		}
+		
+		return returnValue;
+		
+	}
+	 
 	 
 }
