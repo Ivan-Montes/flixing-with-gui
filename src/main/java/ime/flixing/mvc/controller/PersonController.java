@@ -1,7 +1,13 @@
 package ime.flixing.mvc.controller;
 
+import java.util.List;
+import java.util.Optional;
+
+import ime.flixing.dao.impl.PersonDaoImpl;
+import ime.flixing.entity.Person;
 import ime.flixing.mvc.view.PersonView;
 import ime.flixing.mvc.view.person.*;
+import ime.flixing.tool.Checker;
 
 
 public class PersonController {
@@ -48,7 +54,39 @@ public class PersonController {
 		
 	}
 
+	public static final Optional<List<Person>> getAllPerson() {
 
+		return Optional.ofNullable( new PersonDaoImpl().getAllPerson() );
+		
+	}
 	
-
+	public static final Optional<Person> getPersonById(String strPersonCod){
+		
+		Optional<Person>optPerson = Optional.empty();
+		
+		if ( Checker.checkDigits(strPersonCod) ) {
+			
+			optPerson = Optional.ofNullable( new PersonDaoImpl().getPersonById(Long.parseLong(strPersonCod)) );
+		}
+		
+		return optPerson;
+	}
+	
+	public static final Optional<Person> savePerson(String strName, String strSurname){
+		
+		Optional<Person>optPerson = Optional.empty();
+		
+		if ( Checker.checkName(strName)
+				&& Checker.checkSurname(strSurname) ){
+			
+			Person person = new Person();
+			person.setName(strName);
+			person.setSurname(strSurname);
+			optPerson = Optional.ofNullable(new PersonDaoImpl().savePerson(person));
+			
+		}
+		
+		return optPerson;
+		
+	}
 }
