@@ -20,4 +20,8 @@ public class MainController {
 	public static final void callGenreController() {
 		GenreController.initGenreController();
 	}
+	
+	public static final void callPersonController() {
+		PersonController.initPersonController();
+	}
 }
