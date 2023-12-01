@@ -58,31 +58,19 @@ public class MainView extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnFlix, 26, SpringLayout.SOUTH, lbTitle);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lbTitle, 0, SpringLayout.WEST, btnFlix);
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnFlix, 157, SpringLayout.WEST, contentPane);
-		btnFlix.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				
-				MainController.callFlixController();
-				
-			}
-		});
+		btnFlix.addActionListener( e -> MainController.callFlixController() );
 		contentPane.add(btnFlix);
 		
 		JButton btnGenre = new JButton("Genre");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnGenre, 6, SpringLayout.SOUTH, btnFlix);
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnGenre, 0, SpringLayout.WEST, lbTitle);
-		btnGenre.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				MainController.callGenreController();
-				
-			}
-		});
+		btnGenre.addActionListener( e -> MainController.callGenreController() );
 		contentPane.add(btnGenre);
 		
 		JButton btnPerson = new JButton("Person");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnPerson, 6, SpringLayout.SOUTH, btnGenre);
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnPerson, 0, SpringLayout.WEST, lbTitle);
+		btnPerson.addActionListener( e -> MainController.callPersonController() );
 		contentPane.add(btnPerson);
 		
 		JButton btnPosition = new JButton("Position");
