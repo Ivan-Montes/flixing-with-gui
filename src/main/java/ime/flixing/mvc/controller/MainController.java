@@ -4,12 +4,10 @@ import ime.flixing.mvc.view.MainView;
 
 public class MainController {
 
-	public void init() {
-		
+	public void init() {		
 		
 		MainView viewJFrametype = new MainView();		
-		viewJFrametype.setVisible(true);
-		
+		viewJFrametype.setVisible(true);		
 		
 	}
 	
@@ -23,5 +21,9 @@ public class MainController {
 	
 	public static final void callPersonController() {
 		PersonController.initPersonController();
+	}
+	
+	public static final void callPositionController() {
+		PositionController.initPositionController();
 	}
 }
