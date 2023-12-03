@@ -10,8 +10,6 @@ import ime.flixing.mvc.controller.MainController;
 
 import javax.swing.JLabel;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.SpringLayout;
 import java.awt.Font;
 
@@ -76,16 +74,13 @@ public class MainView extends JFrame {
 		JButton btnPosition = new JButton("Position");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnPosition, 6, SpringLayout.SOUTH, btnPerson);
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnPosition, 0, SpringLayout.WEST, lbTitle);
+		btnPosition.addActionListener( e -> MainController.callPositionController() );
 		contentPane.add(btnPosition);
 		
 		JButton btnExit = new JButton("Exit");
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnExit, -10, SpringLayout.SOUTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnExit, -10, SpringLayout.EAST, contentPane);
-		btnExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(NORMAL);
-			}
-		});
+		btnExit.addActionListener( e -> System.exit(NORMAL) );
 		contentPane.add(btnExit);
 	}
 }
