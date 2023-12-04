@@ -1,25 +1,12 @@
 package ime.flixing.tool;
 
-import java.util.Collections;
-import java.util.function.Supplier;
-
 import lombok.AccessLevel;
 import lombok.Generated;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor( access= AccessLevel.PRIVATE )
 @Generated
-public class DecoHelper {
-	
-	private static final String DECOTICONO_PRIME = "#";
-	private static final String DECOTICONO_SECOND = "=";
-	private static final Integer DECOTICONO_SIZE_MAIN = 33;
-	
-	private static final Supplier<String> supDecoPrime = () -> String.join("", Collections.nCopies(DECOTICONO_SIZE_MAIN, DECOTICONO_PRIME));
-	private static final Supplier<String> supDecoSecond = () -> String.join("", Collections.nCopies(DECOTICONO_SIZE_MAIN, DECOTICONO_SECOND));
-
-	public static final Runnable  runDecoPrime = () -> System.out.println(supDecoPrime.get());
-	public static final Runnable  runDecoSecond = () -> System.out.println(supDecoSecond.get());
+public class DecoHelper {	
 		
 	public static final String MSG_VOLVER = "Enter option number (0 for back): ";
 	public static final String MSG_SALIR = "Enter option number (0 for exit): ";
