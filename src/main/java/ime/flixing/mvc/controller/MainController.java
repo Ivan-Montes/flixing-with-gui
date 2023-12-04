@@ -26,4 +26,9 @@ public class MainController {
 	public static final void callPositionController() {
 		PositionController.initPositionController();
 	}
+	
+	public static final void callFlixPersonPositionController() {
+		FlixPersonPositionController.initFlixPersonPositionController();
+	}
+	
 }
