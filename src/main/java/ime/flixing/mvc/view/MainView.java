@@ -82,5 +82,11 @@ public class MainView extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnExit, -10, SpringLayout.EAST, contentPane);
 		btnExit.addActionListener( e -> System.exit(NORMAL) );
 		contentPane.add(btnExit);
+		
+		JButton btnFlixPersonPosition = new JButton("FlixPersonPosition");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnFlixPersonPosition, 6, SpringLayout.SOUTH, btnPosition);
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnFlixPersonPosition, 0, SpringLayout.WEST, lbTitle);
+		btnFlixPersonPosition.addActionListener( e -> MainController.callFlixPersonPositionController() );
+		contentPane.add(btnFlixPersonPosition);
 	}
 }
