@@ -8,6 +8,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.SpringLayout;
+import javax.swing.JLabel;
+import java.awt.Font;
 
 public class FlixPersonPositionView extends JDialog {
 
@@ -38,7 +40,15 @@ public class FlixPersonPositionView extends JDialog {
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(new SpringLayout());
+		SpringLayout sl_contentPanel = new SpringLayout();
+		contentPanel.setLayout(sl_contentPanel);
+		{
+			JLabel lblFlixPersonPosition = new JLabel("FlixPersonPosition");
+			sl_contentPanel.putConstraint(SpringLayout.NORTH, lblFlixPersonPosition, 10, SpringLayout.NORTH, contentPanel);
+			sl_contentPanel.putConstraint(SpringLayout.WEST, lblFlixPersonPosition, 135, SpringLayout.WEST, contentPanel);
+			lblFlixPersonPosition.setFont(new Font("Tahoma", Font.BOLD, 14));
+			contentPanel.add(lblFlixPersonPosition);
+		}
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
