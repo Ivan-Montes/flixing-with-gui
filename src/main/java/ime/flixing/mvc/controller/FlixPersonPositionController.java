@@ -81,4 +81,58 @@ public class FlixPersonPositionController {
 		
 		return optFlixPersonPosition;
 	}
+
+	public static final Optional<List<FlixPersonPosition>> getAllFlixPersonPosition() {
+		
+		return Optional.ofNullable(new FlixPersonPositionDaoImpl().getAllFlixPersonPosition());
+		
+	}
+	
+	public static final int deleteFlixPersonPosition(String strFlixCod, String strPersonCod, String strPositionCod) {
+		
+		int returnValue = -5;
+		
+		if ( Checker.checkDigits(strFlixCod) && Checker.checkDigits(strPersonCod) && Checker.checkDigits(strPositionCod)  ) {
+			
+			FlixDao flixDao = new FlixDaoImpl();
+			Flix flixFound = flixDao.getFlixById(Long.parseLong(strFlixCod));
+			
+			PersonDao personDao = new PersonDaoImpl();
+			Person personFound = personDao.getPersonById(Long.parseLong(strPersonCod));			
+
+			PositionDao positionDao = new PositionDaoImpl();
+			Position positionFound = positionDao.getPositionById(Long.parseLong(strPositionCod));
+			
+			if ( flixFound != null && personFound != null && positionFound != null ) {
+				
+				FlixPersonPositionDao flixPersonPositionDao = new FlixPersonPositionDaoImpl();
+				FlixPersonPosition flixPersonPositionFound = flixPersonPositionDao.getFlixPersonPositionById(Long.parseLong(strFlixCod), 
+																										Long.parseLong(strPersonCod), 
+																										Long.parseLong(strPositionCod) );
+				
+				if ( flixPersonPositionFound != null) {	
+					
+					flixPersonPositionDao.deleteFlixPersonPosition(Long.parseLong(strFlixCod), 
+							Long.parseLong(strPersonCod), 
+							Long.parseLong(strPositionCod) );
+					returnValue = 0;
+					
+				}else {
+					returnValue = -3;
+					
+				}
+				
+			}else {
+				
+					returnValue = -6;
+					
+				}		
+			
+		}else {
+			returnValue = -1;
+			
+		}
+		
+		return returnValue;		
+	}
 }
