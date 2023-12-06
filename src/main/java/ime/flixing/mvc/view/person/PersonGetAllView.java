@@ -131,7 +131,9 @@ public class PersonGetAllView extends JDialog {
 											optListPerson.get().get(i).getSurname()	
 										})
 										.toArray(Object[][]::new);
+			
 			tPerson.setModel(new DefaultTableModel(aData,aTitles){
+				
 		        /**
 				 * JTable treats the first columns as Object instead of Integer. Now, it should sort based on the integer values.
 				 */
@@ -142,9 +144,16 @@ public class PersonGetAllView extends JDialog {
 		            if (columnIndex == 0) return Integer.class;
 		            return super.getColumnClass(columnIndex);
 		        }
-		    });
+				
+				/**
+				 * JTable treats cells as not editable
+				 */
+				@Override
+			    public boolean isCellEditable(int row, int column) {			       
+			       return false;
+			    }
+		    });			
 			
-			tPerson.setDefaultEditor(Object.class, null);
 			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tPerson.getModel());
 			tPerson.setRowSorter(sorter);
 			
