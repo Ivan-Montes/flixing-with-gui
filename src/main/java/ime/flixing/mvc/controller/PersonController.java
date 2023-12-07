@@ -10,7 +10,10 @@ import ime.flixing.mvc.view.PersonView;
 import ime.flixing.mvc.view.person.*;
 import ime.flixing.tool.Checker;
 
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PersonController {
 
 	public static final void initPersonController() {
