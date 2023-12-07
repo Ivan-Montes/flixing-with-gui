@@ -10,6 +10,10 @@ import ime.flixing.mvc.view.GenreView;
 import ime.flixing.mvc.view.genre.*;
 import ime.flixing.tool.Checker;
 
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GenreController {
 	
 	public static final void initGenreController() {
@@ -143,6 +147,24 @@ public class GenreController {
 
 		int returnValue = -1;
 		
+		if ( Checker.checkDigits(strGenreCod) ) {
+			
+			GenreDao genreDao = new GenreDaoImpl();
+			Optional<Genre> optGenre = Optional.ofNullable( genreDao.getGenreByIdEagger(Long.parseLong(strGenreCod)) );
+			
+			if (optGenre.isPresent() ) {
+				
+				if ( optGenre.get().getFlixes().isEmpty() ) {
+					
+					genreDao.deleteGenre( Long.parseLong(strGenreCod) );
+					returnValue = 0;
+				
+				}
+				else {
+					returnValue = -2;
+				}				
+			}		
+		}
 		
 		return returnValue;
 	}
