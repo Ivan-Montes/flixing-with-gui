@@ -12,7 +12,10 @@ import ime.flixing.entity.Genre;
 import ime.flixing.mvc.view.FlixView;
 import ime.flixing.mvc.view.flix.*;
 import ime.flixing.tool.*;
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FlixController {
 	
 	public static final void initFlixController(){
@@ -59,22 +62,20 @@ public class FlixController {
 		
 	 }
 	 
-	 public static final Optional<Flix> searchFlixCod(String cod) {
+	 public static final Optional<Flix> getFlixById(String strFlixCod) {
 		 
-		 if ( Checker.checkDigits(cod) ) {
+		 if ( Checker.checkDigits(strFlixCod) ) {
 			 
 			FlixDao flixDao = new FlixDaoImpl();
-			return Optional.ofNullable( flixDao.getFlixById( Long.parseLong(cod) ) ); 
+			return Optional.ofNullable( flixDao.getFlixById( Long.parseLong(strFlixCod) ) ); 
 		 }		
 		 
 		 return Optional.ofNullable(null);
 	 }
 
-	 public static final Optional<List<Flix>> searchAll() {
-		 
-		FlixDao flixDao = new FlixDaoImpl();
-		return Optional.ofNullable(flixDao.getAllFlix());	
+	 public static final Optional<List<Flix>> getAllFlix() {
 		
+		return Optional.ofNullable(new FlixDaoImpl().getAllFlix());			
 		
 	 }
 	 
