@@ -10,6 +10,10 @@ import ime.flixing.mvc.view.PositionView;
 import ime.flixing.mvc.view.position.*;
 import ime.flixing.tool.Checker;
 
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PositionController {
 
 	public static final void initPositionController() {
@@ -91,16 +95,100 @@ public class PositionController {
 				optPosition = Optional.ofNullable(positionDao.savePosition(position) );
 				
 			}else {
-				position.setPositionId(-1L);
+				position.setPositionId(-2L);
 				optPosition = Optional.ofNullable(position);
 			}
 			
 		}else {
-			position.setPositionId(-2L);
+			position.setPositionId(-1L);
 			optPosition = Optional.ofNullable(position);
 		}
 		
 		return optPosition;
+	}
+	
+	public static final Optional<Position> updatePosition(String strPositionCod, String strName, String strDescription){
+		
+		Optional<Position>optPosition  = Optional.empty();
+		Optional<List<Position>>optListPosition = Optional.empty();
+		Optional<Position> optPositionFound = Optional.empty();
+		Position position = new Position();
+		
+		if ( Checker.checkDigits(strPositionCod) 
+				&& Checker.checkName(strName)
+				&& Checker.checkDescription(strDescription) ) {
+			
+			PositionDao positionDao = new PositionDaoImpl();
+			optListPosition = Optional.ofNullable( positionDao.getPositionByNameId(strName) );
+			
+			if ( ( optListPosition.isPresent() && optListPosition.get().isEmpty() )
+					||  ( optListPosition.isPresent() && optListPosition.get()
+														.stream()
+														.anyMatch( p -> p.getPositionId() == (Long.parseLong(strPositionCod) ) ) )
+					) {
+				
+				optPositionFound = Optional.ofNullable( positionDao.getPositionById(Long.parseLong(strPositionCod)));
+				
+				if( optPositionFound.isPresent() ) {
+
+					position.setName(strName);
+					position.setDescription(strDescription);
+					optPosition = Optional.ofNullable(positionDao.updatePosition(Long.parseLong(strPositionCod), position));
+					
+				}else {
+					position.setPositionId(-3L);
+					optPosition = Optional.ofNullable(position);
+				}
+				
+				
+			}else {
+				position.setPositionId(-2L);
+				optPosition = Optional.ofNullable(position);
+			}
+			
+			
+		}else {
+			position.setPositionId(-1L);
+			optPosition = Optional.ofNullable(position);
+		}
+		
+		return optPosition;
+	}
+	
+	
+	public static final int deletePerson(String strPositionCod) {
+		
+		int returnValue = -5;
+		Optional<Position> optPositionFound = Optional.empty();
+		
+		if ( Checker.checkDigits(strPositionCod) ) {
+			
+			PositionDao positionDao = new PositionDaoImpl();
+			optPositionFound = Optional.ofNullable( positionDao.getPositionByIdEagger(Long.parseLong(strPositionCod)));
+			
+			if( optPositionFound.isPresent() ) {
+			
+				if ( optPositionFound.get().getFlixPersonPosition().isEmpty() ) {
+					
+					positionDao.deletePosition( Long.parseLong(strPositionCod) );
+					returnValue =  0;
+			
+				}
+				else {
+					returnValue = -4;
+				}	
+				
+			}else {
+				returnValue = -3;
+				
+			}
+			
+		}else {
+			returnValue = -1;
+			
+		}
+		
+		return returnValue;
 	}
 
 }
