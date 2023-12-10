@@ -11,40 +11,34 @@ public class Checker {
 
 	
 	public static final boolean checkDigits(String n) {	
-		return ( n.matches("\\d+") );
+		return ( n.matches( CheckerPattern.DIGITS_BASIC ) );
 	}
 
 	public static final boolean checkFlixTitle(String n) {
 		
-		Pattern pattern = Pattern.compile("[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\\s\\-\\?\\¿\\!\\¡\\.&,:]+");
+		Pattern pattern = Pattern.compile( CheckerPattern.TITLE_FLIX_BASIC );
 		Matcher matcher = pattern.matcher(n);
 		
 		return matcher.matches() && (n.length() >= 1 && n.length() <= 50);
 		
 	}
-
-	public static final boolean checkConfirmation(String n) {
-		
-		return n.matches("[yY]");
-		
-	}
 	
 	public static final boolean checkName(String str) {
 		
-		return str.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s\\-\\.&,:]+") && str.length() <= 50;
+		return str.matches( CheckerPattern.NAME_BASIC ) && str.length() <= 50;
 		
 	}
 	
 	public static final boolean checkDescription(String str) {
 		
-		return str.matches("[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\\s\\-\\.&,:]+") && str.length() <= 100;
+		return str.matches( CheckerPattern.DESCRIPTION_BASIC ) && str.length() <= 100;
 		
 	}
 	
 
 	public static final boolean checkSurname(String str) {
 		
-		return str.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s\\-\\.&,:]+") && str.length() <= 50;
+		return str.matches( CheckerPattern.SURNAME_BASIC) && str.length() <= 50;
 		
 	}
 }
