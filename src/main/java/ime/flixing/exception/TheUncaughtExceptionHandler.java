@@ -1,8 +1,14 @@
 package ime.flixing.exception;
 
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import ime.flixing.tool.DecoHelper;
 
 public class TheUncaughtExceptionHandler implements UncaughtExceptionHandler {
+	
+	private final Logger logger = Logger.getLogger(getClass().getName());
 
 	@Override
     public void uncaughtException(Thread t, Throwable e) {
@@ -25,23 +31,23 @@ public class TheUncaughtExceptionHandler implements UncaughtExceptionHandler {
     }
 
     private void handleNullPointerException(NullPointerException e) {
-        System.out.println("Se ha producido una excepción de puntero nulo: " + e.getMessage());
+        logger.log(Level.SEVERE, String.format("Error: {0}.  Description: {1}", DecoHelper.EX_NULL, e.getMessage() ) );
     }
 
     private void handleIllegalStateException(java.lang.IllegalStateException e) {
-        System.out.println("Se ha producido una excepción de java.lang.IllegalStateException: " + e.getMessage());
+        logger.log(Level.SEVERE, String.format("Error: {0}.  Description: {1}", DecoHelper.EX_ILLEGAL_STATE, e.getMessage() ) );
     }
 
     private void handleIllegalServiceException(org.hibernate.service.spi.ServiceException e) {
-        System.out.println("Se ha producido una excepción de org.hibernate.service.spi.ServiceException: " + e.getMessage());
+        logger.log(Level.SEVERE, String.format("Error: {0}.  Description: {1}", DecoHelper.EX_ILLEGAL_SERVICE, e.getMessage() ) );
     }
 
     private void handleJdbcEnvironmentException(org.hibernate.engine.jdbc.env.spi.JdbcEnvironment e) {
-        System.out.println("Se ha producido una excepción de org.hibernate.engine.jdbc.env.spi.JdbcEnvironment: ");
+        logger.log(Level.SEVERE, String.format("Error: {0}.  Description: {1}", DecoHelper.EX_HIBERNATE_JDBC, ((Throwable) e).getMessage() ) );
     }
 
     private void handleGenericException(Throwable e) {
-        System.out.println("Se ha producido una excepción desconocida: " + e.getMessage());
+        logger.log(Level.SEVERE, String.format("Error: {0}.  Description: {1}", DecoHelper.EX_UNKNOWN, e.getMessage() ) );
     }
 
 }
