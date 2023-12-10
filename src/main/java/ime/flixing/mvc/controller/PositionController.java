@@ -79,7 +79,7 @@ public class PositionController {
 	
 	public static final Optional<Position> savePosition(String strName, String strDescription){
 		
-		Optional<Position>optPosition  = Optional.empty();
+		Optional<Position>optPosition;
 		Position position = new Position();
 		
 		if ( Checker.checkName(strName)
@@ -88,7 +88,7 @@ public class PositionController {
 			PositionDao positionDao = new PositionDaoImpl();
 			Optional<List<Position>>optListPosition = Optional.ofNullable( positionDao.getPositionByNameId(strName) );
 			
-			if ( optListPosition.isPresent() && optListPosition.get().size() == 0 ) {				
+			if ( optListPosition.isPresent() && optListPosition.get().isEmpty() ) {				
 				
 				position.setName(strName);
 				position.setDescription(strDescription);
@@ -109,9 +109,9 @@ public class PositionController {
 	
 	public static final Optional<Position> updatePosition(String strPositionCod, String strName, String strDescription){
 		
-		Optional<Position>optPosition  = Optional.empty();
-		Optional<List<Position>>optListPosition = Optional.empty();
-		Optional<Position> optPositionFound = Optional.empty();
+		Optional<Position>optPosition;
+		Optional<List<Position>>optListPosition;
+		Optional<Position> optPositionFound;
 		Position position = new Position();
 		
 		if ( Checker.checkDigits(strPositionCod) 
@@ -158,8 +158,8 @@ public class PositionController {
 	
 	public static final int deletePerson(String strPositionCod) {
 		
-		int returnValue = -5;
-		Optional<Position> optPositionFound = Optional.empty();
+		int returnValue;
+		Optional<Position> optPositionFound;
 		
 		if ( Checker.checkDigits(strPositionCod) ) {
 			
