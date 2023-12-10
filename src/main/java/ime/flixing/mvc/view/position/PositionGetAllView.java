@@ -1,6 +1,8 @@
 package ime.flixing.mvc.view.position;
 
 import java.awt.BorderLayout;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.awt.FlowLayout;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +20,6 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -45,10 +46,11 @@ public class PositionGetAllView extends JDialog {
 	public static void main(String[] args) {
 		try {
 			PositionGetAllView dialog = new PositionGetAllView();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			final Logger logger = Logger.getLogger(PositionGetAllView.class.getName());
+			logger.log(Level.SEVERE, DecoHelper.MSG_SHIT_HAPPENS, e);
 		}
 	}
 
@@ -57,55 +59,55 @@ public class PositionGetAllView extends JDialog {
 	 */
 	public PositionGetAllView() {
 
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 		setModal(true);
 		setAlwaysOnTop(true);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		SpringLayout sl_contentPanel = new SpringLayout();
-		contentPanel.setLayout(sl_contentPanel);
+		SpringLayout slContentPanel = new SpringLayout();
+		contentPanel.setLayout(slContentPanel);
 		{
 			btnSearch = new JButton("Search");
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, btnSearch, 10, SpringLayout.NORTH, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.EAST, btnSearch, -265, SpringLayout.EAST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.NORTH, btnSearch, 10, SpringLayout.NORTH, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.EAST, btnSearch, -265, SpringLayout.EAST, contentPanel);
 			btnSearch.addActionListener( e -> searchAllAndShow() );
 			contentPanel.add(btnSearch);
 		}
 		{
 			JButton btnClean = new JButton("Clean");
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, btnClean, 0, SpringLayout.NORTH, btnSearch);
-			sl_contentPanel.putConstraint(SpringLayout.WEST, btnClean, 88, SpringLayout.EAST, btnSearch);
+			slContentPanel.putConstraint(SpringLayout.NORTH, btnClean, 0, SpringLayout.NORTH, btnSearch);
+			slContentPanel.putConstraint(SpringLayout.WEST, btnClean, 88, SpringLayout.EAST, btnSearch);
 			btnClean.addActionListener( e -> cleanFields() );
 			contentPanel.add(btnClean);
 		}
 		
 		JScrollPane spPosition = new JScrollPane();
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, spPosition, 18, SpringLayout.SOUTH, btnSearch);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, spPosition, 10, SpringLayout.WEST, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, spPosition, -69, SpringLayout.SOUTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, spPosition, -12, SpringLayout.EAST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.NORTH, spPosition, 18, SpringLayout.SOUTH, btnSearch);
+		slContentPanel.putConstraint(SpringLayout.WEST, spPosition, 10, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, spPosition, -69, SpringLayout.SOUTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.EAST, spPosition, -12, SpringLayout.EAST, contentPanel);
 		contentPanel.add(spPosition);
 		
 		tPosition = new JTable();
 		tPosition.setFillsViewportHeight(true);
 		tPosition.setModel(new DefaultTableModel());		
 		ListSelectionModel listSelectionModel = tPosition.getSelectionModel();
-		listSelectionModel.addListSelectionListener( e -> fillDescriptionText(e) );
+		listSelectionModel.addListSelectionListener( e -> fillDescriptionText() );
 		tPosition.setSelectionModel(listSelectionModel);
 		
 		spPosition.setViewportView(tPosition);
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, tPosition, 76, SpringLayout.NORTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, tPosition, 73, SpringLayout.WEST, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, tPosition, 0, SpringLayout.SOUTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, tPosition, 0, SpringLayout.EAST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.NORTH, tPosition, 76, SpringLayout.NORTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.WEST, tPosition, 73, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, tPosition, 0, SpringLayout.SOUTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.EAST, tPosition, 0, SpringLayout.EAST, contentPanel);
 		
 		JScrollPane spDescription = new JScrollPane();
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, spDescription, -46, SpringLayout.SOUTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, spDescription, 31, SpringLayout.WEST, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, spDescription, -10, SpringLayout.SOUTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, spDescription, -33, SpringLayout.EAST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.NORTH, spDescription, -46, SpringLayout.SOUTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.WEST, spDescription, 31, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, spDescription, -10, SpringLayout.SOUTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.EAST, spDescription, -33, SpringLayout.EAST, contentPanel);
 		contentPanel.add(spDescription);
 		
 		taDescription = new JTextArea();
@@ -115,8 +117,8 @@ public class PositionGetAllView extends JDialog {
 		spDescription.setViewportView(taDescription);
 		
 		JLabel lblDescription = new JLabel("Description");
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, lblDescription, 6, SpringLayout.SOUTH, spPosition);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, lblDescription, 171, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.NORTH, lblDescription, 6, SpringLayout.SOUTH, spPosition);
+		slContentPanel.putConstraint(SpringLayout.WEST, lblDescription, 171, SpringLayout.WEST, contentPanel);
 		contentPanel.add(lblDescription);
 		{
 			JPanel buttonPane = new JPanel();
@@ -131,7 +133,7 @@ public class PositionGetAllView extends JDialog {
 		}
 	}	
 
-	private void fillDescriptionText(ListSelectionEvent e) {
+	private void fillDescriptionText() {
 		
 		int viewRow = tPosition.getSelectedRow();
 		
@@ -189,7 +191,7 @@ public class PositionGetAllView extends JDialog {
 			    }
 		    });
 			
-			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tPosition.getModel());
+			TableRowSorter<TableModel> sorter = new TableRowSorter<>(tPosition.getModel());
 			tPosition.setRowSorter(sorter);
 			
 		}else {
