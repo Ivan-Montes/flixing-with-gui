@@ -31,23 +31,23 @@ public class TheUncaughtExceptionHandler implements UncaughtExceptionHandler {
     }
 
     private void handleNullPointerException(NullPointerException e) {
-        logger.log(Level.SEVERE, String.format("Error: {0}.  Description: {1}", DecoHelper.EX_NULL, e.getMessage() ) );
+        logger.log(Level.SEVERE, String.format("Error: %s.  Description: %s", DecoHelper.EX_NULL, e.getMessage() ) );
     }
 
     private void handleIllegalStateException(java.lang.IllegalStateException e) {
-        logger.log(Level.SEVERE, String.format("Error: {0}.  Description: {1}", DecoHelper.EX_ILLEGAL_STATE, e.getMessage() ) );
+        logger.log(Level.SEVERE, String.format("Error: %s.  Description: %s", DecoHelper.EX_ILLEGAL_STATE, e.getMessage() ) );
     }
 
     private void handleIllegalServiceException(org.hibernate.service.spi.ServiceException e) {
-        logger.log(Level.SEVERE, String.format("Error: {0}.  Description: {1}", DecoHelper.EX_ILLEGAL_SERVICE, e.getMessage() ) );
+        logger.log(Level.SEVERE, String.format("Error: %s.  Description: %s", DecoHelper.EX_ILLEGAL_SERVICE, e.getMessage() ) );
     }
 
     private void handleJdbcEnvironmentException(org.hibernate.engine.jdbc.env.spi.JdbcEnvironment e) {
-        logger.log(Level.SEVERE, String.format("Error: {0}.  Description: {1}", DecoHelper.EX_HIBERNATE_JDBC, ((Throwable) e).getMessage() ) );
+        logger.log(Level.SEVERE, String.format("Error: %s.  Description: %s", DecoHelper.EX_HIBERNATE_JDBC, ((Throwable) e).getMessage() ) );
     }
 
     private void handleGenericException(Throwable e) {
-        logger.log(Level.SEVERE, String.format("Error: {0}.  Description: {1}", DecoHelper.EX_UNKNOWN, e.getMessage() ) );
+        logger.log(Level.SEVERE, String.format("Error: %s.  Description: %s", DecoHelper.EX_UNKNOWN, e.getMessage() ) );
     }
 
 }
