@@ -148,7 +148,7 @@ public class PositionGetByIdView extends JDialog {
 		
 		if ( Checker.checkDigits(strPositionCod)) {
 			
-			Optional<Position>optPosition = PositionController.getPositionById(strPositionCod);
+			Optional<Position>optPosition = new PositionController().getPositionById(strPositionCod);
 			
 			if ( optPosition.isPresent()) {
 				
