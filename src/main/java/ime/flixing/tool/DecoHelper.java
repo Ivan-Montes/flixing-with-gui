@@ -1,5 +1,6 @@
 package ime.flixing.tool;
 
+
 import lombok.AccessLevel;
 import lombok.Generated;
 import lombok.NoArgsConstructor;
@@ -35,5 +36,49 @@ public class DecoHelper {
 	public static final String MSG_DUPLICATED_NAME = "Repeated info: This NAME is already in the database";
 	public static final String MSG_CONFIRM_OPTION = "Please, confirm option";
 	public static final String MSG_CONFIRM_TITLE = "Confirmation box";
+	public static final String BTN_SEARCH = "Search";
+	public static final String EX_NULL = "Se ha producido una excepción de puntero nulo: ";
+	public static final String EX_ILLEGAL_STATE = "Se ha producido una excepción de java.lang.IllegalStateException: ";
+	public static final String EX_ILLEGAL_SERVICE = "Se ha producido una excepción de org.hibernate.service.spi.ServiceException: ";
+	public static final String EX_HIBERNATE_JDBC = "Se ha producido una excepción de org.hibernate.engine.jdbc.env.spi.JdbcEnvironment: ";
+	public static final String EX_UNKNOWN = "Se ha producido una excepción desconocida: ";
+	public static final String MSG_SHIT_HAPPENS = "An error has occurred";
+	
+	
+	
+	public static final String chooseResultMessageByReturnValue(Long returnValue) {
+		
+		String msgInfo = DecoHelper.MSG_ERROR_UNEXPECTED;
+		
+		if ( returnValue != null ) {
+			
+			switch( String.valueOf( returnValue ) ) {
+			
+			case "-1":
+				msgInfo = DecoHelper.MSG_ERROR_CHECKER;
+				break;
+			case "-2":
+				msgInfo = DecoHelper.MSG_DUPLICATED_NAME;
+				break;
+			case "-3":
+				msgInfo = DecoHelper.MSG_ERROR_COD;
+				break;
+			case "-4":
+				msgInfo = DecoHelper.MSG_ERROR_DELETE_ASSOCIATED_ITEMS;
+				break;
+			case "-5":
+				msgInfo = DecoHelper.MSG_ERROR_UNEXPECTED;
+				break;
+			case "-6":
+				msgInfo = DecoHelper.MSG_ERROR_NULL;
+				break;
+			default:
+				msgInfo = DecoHelper.MSG_SUCCESSFULLY;
+				break;
+			}
+		}
+		
+		return msgInfo;
+	}
 
 }
