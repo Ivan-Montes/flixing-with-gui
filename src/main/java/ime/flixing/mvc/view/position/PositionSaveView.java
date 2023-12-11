@@ -131,7 +131,7 @@ public class PositionSaveView extends JDialog {
 			if ( JOptionPane.showConfirmDialog(this, DecoHelper.MSG_CONFIRM_OPTION, DecoHelper.MSG_CONFIRM_TITLE, JOptionPane.YES_NO_OPTION )
 					 == JOptionPane.OK_OPTION ){
 				
-				Optional<Position>optPos = PositionController.savePosition(strPositionName, strPositionDescription);
+				Optional<Position>optPos = new PositionController().savePosition(strPositionName, strPositionDescription);
 				
 				if (optPos.isPresent() ) {
 					
