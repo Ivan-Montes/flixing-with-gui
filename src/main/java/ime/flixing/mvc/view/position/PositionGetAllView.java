@@ -153,9 +153,9 @@ public class PositionGetAllView extends JDialog {
 		taDescription.setText("");
 	}
 
-	private void searchAllAndShow() {
+	private void searchAllAndShow() {		
 		
-		Optional<List<Position>>optPosition = PositionController.getAllPosition();
+		Optional<List<Position>>optPosition = new PositionController().getAllPosition();
 		
 		if ( optPosition.isPresent() ) {
 			
