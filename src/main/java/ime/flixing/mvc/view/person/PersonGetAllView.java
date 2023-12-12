@@ -1,6 +1,8 @@
 package ime.flixing.mvc.view.person;
 
 import java.awt.BorderLayout;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.awt.FlowLayout;
 import java.util.List;
 import java.util.Optional;
@@ -40,10 +42,11 @@ public class PersonGetAllView extends JDialog {
 	public static void main(String[] args) {
 		try {
 			PersonGetAllView dialog = new PersonGetAllView();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			final Logger logger = Logger.getLogger(PersonGetAllView.class.getName());
+			logger.log(Level.SEVERE, DecoHelper.MSG_SHIT_HAPPENS, e);
 		}
 	}
 
@@ -53,50 +56,50 @@ public class PersonGetAllView extends JDialog {
 	public PersonGetAllView() {
 		setModal(true);
 		setAlwaysOnTop(true);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		SpringLayout sl_contentPanel = new SpringLayout();
-		contentPanel.setLayout(sl_contentPanel);
+		SpringLayout slContentPanel = new SpringLayout();
+		contentPanel.setLayout(slContentPanel);
 		{
 			btnSearch = new JButton("Search");
-			sl_contentPanel.putConstraint(SpringLayout.WEST, btnSearch, 86, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.WEST, btnSearch, 86, SpringLayout.WEST, contentPanel);
 			btnSearch.addActionListener( e -> searchAll() );
 			contentPanel.add(btnSearch);
 		}
 		{
 			btnClean = new JButton("Clean");
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, btnClean, 10, SpringLayout.NORTH, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, btnSearch, 0, SpringLayout.NORTH, btnClean);
-			sl_contentPanel.putConstraint(SpringLayout.EAST, btnClean, -102, SpringLayout.EAST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.NORTH, btnClean, 10, SpringLayout.NORTH, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.NORTH, btnSearch, 0, SpringLayout.NORTH, btnClean);
+			slContentPanel.putConstraint(SpringLayout.EAST, btnClean, -102, SpringLayout.EAST, contentPanel);
 			btnClean.addActionListener( e -> cleanFields() );
 			contentPanel.add(btnClean);
 		}
 		{
 			separator = new JSeparator();
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, separator, 10, SpringLayout.SOUTH, btnSearch);
-			sl_contentPanel.putConstraint(SpringLayout.WEST, separator, 20, SpringLayout.WEST, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.SOUTH, separator, -170, SpringLayout.SOUTH, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.EAST, separator, 400, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.NORTH, separator, 10, SpringLayout.SOUTH, btnSearch);
+			slContentPanel.putConstraint(SpringLayout.WEST, separator, 20, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.SOUTH, separator, -170, SpringLayout.SOUTH, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.EAST, separator, 400, SpringLayout.WEST, contentPanel);
 			contentPanel.add(separator);
 		}
 		{
 			spPerson = new JScrollPane();
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, spPerson, 12, SpringLayout.SOUTH, separator);
-			sl_contentPanel.putConstraint(SpringLayout.WEST, spPerson, 36, SpringLayout.WEST, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.SOUTH, spPerson, -10, SpringLayout.SOUTH, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.EAST, spPerson, -35, SpringLayout.EAST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.NORTH, spPerson, 12, SpringLayout.SOUTH, separator);
+			slContentPanel.putConstraint(SpringLayout.WEST, spPerson, 36, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.SOUTH, spPerson, -10, SpringLayout.SOUTH, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.EAST, spPerson, -35, SpringLayout.EAST, contentPanel);
 			contentPanel.add(spPerson);
 			
 			tPerson = new JTable();
 			tPerson.setFillsViewportHeight(true);
 			spPerson.setViewportView(tPerson);
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, tPerson, 114, SpringLayout.SOUTH, separator);
-			sl_contentPanel.putConstraint(SpringLayout.WEST, tPerson, 48, SpringLayout.WEST, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.SOUTH, tPerson, -10, SpringLayout.SOUTH, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.EAST, tPerson, 68, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.NORTH, tPerson, 114, SpringLayout.SOUTH, separator);
+			slContentPanel.putConstraint(SpringLayout.WEST, tPerson, 48, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.SOUTH, tPerson, -10, SpringLayout.SOUTH, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.EAST, tPerson, 68, SpringLayout.WEST, contentPanel);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -123,7 +126,6 @@ public class PersonGetAllView extends JDialog {
 		
 		if (optListPerson.isPresent() ) {
 			
-			String[] aTitles = {"Person Id", "Name", "Surname"};
 			Object [][] aData = IntStream.range(0, optListPerson.get().size())
 										.mapToObj( i -> new Object []{
 											optListPerson.get().get(i).getPersonId(),
@@ -132,7 +134,7 @@ public class PersonGetAllView extends JDialog {
 										})
 										.toArray(Object[][]::new);
 			
-			tPerson.setModel(new DefaultTableModel(aData,aTitles){
+			tPerson.setModel(new DefaultTableModel(aData, new String[] {"Person Id", "Name", "Surname"}){
 				
 		        /**
 				 * JTable treats the first columns as Object instead of Integer. Now, it should sort based on the integer values.
@@ -154,7 +156,7 @@ public class PersonGetAllView extends JDialog {
 			    }
 		    });			
 			
-			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tPerson.getModel());
+			TableRowSorter<TableModel> sorter = new TableRowSorter<>(tPerson.getModel());
 			tPerson.setRowSorter(sorter);
 			
 		}else {
