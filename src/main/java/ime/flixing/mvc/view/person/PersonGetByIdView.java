@@ -1,6 +1,8 @@
 package ime.flixing.mvc.view.person;
 
 import java.awt.BorderLayout;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.awt.FlowLayout;
 import java.util.Optional;
 
@@ -37,10 +39,11 @@ public class PersonGetByIdView extends JDialog {
 	public static void main(String[] args) {
 		try {
 			PersonGetByIdView dialog = new PersonGetByIdView();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			final Logger logger = Logger.getLogger(PersonGetByIdView.class.getName());
+			logger.log(Level.SEVERE, DecoHelper.MSG_SHIT_HAPPENS, e);
 		}
 	}
 
@@ -48,73 +51,73 @@ public class PersonGetByIdView extends JDialog {
 	 * Create the dialog.
 	 */
 	public PersonGetByIdView() {
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 		setModal(true);
 		setAlwaysOnTop(true);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		SpringLayout sl_contentPanel = new SpringLayout();
-		contentPanel.setLayout(sl_contentPanel);
+		SpringLayout slContentPanel = new SpringLayout();
+		contentPanel.setLayout(slContentPanel);
 		
 		JLabel lblPersonCod = new JLabel("Person Code");
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, lblPersonCod, 10, SpringLayout.NORTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, lblPersonCod, 10, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.NORTH, lblPersonCod, 10, SpringLayout.NORTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.WEST, lblPersonCod, 10, SpringLayout.WEST, contentPanel);
 		contentPanel.add(lblPersonCod);
 		
 		tfPersonName = new JTextField();
-		sl_contentPanel.putConstraint(SpringLayout.WEST, tfPersonName, 61, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.WEST, tfPersonName, 61, SpringLayout.WEST, contentPanel);
 		tfPersonName.setEditable(false);
 		contentPanel.add(tfPersonName);
 		tfPersonName.setColumns(10);
 		
 		spPersonCod = new JSpinner();
-		sl_contentPanel.putConstraint(SpringLayout.WEST, spPersonCod, 23, SpringLayout.EAST, lblPersonCod);
+		slContentPanel.putConstraint(SpringLayout.WEST, spPersonCod, 23, SpringLayout.EAST, lblPersonCod);
 		spPersonCod.setModel(new SpinnerNumberModel(0, 0, 33, 1));
 		contentPanel.add(spPersonCod);
 		
 		JButton btnSearch = new JButton("Search");
-		sl_contentPanel.putConstraint(SpringLayout.WEST, btnSearch, 39, SpringLayout.EAST, spPersonCod);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, spPersonCod, 0, SpringLayout.SOUTH, btnSearch);
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, btnSearch, 10, SpringLayout.NORTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.WEST, btnSearch, 39, SpringLayout.EAST, spPersonCod);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, spPersonCod, 0, SpringLayout.SOUTH, btnSearch);
+		slContentPanel.putConstraint(SpringLayout.NORTH, btnSearch, 10, SpringLayout.NORTH, contentPanel);
 		btnSearch.addActionListener( e -> searchAndShow() );
 		contentPanel.add(btnSearch);
 		
 		JButton btnClean = new JButton("Clean");
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, btnClean, 0, SpringLayout.NORTH, lblPersonCod);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, btnClean, 42, SpringLayout.EAST, btnSearch);
+		slContentPanel.putConstraint(SpringLayout.NORTH, btnClean, 0, SpringLayout.NORTH, lblPersonCod);
+		slContentPanel.putConstraint(SpringLayout.WEST, btnClean, 42, SpringLayout.EAST, btnSearch);
 		btnClean.addActionListener( e -> cleanFields() );
 		contentPanel.add(btnClean);
 		
 		JSeparator separator = new JSeparator();
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, separator, 19, SpringLayout.SOUTH, spPersonCod);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, separator, -158, SpringLayout.SOUTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, separator, 10, SpringLayout.WEST, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, separator, 387, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.NORTH, separator, 19, SpringLayout.SOUTH, spPersonCod);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, separator, -158, SpringLayout.SOUTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.WEST, separator, 10, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.EAST, separator, 387, SpringLayout.WEST, contentPanel);
 		contentPanel.add(separator);
 		
 		tfPersonSurname = new JTextField();
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, tfPersonSurname, 118, SpringLayout.NORTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, tfPersonSurname, 88, SpringLayout.EAST, tfPersonName);
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, tfPersonName, 0, SpringLayout.NORTH, tfPersonSurname);
+		slContentPanel.putConstraint(SpringLayout.NORTH, tfPersonSurname, 118, SpringLayout.NORTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.WEST, tfPersonSurname, 88, SpringLayout.EAST, tfPersonName);
+		slContentPanel.putConstraint(SpringLayout.NORTH, tfPersonName, 0, SpringLayout.NORTH, tfPersonSurname);
 		tfPersonSurname.setEditable(false);
 		contentPanel.add(tfPersonSurname);
 		tfPersonSurname.setColumns(10);
 		
 		tfPersonCod = new JTextField();
-		sl_contentPanel.putConstraint(SpringLayout.WEST, tfPersonCod, 145, SpringLayout.WEST, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, tfPersonCod, -18, SpringLayout.NORTH, tfPersonName);
+		slContentPanel.putConstraint(SpringLayout.WEST, tfPersonCod, 145, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, tfPersonCod, -18, SpringLayout.NORTH, tfPersonName);
 		tfPersonCod.setEditable(false);
 		contentPanel.add(tfPersonCod);
 		tfPersonCod.setColumns(10);
 		
-		JSeparator separator_1 = new JSeparator();
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, separator_1, 46, SpringLayout.SOUTH, tfPersonName);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, separator_1, 15, SpringLayout.WEST, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, separator_1, -26, SpringLayout.SOUTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, separator_1, 5, SpringLayout.EAST, separator);
-		contentPanel.add(separator_1);
+		JSeparator separator01 = new JSeparator();
+		slContentPanel.putConstraint(SpringLayout.NORTH, separator01, 46, SpringLayout.SOUTH, tfPersonName);
+		slContentPanel.putConstraint(SpringLayout.WEST, separator01, 15, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, separator01, -26, SpringLayout.SOUTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.EAST, separator01, 5, SpringLayout.EAST, separator);
+		contentPanel.add(separator01);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
