@@ -1,6 +1,8 @@
 package ime.flixing.mvc.view.genre;
 
 import java.awt.BorderLayout;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.awt.FlowLayout;
 import java.util.Optional;
 
@@ -35,10 +37,11 @@ public class GenreSaveView extends JDialog {
 	public static void main(String[] args) {
 		try {
 			GenreSaveView dialog = new GenreSaveView();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			final Logger logger = Logger.getLogger(GenreSaveView.class.getName());
+			logger.log(Level.SEVERE, DecoHelper.MSG_SHIT_HAPPENS, e);
 		}
 	}
 
@@ -46,35 +49,35 @@ public class GenreSaveView extends JDialog {
 	 * Create the dialog.
 	 */
 	public GenreSaveView() {
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 		setModal(true);
 		setAlwaysOnTop(true);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		SpringLayout sl_contentPanel = new SpringLayout();
-		contentPanel.setLayout(sl_contentPanel);
+		SpringLayout slContentPanel = new SpringLayout();
+		contentPanel.setLayout(slContentPanel);
 		{
 			lblGenreName = new JLabel("Genre Name");
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, lblGenreName, 10, SpringLayout.NORTH, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.WEST, lblGenreName, 10, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.NORTH, lblGenreName, 10, SpringLayout.NORTH, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.WEST, lblGenreName, 10, SpringLayout.WEST, contentPanel);
 			contentPanel.add(lblGenreName);
 		}
 		
 		tfGenreName = new JTextField();
 		lblGenreName.setLabelFor(tfGenreName);
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, tfGenreName, -3, SpringLayout.NORTH, lblGenreName);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, tfGenreName, 25, SpringLayout.EAST, lblGenreName);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, tfGenreName, -15, SpringLayout.EAST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.NORTH, tfGenreName, -3, SpringLayout.NORTH, lblGenreName);
+		slContentPanel.putConstraint(SpringLayout.WEST, tfGenreName, 25, SpringLayout.EAST, lblGenreName);
+		slContentPanel.putConstraint(SpringLayout.EAST, tfGenreName, -15, SpringLayout.EAST, contentPanel);
 		contentPanel.add(tfGenreName);
 		tfGenreName.setColumns(10);
 		
 		JScrollPane spDescription = new JScrollPane();
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, spDescription, 48, SpringLayout.SOUTH, tfGenreName);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, spDescription, 10, SpringLayout.WEST, lblGenreName);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, spDescription, 119, SpringLayout.SOUTH, tfGenreName);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, spDescription, 0, SpringLayout.EAST, tfGenreName);
+		slContentPanel.putConstraint(SpringLayout.NORTH, spDescription, 48, SpringLayout.SOUTH, tfGenreName);
+		slContentPanel.putConstraint(SpringLayout.WEST, spDescription, 10, SpringLayout.WEST, lblGenreName);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, spDescription, 119, SpringLayout.SOUTH, tfGenreName);
+		slContentPanel.putConstraint(SpringLayout.EAST, spDescription, 0, SpringLayout.EAST, tfGenreName);
 		contentPanel.add(spDescription);
 		
 		taDescription = new JTextArea();
@@ -84,13 +87,13 @@ public class GenreSaveView extends JDialog {
 		
 		JLabel lblDescription = new JLabel("Description");
 		lblDescription.setLabelFor(taDescription);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, lblDescription, 181, SpringLayout.WEST, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, lblDescription, -6, SpringLayout.NORTH, spDescription);
+		slContentPanel.putConstraint(SpringLayout.WEST, lblDescription, 181, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, lblDescription, -6, SpringLayout.NORTH, spDescription);
 		contentPanel.add(lblDescription);
 		
 		JButton btnClean = new JButton("Clean");
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, btnClean, 14, SpringLayout.SOUTH, spDescription);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, btnClean, 167, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.NORTH, btnClean, 14, SpringLayout.SOUTH, spDescription);
+		slContentPanel.putConstraint(SpringLayout.WEST, btnClean, 167, SpringLayout.WEST, contentPanel);
 		btnClean.addActionListener( e -> cleanFields() );
 		contentPanel.add(btnClean);
 		{
@@ -123,7 +126,7 @@ public class GenreSaveView extends JDialog {
 			if ( JOptionPane.showConfirmDialog(this, DecoHelper.MSG_CONFIRM_OPTION, DecoHelper.MSG_CONFIRM_TITLE, JOptionPane.YES_NO_OPTION )
 					 == JOptionPane.OK_OPTION ){
 				
-				Optional<Genre>optGenre = GenreController.saveGenre(strGenreName, strDescription);
+				Optional<Genre>optGenre = new GenreController().saveGenre(strGenreName, strDescription);
 				
 				if (optGenre.isPresent() ) {
 					

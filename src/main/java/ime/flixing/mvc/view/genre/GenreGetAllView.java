@@ -1,8 +1,9 @@
 package ime.flixing.mvc.view.genre;
 
 import java.awt.BorderLayout;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.awt.FlowLayout;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.JTextArea;
+import javax.swing.JLabel;
 
 public class GenreGetAllView extends JDialog {
 
@@ -36,7 +38,6 @@ public class GenreGetAllView extends JDialog {
 	private JTable tGenres;
 	private JTextArea taDescription;
 	private JButton btnSearch;
-	private List<String>descriptionList;
 	private Map<Long,String>descriptionMap;
 	
 	/**
@@ -45,10 +46,11 @@ public class GenreGetAllView extends JDialog {
 	public static void main(String[] args) {
 		try {
 			GenreGetAllView dialog = new GenreGetAllView();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			final Logger logger = Logger.getLogger(GenreGetAllView.class.getName());
+			logger.log(Level.SEVERE, DecoHelper.MSG_SHIT_HAPPENS, e);
 		}
 	}
 
@@ -56,63 +58,66 @@ public class GenreGetAllView extends JDialog {
 	 * Create the dialog.
 	 */
 	public GenreGetAllView() {
+		setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 		setModal(true);
 		setAlwaysOnTop(true);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		SpringLayout sl_contentPanel = new SpringLayout();
-		contentPanel.setLayout(sl_contentPanel);
+		SpringLayout slContentPanel = new SpringLayout();
+		contentPanel.setLayout(slContentPanel);
 		{
 			btnSearch = new JButton("Search");
+			slContentPanel.putConstraint(SpringLayout.NORTH, btnSearch, 10, SpringLayout.NORTH, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.EAST, btnSearch, -265, SpringLayout.EAST, contentPanel);
 			btnSearch.addActionListener( e -> searchAllAndShow() );
 			contentPanel.add(btnSearch);
 		}
 		{
 			JButton btnClean = new JButton("Clean");
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, btnClean, 10, SpringLayout.NORTH, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.WEST, btnClean, 235, SpringLayout.WEST, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, btnSearch, 0, SpringLayout.NORTH, btnClean);
-			sl_contentPanel.putConstraint(SpringLayout.EAST, btnSearch, -76, SpringLayout.WEST, btnClean);
+			slContentPanel.putConstraint(SpringLayout.NORTH, btnClean, 0, SpringLayout.NORTH, btnSearch);
+			slContentPanel.putConstraint(SpringLayout.WEST, btnClean, 88, SpringLayout.EAST, btnSearch);
 			btnClean.addActionListener( e -> cleanFields() );
 			contentPanel.add(btnClean);
 		}
 		
 		JScrollPane spGenres = new JScrollPane();
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, spGenres, 18, SpringLayout.SOUTH, btnSearch);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, spGenres, 10, SpringLayout.WEST, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, spGenres, -69, SpringLayout.SOUTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, spGenres, -12, SpringLayout.EAST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.NORTH, spGenres, 18, SpringLayout.SOUTH, btnSearch);
+		slContentPanel.putConstraint(SpringLayout.WEST, spGenres, 10, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, spGenres, -69, SpringLayout.SOUTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.EAST, spGenres, -12, SpringLayout.EAST, contentPanel);
 		contentPanel.add(spGenres);
 		
 		tGenres = new JTable();
 		tGenres.setFillsViewportHeight(true);
 		tGenres.setModel(new DefaultTableModel());
-		tGenres.setName("jTableGenres");
-		//TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tGenres.getModel());
-		//tGenres.setRowSorter(sorter);
 		ListSelectionModel listSelectionModel = tGenres.getSelectionModel();
-		listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listSelectionModel.addListSelectionListener( e -> fillDescriptionText(e) );
+		listSelectionModel.addListSelectionListener( this::fillDescriptionText );
 		tGenres.setSelectionModel(listSelectionModel);		
 		spGenres.setViewportView(tGenres);
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, tGenres, 76, SpringLayout.NORTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, tGenres, 73, SpringLayout.WEST, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, tGenres, 0, SpringLayout.SOUTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, tGenres, 0, SpringLayout.EAST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.NORTH, tGenres, 76, SpringLayout.NORTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.WEST, tGenres, 73, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, tGenres, 0, SpringLayout.SOUTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.EAST, tGenres, 0, SpringLayout.EAST, contentPanel);
 		
 		JScrollPane spDescription = new JScrollPane();
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, spDescription, -46, SpringLayout.SOUTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, spDescription, 31, SpringLayout.WEST, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, spDescription, -10, SpringLayout.SOUTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, spDescription, -33, SpringLayout.EAST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.NORTH, spDescription, -46, SpringLayout.SOUTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.WEST, spDescription, 31, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, spDescription, -10, SpringLayout.SOUTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.EAST, spDescription, -33, SpringLayout.EAST, contentPanel);
 		contentPanel.add(spDescription);
 		
 		taDescription = new JTextArea();
+		taDescription.setEditable(false);
 		taDescription.setWrapStyleWord(true);
 		taDescription.setLineWrap(true);
 		spDescription.setViewportView(taDescription);
+		
+		JLabel lblDescription = new JLabel("Description");
+		slContentPanel.putConstraint(SpringLayout.NORTH, lblDescription, 6, SpringLayout.SOUTH, spGenres);
+		slContentPanel.putConstraint(SpringLayout.WEST, lblDescription, 171, SpringLayout.WEST, contentPanel);
+		contentPanel.add(lblDescription);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -128,14 +133,12 @@ public class GenreGetAllView extends JDialog {
 	
 	private void searchAllAndShow() {
 		
-		Optional<List<Genre>> optListGenre = GenreController.getAllGenre();
+		Optional<List<Genre>> optListGenre = new GenreController().getAllGenre();
 		
 		if ( optListGenre.isPresent() ) {
 			
 			descriptionMap = new HashMap<>();
-			descriptionList = new ArrayList<>();
 			Object[][] aGenres = IntStream.range(0, optListGenre.get().size() )
-									.peek( n-> descriptionList.add(optListGenre.get().get(n).getDescription() ) )
 									.peek( m-> descriptionMap.put(optListGenre.get().get(m).getGenreId(),
 																	optListGenre.get().get(m).getDescription() ) )
                     				.mapToObj( i -> new Object []{
@@ -144,8 +147,9 @@ public class GenreGetAllView extends JDialog {
                     				}).toArray(Object[][]::new);
 			
 			tGenres.setModel(new DefaultTableModel(aGenres, new String [] {"GenreId", "GenreName"} ) );
-			//TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tGenres.getModel());
-			//tGenres.setRowSorter(sorter);
+			tGenres.setDefaultEditor(Object.class, null);
+			TableRowSorter<TableModel> sorter = new TableRowSorter<>(tGenres.getModel());
+			tGenres.setRowSorter(sorter);
 			
 		}else {
 			JOptionPane.showMessageDialog(this, DecoHelper.MSG_ERROR_NULL);
@@ -166,16 +170,9 @@ public class GenreGetAllView extends JDialog {
         
         if ( !e.getValueIsAdjusting() && minIndex >= 0 ) {        	
         	
-        	//Sacar el value de la columna Genre Id
-        	Object objId = tGenres.getValueAt(tGenres.getSelectedRow(), tGenres.getSelectedColumn());
-        	
-        	//Buscar en el Map por genre id/clave para obtener la descripcion
-        	
-        	
-        	//Mostrar
-        	//System.out.println(descriptionList.get(minIndex));
-        	taDescription.setText(descriptionList.get(minIndex));
+        	Object objId = tGenres.getValueAt(tGenres.getSelectedRow(), 0 );        	
+        	String descrip = descriptionMap.get(objId);        	
+        	taDescription.setText(descrip);
         }
 	}
-	
 }

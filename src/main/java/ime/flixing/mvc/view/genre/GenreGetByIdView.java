@@ -1,6 +1,8 @@
 package ime.flixing.mvc.view.genre;
 
 import java.awt.BorderLayout;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.awt.FlowLayout;
 import java.util.Optional;
 
@@ -40,10 +42,11 @@ public class GenreGetByIdView extends JDialog {
 	public static void main(String[] args) {
 		try {
 			GenreGetByIdView dialog = new GenreGetByIdView();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			final Logger logger = Logger.getLogger(GenreGetByIdView.class.getName());
+			logger.log(Level.SEVERE, DecoHelper.MSG_SHIT_HAPPENS, e);
 		}
 	}
 
@@ -51,45 +54,46 @@ public class GenreGetByIdView extends JDialog {
 	 * Create the dialog.
 	 */
 	public GenreGetByIdView() {
+		setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 		setModal(true);
 		setAlwaysOnTop(true);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		SpringLayout sl_contentPanel = new SpringLayout();
-		contentPanel.setLayout(sl_contentPanel);
+		SpringLayout slContentPanel = new SpringLayout();
+		contentPanel.setLayout(slContentPanel);
 		
 		JLabel lblGenreCod = new JLabel("Genre Id");
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, lblGenreCod, 10, SpringLayout.NORTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, lblGenreCod, 10, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.NORTH, lblGenreCod, 10, SpringLayout.NORTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.WEST, lblGenreCod, 10, SpringLayout.WEST, contentPanel);
 		contentPanel.add(lblGenreCod);
 		
 		spGenreCod = new JSpinner(new SpinnerNumberModel(0, 0, 33, 1));
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, spGenreCod, 0, SpringLayout.NORTH, lblGenreCod);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, spGenreCod, 23, SpringLayout.EAST, lblGenreCod);
+		slContentPanel.putConstraint(SpringLayout.NORTH, spGenreCod, 0, SpringLayout.NORTH, lblGenreCod);
+		slContentPanel.putConstraint(SpringLayout.WEST, spGenreCod, 23, SpringLayout.EAST, lblGenreCod);
 		contentPanel.add(spGenreCod);
 		
 		JButton btnSearch = new JButton("Search");
-		sl_contentPanel.putConstraint(SpringLayout.WEST, btnSearch, 25, SpringLayout.EAST, spGenreCod);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, btnSearch, 0, SpringLayout.SOUTH, spGenreCod);
+		slContentPanel.putConstraint(SpringLayout.WEST, btnSearch, 25, SpringLayout.EAST, spGenreCod);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, btnSearch, 0, SpringLayout.SOUTH, spGenreCod);
 		btnSearch.addActionListener( e -> searchAndShowGenre() );
 		contentPanel.add(btnSearch);
 		
 		jListGenre = new JList<>();
-		jListGenre.setModel(new DefaultListModel<String>());
+		jListGenre.setModel(new DefaultListModel<>());
 		
 		JScrollPane spListGenre = new JScrollPane();
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, spListGenre, 36, SpringLayout.SOUTH, spGenreCod);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, spListGenre, 0, SpringLayout.WEST, lblGenreCod);
+		slContentPanel.putConstraint(SpringLayout.NORTH, spListGenre, 36, SpringLayout.SOUTH, spGenreCod);
+		slContentPanel.putConstraint(SpringLayout.WEST, spListGenre, 0, SpringLayout.WEST, lblGenreCod);
 		spListGenre.setViewportView(jListGenre);
 		contentPanel.add(spListGenre);
 		
 		JScrollPane spDescription = new JScrollPane();
-		sl_contentPanel.putConstraint(SpringLayout.EAST, spListGenre, 0, SpringLayout.EAST, spDescription);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, spDescription, 0, SpringLayout.WEST, lblGenreCod);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, spDescription, -5, SpringLayout.SOUTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, spDescription, -15, SpringLayout.EAST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.EAST, spListGenre, 0, SpringLayout.EAST, spDescription);
+		slContentPanel.putConstraint(SpringLayout.WEST, spDescription, 0, SpringLayout.WEST, lblGenreCod);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, spDescription, -5, SpringLayout.SOUTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.EAST, spDescription, -15, SpringLayout.EAST, contentPanel);
 		contentPanel.add(spDescription);
 		
 		textAreaDescription = new JTextArea();
@@ -97,32 +101,32 @@ public class GenreGetByIdView extends JDialog {
 		textAreaDescription.setLineWrap(true);
 		textAreaDescription.setEditable(false);
 		spDescription.setViewportView(textAreaDescription);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, textAreaDescription, 46, SpringLayout.EAST, spListGenre);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, textAreaDescription, -150, SpringLayout.SOUTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.WEST, textAreaDescription, 46, SpringLayout.EAST, spListGenre);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, textAreaDescription, -150, SpringLayout.SOUTH, contentPanel);
 		
 		JButton btnClean = new JButton("Clean");
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, spDescription, 121, SpringLayout.SOUTH, btnClean);
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, btnClean, 0, SpringLayout.NORTH, btnSearch);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, btnClean, 24, SpringLayout.EAST, btnSearch);
+		slContentPanel.putConstraint(SpringLayout.NORTH, spDescription, 121, SpringLayout.SOUTH, btnClean);
+		slContentPanel.putConstraint(SpringLayout.NORTH, btnClean, 0, SpringLayout.NORTH, btnSearch);
+		slContentPanel.putConstraint(SpringLayout.WEST, btnClean, 24, SpringLayout.EAST, btnSearch);
 		btnClean.addActionListener( e -> cleanFields() );
 		contentPanel.add(btnClean);
 		
 		JLabel lblDescription = new JLabel("Description");
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, spListGenre, -8, SpringLayout.NORTH, lblDescription);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, lblDescription, 0, SpringLayout.WEST, lblGenreCod);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, lblDescription, -6, SpringLayout.NORTH, spDescription);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, spListGenre, -8, SpringLayout.NORTH, lblDescription);
+		slContentPanel.putConstraint(SpringLayout.WEST, lblDescription, 0, SpringLayout.WEST, lblGenreCod);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, lblDescription, -6, SpringLayout.NORTH, spDescription);
 		contentPanel.add(lblDescription);
 		
 		JLabel lblGenre = new JLabel("Genre");
-		sl_contentPanel.putConstraint(SpringLayout.WEST, lblGenre, 10, SpringLayout.WEST, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, lblGenre, -6, SpringLayout.NORTH, spListGenre);
+		slContentPanel.putConstraint(SpringLayout.WEST, lblGenre, 10, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, lblGenre, -6, SpringLayout.NORTH, spListGenre);
 		contentPanel.add(lblGenre);
 		
 		JSeparator separator = new JSeparator();
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, separator, 6, SpringLayout.SOUTH, spGenreCod);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, separator, 0, SpringLayout.WEST, lblGenreCod);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, separator, -5, SpringLayout.NORTH, lblGenre);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, separator, -10, SpringLayout.EAST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.NORTH, separator, 6, SpringLayout.SOUTH, spGenreCod);
+		slContentPanel.putConstraint(SpringLayout.WEST, separator, 0, SpringLayout.WEST, lblGenreCod);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, separator, -5, SpringLayout.NORTH, lblGenre);
+		slContentPanel.putConstraint(SpringLayout.EAST, separator, -10, SpringLayout.EAST, contentPanel);
 		contentPanel.add(separator);
 				
 		
@@ -143,7 +147,7 @@ public class GenreGetByIdView extends JDialog {
 		
 		if ( Checker.checkDigits(spGenreCod.getValue().toString()) ){
 			
-			Optional<Genre>optGenreFound = GenreController.getGenreById( spGenreCod.getValue().toString() );
+			Optional<Genre>optGenreFound = new GenreController().getGenreById( spGenreCod.getValue().toString() );
 			
 			if ( optGenreFound.isPresent() ) {
 				
