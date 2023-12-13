@@ -6,8 +6,8 @@ import java.util.Optional;
 
 import ime.flixing.dao.FlixDao;
 import ime.flixing.dao.FlixPersonPositionDao;
+import ime.flixing.dao.GenericDao;
 import ime.flixing.dao.PersonDao;
-import ime.flixing.dao.PositionDao;
 import ime.flixing.dao.impl.FlixDaoImpl;
 import ime.flixing.dao.impl.FlixPersonPositionDaoImpl;
 import ime.flixing.dao.impl.PersonDaoImpl;
@@ -71,8 +71,8 @@ public class FlixPersonPositionController {
 			PersonDao personDao = new PersonDaoImpl();
 			Person personFound = personDao.getPersonById(Long.parseLong(strPersonCod));			
 
-			PositionDao positionDao = new PositionDaoImpl();
-			Position positionFound = positionDao.getPositionById(Long.parseLong(strPositionCod));
+			GenericDao<Position> positionDao = new PositionDaoImpl();
+			Position positionFound = positionDao.getById(Long.parseLong(strPositionCod));
 			
 			if ( flixFound != null && personFound != null && positionFound != null ) {
 				
@@ -115,8 +115,8 @@ public class FlixPersonPositionController {
 			PersonDao personDao = new PersonDaoImpl();
 			Person personFound = personDao.getPersonById(Long.parseLong(strPersonCod));			
 
-			PositionDao positionDao = new PositionDaoImpl();
-			Position positionFound = positionDao.getPositionById(Long.parseLong(strPositionCod));
+			GenericDao<Position> positionDao = new PositionDaoImpl();
+			Position positionFound = positionDao.getById(Long.parseLong(strPositionCod));
 			
 			if ( flixFound != null && personFound != null && positionFound != null ) {
 				
