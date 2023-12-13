@@ -3,8 +3,6 @@ package ime.flixing.mvc.controller;
 import java.util.List;
 import java.util.Optional;
 
-import ime.flixing.dao.FlixDao;
-import ime.flixing.dao.GenreDao;
 import ime.flixing.dao.impl.FlixDaoImpl;
 import ime.flixing.dao.impl.GenreDaoImpl;
 import ime.flixing.entity.Flix;
@@ -12,12 +10,30 @@ import ime.flixing.entity.Genre;
 import ime.flixing.mvc.view.FlixView;
 import ime.flixing.mvc.view.flix.*;
 import ime.flixing.tool.*;
-import lombok.NoArgsConstructor;
-import lombok.AccessLevel;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+
 public class FlixController {
 	
+	private FlixDaoImpl flixDaoImpl;
+	private GenreDaoImpl genreDaoImpl;
+	
+	public FlixController() {
+		super();
+		this.flixDaoImpl = new FlixDaoImpl();
+		this.genreDaoImpl = new GenreDaoImpl();
+	}
+
+	public FlixController(FlixDaoImpl flixDaoImpl) {
+		super();
+		this.flixDaoImpl = flixDaoImpl;
+	}
+
+	public FlixController(FlixDaoImpl flixDaoImpl, GenreDaoImpl genreDaoImpl) {
+		super();
+		this.flixDaoImpl = flixDaoImpl;
+		this.genreDaoImpl = genreDaoImpl;
+	}
+
 	public static final void initFlixController(){
 		
 		FlixView flixView = new FlixView();
@@ -62,40 +78,37 @@ public class FlixController {
 		
 	 }
 	 
-	 public static final Optional<Flix> getFlixById(String strFlixCod) {
+	 public final Optional<List<Flix>> getAllFlix() {
+		
+		return Optional.ofNullable(flixDaoImpl.getAllFlix());			
+		
+	 }
+
+	 public final Optional<Flix> getFlixById(String strFlixCod) {
 		 
 		 if ( Checker.checkDigits(strFlixCod) ) {
-			 
-			FlixDao flixDao = new FlixDaoImpl();
-			return Optional.ofNullable( flixDao.getFlixById( Long.parseLong(strFlixCod) ) ); 
+			
+			return Optional.ofNullable( flixDaoImpl.getFlixById( Long.parseLong(strFlixCod) ) ); 
 		 }		
 		 
 		 return Optional.ofNullable(null);
 	 }
 
-	 public static final Optional<List<Flix>> getAllFlix() {
-		
-		return Optional.ofNullable(new FlixDaoImpl().getAllFlix());			
-		
-	 }
-	 
-	 public static final Optional<Flix>saveFlix(String strFlixName, String strGenreId){
+	 public final Optional<Flix>saveFlix(String strFlixName, String strGenreId){
 		 
 		 Optional<Flix>result = Optional.empty();
 		 
 		 if ( Checker.checkFlixTitle( strFlixName ) 
 					&& Checker.checkDigits( strGenreId) ) {
 
-			 GenreDao genreDaoImpl = new GenreDaoImpl();
-			 Optional<Genre> optGenre = Optional.ofNullable( genreDaoImpl.getGenreById( Long.parseLong(strGenreId) ) );
+			 Optional<Genre> optGenre = Optional.ofNullable( genreDaoImpl.getById( Long.parseLong(strGenreId) ) );
 			 
 			 if ( optGenre.isPresent() ) {
 				 
-				 FlixDao flixDao = new FlixDaoImpl();
 				 Flix flix = new Flix();
 				 flix.setTitle(strFlixName);
 				 flix.setGenre( optGenre.get() );
-				 result = Optional.ofNullable(flixDao.saveFlix(flix));
+				 result = Optional.ofNullable(flixDaoImpl.saveFlix(flix));
 			 } 
 		 }
 		 
@@ -103,7 +116,7 @@ public class FlixController {
 		 
 	 }
 	 
-	 public static final Optional<Flix>updateFlix(String strFlixCod, String strFlixName, String strGenreId){
+	 public final Optional<Flix>updateFlix(String strFlixCod, String strFlixName, String strGenreId){
 		 
 		 Optional<Flix>result = Optional.empty();
 		 
@@ -111,36 +124,34 @@ public class FlixController {
 					&& Checker.checkFlixTitle( strFlixName ) 
 					&& Checker.checkDigits( strGenreId) ) {
 			 
-			 GenreDao genreDaoImpl = new GenreDaoImpl();
-			 Optional<Genre> optGenre = Optional.ofNullable( genreDaoImpl.getGenreById( Long.parseLong(strGenreId) ) );
+			 
+			 Optional<Genre> optGenre = Optional.ofNullable( genreDaoImpl.getById( Long.parseLong(strGenreId) ) );
 			 
 			 if ( optGenre.isPresent() ) {
 				 
-				 FlixDao flixDao = new FlixDaoImpl();
 				 Flix flix = new Flix();
 				 flix.setTitle( strFlixName );
 				 flix.setGenre( optGenre.get() );
-				 result = Optional.ofNullable(flixDao.updateFlix(Long.parseLong(strFlixCod), flix));
+				 result = Optional.ofNullable(flixDaoImpl.updateFlix(Long.parseLong(strFlixCod), flix));
 			 }	 
 		 }
 		 
 		 return result;
 	 }
 	 
-	public static final int deleteFlix(String strFlixCod) {
+	public final int deleteFlix(String strFlixCod) {
 		
 		int returnValue = -1;
 		
 		if ( Checker.checkDigits( strFlixCod ) ) {
 			
-			FlixDao flixDao = new FlixDaoImpl();
-			Optional<Flix> optFlixFound = Optional.ofNullable(flixDao.getFlixByIdEagger(Long.parseLong(strFlixCod)));
+			Optional<Flix> optFlixFound = Optional.ofNullable(flixDaoImpl.getFlixByIdEagger(Long.parseLong(strFlixCod)));
 			
 			if ( optFlixFound.isPresent() ) {
 				
 				if ( optFlixFound.get().getFlixPersonPosition().isEmpty() ) {
 					
-					flixDao.deleteFlix( Long.parseLong(strFlixCod) );
+					flixDaoImpl.deleteFlix( Long.parseLong(strFlixCod) );
 					returnValue =  0;
 					
 				}else {
