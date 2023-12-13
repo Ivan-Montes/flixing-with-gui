@@ -18,10 +18,13 @@ import ime.flixing.entity.Person;
 import ime.flixing.entity.Position;
 import ime.flixing.tool.Checker;
 import ime.flixing.mvc.view.FlixPersonPositionView;
-import ime.flixing.mvc.view.flix_person_position.FlixPersonPositionEditView;
-import ime.flixing.mvc.view.flix_person_position.FlixPersonPositionSaveView;
+import ime.flixing.mvc.view.flix_person_position.*;
 
 
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FlixPersonPositionController {
 	
 	public static final void initFlixPersonPositionController() {
@@ -40,6 +43,18 @@ public class FlixPersonPositionController {
 	public static final void initFlixPersonPositionSaveView() {
 		
 		FlixPersonPositionSaveView view = new FlixPersonPositionSaveView();
+		view.setVisible(true);
+	}
+	
+	public static final void initFlixPersonPositionDetailsView(String strFlixCod, String strPersonCod, String strPositionCod) {
+		
+		FlixPersonPosition flixPersonPosition = new FlixPersonPositionDaoImpl().getFlixPersonPositionById(
+				Long.parseLong(strFlixCod), 
+				Long.parseLong(strPersonCod), 
+				Long.parseLong(strPositionCod) ) ;
+		
+		FlixPersonPositionDetailsView view = new FlixPersonPositionDetailsView();
+		view.loadData(flixPersonPosition != null? flixPersonPosition:new FlixPersonPosition());
 		view.setVisible(true);
 	}
 
@@ -90,7 +105,7 @@ public class FlixPersonPositionController {
 	
 	public static final int deleteFlixPersonPosition(String strFlixCod, String strPersonCod, String strPositionCod) {
 		
-		int returnValue = -5;
+		int returnValue;
 		
 		if ( Checker.checkDigits(strFlixCod) && Checker.checkDigits(strPersonCod) && Checker.checkDigits(strPositionCod)  ) {
 			
