@@ -3,18 +3,26 @@ package ime.flixing.mvc.controller;
 import java.util.List;
 import java.util.Optional;
 
-import ime.flixing.dao.PersonDao;
 import ime.flixing.dao.impl.PersonDaoImpl;
 import ime.flixing.entity.Person;
 import ime.flixing.mvc.view.PersonView;
 import ime.flixing.mvc.view.person.*;
 import ime.flixing.tool.Checker;
 
-import lombok.NoArgsConstructor;
-import lombok.AccessLevel;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PersonController {
+
+	private PersonDaoImpl personDaoImpl;
+	
+	public PersonController() {
+		super();
+		this.personDaoImpl = new PersonDaoImpl();
+	}
+
+	public PersonController(PersonDaoImpl personDaoImpl) {
+		super();
+		this.personDaoImpl = personDaoImpl;
+	}
 
 	public static final void initPersonController() {
 		
@@ -58,25 +66,25 @@ public class PersonController {
 		
 	}
 
-	public static final Optional<List<Person>> getAllPerson() {
+	public final Optional<List<Person>> getAllPerson() {
 
-		return Optional.ofNullable( new PersonDaoImpl().getAllPerson() );
+		return Optional.ofNullable( personDaoImpl.getAllPerson() );
 		
 	}
 	
-	public static final Optional<Person> getPersonById(String strPersonCod){
+	public final Optional<Person> getPersonById(String strPersonCod){
 		
 		Optional<Person>optPerson = Optional.empty();
 		
 		if ( Checker.checkDigits(strPersonCod) ) {
 			
-			optPerson = Optional.ofNullable( new PersonDaoImpl().getPersonById(Long.parseLong(strPersonCod)) );
+			optPerson = Optional.ofNullable( personDaoImpl.getPersonById(Long.parseLong(strPersonCod)) );
 		}
 		
 		return optPerson;
 	}
 	
-	public static final Optional<Person> savePerson(String strName, String strSurname){
+	public final Optional<Person> savePerson(String strName, String strSurname){
 		
 		Optional<Person>optPerson = Optional.empty();
 		
@@ -86,7 +94,7 @@ public class PersonController {
 			Person person = new Person();
 			person.setName(strName);
 			person.setSurname(strSurname);
-			optPerson = Optional.ofNullable(new PersonDaoImpl().savePerson(person));
+			optPerson = Optional.ofNullable(personDaoImpl.savePerson(person));
 			
 		}
 		
@@ -94,23 +102,22 @@ public class PersonController {
 		
 	}
 	
-	public static final Optional<Person> updatePerson(String strPersonCod, String strName, String strSurname){
+	public final Optional<Person> updatePerson(String strPersonCod, String strName, String strSurname){
 
 		Optional<Person>optPersonSaved = Optional.empty();
 		
 		if ( Checker.checkDigits(strPersonCod) &&
 				Checker.checkName(strName)
 				&& Checker.checkSurname(strSurname) ){
-			
-			PersonDao personDao = new PersonDaoImpl();
-			Optional<Person> optPersonFound = Optional.ofNullable(personDao.getPersonById(Long.parseLong(strPersonCod)));
+						
+			Optional<Person> optPersonFound = Optional.ofNullable(personDaoImpl.getPersonById(Long.parseLong(strPersonCod)));
 			
 			if ( optPersonFound.isPresent() ) {
 				
 				Person person = new Person();
 				person.setName(strName);
 				person.setSurname(strSurname);
-				optPersonSaved = Optional.ofNullable(personDao.updatePerson(Long.parseLong(strPersonCod), person));
+				optPersonSaved = Optional.ofNullable(personDaoImpl.updatePerson(Long.parseLong(strPersonCod), person));
 				
 			}
 			
@@ -119,20 +126,19 @@ public class PersonController {
 		return optPersonSaved;
 	}
 	
-	public static final int deletePerson(String strPersonCod) {
+	public final int deletePerson(String strPersonCod) {
 		
 		int returnValue = -1;
 		
 		if ( Checker.checkDigits(strPersonCod) ) {
-			
-			PersonDao personDao = new PersonDaoImpl();
-			Optional<Person>optPerson = Optional.ofNullable( personDao.getPersonByIdEagger(Long.parseLong(strPersonCod)) );
+						
+			Optional<Person>optPerson = Optional.ofNullable( personDaoImpl.getPersonByIdEagger(Long.parseLong(strPersonCod)) );
 		
 			if (optPerson.isPresent() ) {
 				
 					if ( optPerson.get().getFlixPersonPosition().isEmpty() ) {
 					
-						personDao.deletePerson( Long.parseLong(strPersonCod) );
+						personDaoImpl.deletePerson( Long.parseLong(strPersonCod) );
 						returnValue =  0;
 				
 					}
