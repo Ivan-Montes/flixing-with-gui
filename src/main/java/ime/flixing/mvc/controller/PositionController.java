@@ -3,19 +3,31 @@ package ime.flixing.mvc.controller;
 import java.util.List;
 import java.util.Optional;
 
-import ime.flixing.dao.PositionDao;
 import ime.flixing.dao.impl.PositionDaoImpl;
 import ime.flixing.entity.Position;
 import ime.flixing.mvc.view.PositionView;
 import ime.flixing.mvc.view.position.*;
 import ime.flixing.tool.Checker;
 
-import lombok.NoArgsConstructor;
-import lombok.AccessLevel;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class PositionController {
 
+public class PositionController {	
+
+	private PositionDaoImpl positionDaoImpl;
+	
+	
+	public PositionController() {
+		
+		this.positionDaoImpl = new PositionDaoImpl();
+		
+	}
+	
+	public PositionController(PositionDaoImpl positionDaoImpl) {
+		
+		this.positionDaoImpl = positionDaoImpl;
+		
+	}	
+	
 	public static final void initPositionController() {
 
 		PositionView view = new PositionView();
@@ -58,119 +70,107 @@ public class PositionController {
 		
 	}
 	
-	public static final Optional<List<Position>>getAllPosition(){
-		
-		return Optional.ofNullable( new PositionDaoImpl().getAllPosition() );
+	public final Optional<List<Position>>getAllPosition(){
+				
+		return Optional.ofNullable( positionDaoImpl.getAllPosition() );
 		
 	}
 	
-	public static final Optional<Position>getPositionById(String strPositionCod){
+	public final Optional<Position>getPositionById(String strPositionCod){
 		
 		Optional<Position>optPosition  = Optional.empty();
 		
 		if ( Checker.checkDigits(strPositionCod) ) {
 			
-			optPosition = Optional.ofNullable( new PositionDaoImpl().getPositionById(Long.parseLong(strPositionCod)));
+			optPosition = Optional.ofNullable( positionDaoImpl.getPositionById(Long.parseLong(strPositionCod)));
 		}
 		
 		return optPosition;
 		
 	}
 	
-	public static final Optional<Position> savePosition(String strName, String strDescription){
+	public final Optional<Position> savePosition(String strName, String strDescription){
 		
-		Optional<Position>optPosition;
 		Position position = new Position();
 		
 		if ( Checker.checkName(strName)
 				&& Checker.checkDescription(strDescription) ) {
 			
-			PositionDao positionDao = new PositionDaoImpl();
-			Optional<List<Position>>optListPosition = Optional.ofNullable( positionDao.getPositionByNameId(strName) );
+			List<Position>listPosition = positionDaoImpl.getPositionByNameId(strName) ;
 			
-			if ( optListPosition.isPresent() && optListPosition.get().isEmpty() ) {				
+			if ( listPosition != null && listPosition.isEmpty() ) {				
 				
 				position.setName(strName);
 				position.setDescription(strDescription);
-				optPosition = Optional.ofNullable(positionDao.savePosition(position) );
+				position = positionDaoImpl.savePosition(position);
 				
 			}else {
 				position.setPositionId(-2L);
-				optPosition = Optional.ofNullable(position);
 			}
 			
 		}else {
 			position.setPositionId(-1L);
-			optPosition = Optional.ofNullable(position);
 		}
 		
-		return optPosition;
+		return Optional.ofNullable(position);
 	}
 	
-	public static final Optional<Position> updatePosition(String strPositionCod, String strName, String strDescription){
+	public final Optional<Position> updatePosition(String strPositionCod, String strName, String strDescription){
 		
-		Optional<Position>optPosition;
-		Optional<List<Position>>optListPosition;
 		Optional<Position> optPositionFound;
 		Position position = new Position();
 		
 		if ( Checker.checkDigits(strPositionCod) 
 				&& Checker.checkName(strName)
-				&& Checker.checkDescription(strDescription) ) {
+				&& Checker.checkDescription(strDescription) ) {			
 			
-			PositionDao positionDao = new PositionDaoImpl();
-			optListPosition = Optional.ofNullable( positionDao.getPositionByNameId(strName) );
-			
-			if ( ( optListPosition.isPresent() && optListPosition.get().isEmpty() )
-					||  ( optListPosition.isPresent() && optListPosition.get()
+			List<Position>listPosition = positionDaoImpl.getPositionByNameId(strName) ;
+
+			if ( ( listPosition != null && listPosition.isEmpty() )
+					||  ( listPosition != null && listPosition
 														.stream()
 														.anyMatch( p -> p.getPositionId() == (Long.parseLong(strPositionCod) ) ) )
 					) {
 				
-				optPositionFound = Optional.ofNullable( positionDao.getPositionById(Long.parseLong(strPositionCod)));
+				optPositionFound = Optional.ofNullable( positionDaoImpl.getPositionById(Long.parseLong(strPositionCod)));
 				
 				if( optPositionFound.isPresent() ) {
 
 					position.setName(strName);
 					position.setDescription(strDescription);
-					optPosition = Optional.ofNullable(positionDao.updatePosition(Long.parseLong(strPositionCod), position));
+					position = positionDaoImpl.updatePosition(Long.parseLong(strPositionCod), position);
 					
 				}else {
 					position.setPositionId(-3L);
-					optPosition = Optional.ofNullable(position);
 				}
 				
 				
 			}else {
 				position.setPositionId(-2L);
-				optPosition = Optional.ofNullable(position);
-			}
-			
+			}			
 			
 		}else {
 			position.setPositionId(-1L);
-			optPosition = Optional.ofNullable(position);
 		}
 		
-		return optPosition;
+		return Optional.ofNullable(position);
 	}
 	
 	
-	public static final int deletePerson(String strPositionCod) {
+	public final int deletePerson(String strPositionCod) {
 		
 		int returnValue;
 		Optional<Position> optPositionFound;
 		
 		if ( Checker.checkDigits(strPositionCod) ) {
 			
-			PositionDao positionDao = new PositionDaoImpl();
-			optPositionFound = Optional.ofNullable( positionDao.getPositionByIdEagger(Long.parseLong(strPositionCod)));
+			optPositionFound = Optional.ofNullable( positionDaoImpl.getPositionByIdEagger(Long.parseLong(strPositionCod)));
 			
 			if( optPositionFound.isPresent() ) {
 			
 				if ( optPositionFound.get().getFlixPersonPosition().isEmpty() ) {
 					
-					positionDao.deletePosition( Long.parseLong(strPositionCod) );
+					positionDaoImpl.deletePosition( Long.parseLong(strPositionCod) );
 					returnValue =  0;
 			
 				}
