@@ -5,16 +5,18 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>ime</groupId>
-  <artifactId>flixing</artifactId>
+  <artifactId>flixing-with-gui</artifactId>
   <version>1.0.0</version>
-
+  <packaging>jar</packaging>
   <name>flixing-with-gui</name>
   <url>http://www.github.com</url>
 
   <properties>
     <maven.compiler.release>17</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <sonar.coverage.exclusions>src/main/java/ime/flixing/mvc/**/*,src/main/java/ime/flixing/mvc/**/**/*,src/main/java/ime/flixing/exception/*</sonar.coverage.exclusions>
+    <sonar-java-binaries>target/classes</sonar-java-binaries>
+    <sonar.exclusions></sonar.exclusions>
+    <sonar.coverage.exclusions>src/main/java/ime/flixing/mvc/view/*,src/main/java/ime/flixing/mvc/view/**/*,src/main/java/ime/flixing/exception/*</sonar.coverage.exclusions>
   </properties>
 
   <dependencies>
@@ -85,7 +87,7 @@
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.3.2</version>
         </plugin>
         <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
         <plugin>
@@ -102,9 +104,11 @@
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
+          <version>3.3.0</version>
           <configuration>
-	        <archive>
+	        <archive>				
+            <addMavenDescriptor>false</addMavenDescriptor>
+            <compress>true</compress>
 	          <manifest>
 	            <addClasspath>true</addClasspath>
 	            <classpathPrefix>lib/</classpathPrefix>
@@ -133,6 +137,49 @@
       </plugins>
     </pluginManagement>
     <plugins>
+		<!-- Fat jar with dependencies inside. Default name %file%jar-with-dependencies.jar -->
+        <plugin>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-assembly-plugin</artifactId>
+		    <version>3.6.0</version>
+		   	<configuration>
+                <descriptorRefs>
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
+                <archive>
+                    <manifest>
+                        <mainClass>ime.flixing.App</mainClass>
+                    </manifest>
+                </archive>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>make-assembly</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                </execution>
+            </executions>
+		</plugin>
+		<!-- Thin jar packaging with dependencies in /lib folder in /target directory -->
+		<plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-dependency-plugin</artifactId>
+	        <version>3.2.0</version>
+	        <executions>
+	          <execution>
+	            <id>copy-dependencies</id>
+	            <phase>package</phase>
+	            <goals>
+	              <goal>copy-dependencies</goal>
+	            </goals>
+	            <configuration>
+	              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+	            </configuration>
+	          </execution>
+	        </executions>
+	      </plugin>
 	    <plugin>
 	      <groupId>org.jacoco</groupId>
 	      <artifactId>jacoco-maven-plugin</artifactId>
