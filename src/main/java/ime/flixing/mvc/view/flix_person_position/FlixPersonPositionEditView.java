@@ -1,6 +1,8 @@
 package ime.flixing.mvc.view.flix_person_position;
 
 import java.awt.BorderLayout;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.awt.FlowLayout;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +14,6 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -40,10 +41,11 @@ public class FlixPersonPositionEditView extends JDialog {
 	public static void main(String[] args) {
 		try {
 			FlixPersonPositionEditView dialog = new FlixPersonPositionEditView();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			final Logger logger = Logger.getLogger(FlixPersonPositionEditView.class.getName());
+			logger.log(Level.SEVERE, DecoHelper.MSG_SHIT_HAPPENS, e);
 		}
 	}
 
@@ -52,41 +54,41 @@ public class FlixPersonPositionEditView extends JDialog {
 	 */
 	public FlixPersonPositionEditView() {
 		setModal(true);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 		setAlwaysOnTop(true);
 		setBounds(100, 100, 640, 480);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		SpringLayout sl_contentPanel = new SpringLayout();
-		contentPanel.setLayout(sl_contentPanel);
+		SpringLayout slContentPanel = new SpringLayout();
+		contentPanel.setLayout(slContentPanel);
 		{
 			btnSearch = new JButton("Search");
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, btnSearch, 10, SpringLayout.NORTH, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.WEST, btnSearch, 247, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.NORTH, btnSearch, 10, SpringLayout.NORTH, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.WEST, btnSearch, 247, SpringLayout.WEST, contentPanel);
 			btnSearch.addActionListener( e -> searchAndShow() );
 			contentPanel.add(btnSearch);
 		}
 		{
 			btnDelete = new JButton("Delete");
-			sl_contentPanel.putConstraint(SpringLayout.WEST, btnDelete, 104, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.WEST, btnDelete, 104, SpringLayout.WEST, contentPanel);
 			btnDelete.addActionListener( e -> deleteFlixPersonPosition() );
 			contentPanel.add(btnDelete);
 		}
 		{
 			JButton btnDetails = new JButton("Details");
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, btnDelete, 0, SpringLayout.NORTH, btnDetails);
-			sl_contentPanel.putConstraint(SpringLayout.SOUTH, btnDetails, -10, SpringLayout.SOUTH, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.EAST, btnDetails, -100, SpringLayout.EAST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.NORTH, btnDelete, 0, SpringLayout.NORTH, btnDetails);
+			slContentPanel.putConstraint(SpringLayout.SOUTH, btnDetails, -10, SpringLayout.SOUTH, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.EAST, btnDetails, -100, SpringLayout.EAST, contentPanel);
 			btnDetails.addActionListener( e -> showDetails() );
 			contentPanel.add(btnDetails);
 		}
 		{
 			JScrollPane spTable = new JScrollPane();
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, spTable, 6, SpringLayout.SOUTH, btnSearch);
-			sl_contentPanel.putConstraint(SpringLayout.WEST, spTable, 10, SpringLayout.WEST, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.SOUTH, spTable, 319, SpringLayout.SOUTH, btnSearch);
-			sl_contentPanel.putConstraint(SpringLayout.EAST, spTable, 604, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.NORTH, spTable, 6, SpringLayout.SOUTH, btnSearch);
+			slContentPanel.putConstraint(SpringLayout.WEST, spTable, 10, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.SOUTH, spTable, 319, SpringLayout.SOUTH, btnSearch);
+			slContentPanel.putConstraint(SpringLayout.EAST, spTable, 604, SpringLayout.WEST, contentPanel);
 			contentPanel.add(spTable);
 			{
 				table = new JTable();
@@ -149,7 +151,7 @@ public class FlixPersonPositionEditView extends JDialog {
 			    }
 		    });
 			
-			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
+			TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
 			table.setRowSorter(sorter);
 			
 		}else {
@@ -179,6 +181,7 @@ public class FlixPersonPositionEditView extends JDialog {
 											String.valueOf( list.get(2) )
 							);
 					JOptionPane.showMessageDialog(this, DecoHelper.chooseResultMessageByReturnValue((long) returnValue));
+					searchAndShow();
 				}
 				
 			}else {
@@ -197,6 +200,29 @@ public class FlixPersonPositionEditView extends JDialog {
 	
 	private void showDetails() {
 		
+		List<Object> list = getSelectedCodesFromTable();
+		
+		if ( list != null && !list.isEmpty() ) {
+			
+			if ( Checker.checkDigits( String.valueOf( list.get(0) ) )
+					&& Checker.checkDigits( String.valueOf( list.get(1) ) )
+					&& Checker.checkDigits( String.valueOf( list.get(2) ) )
+					) {
+				
+				FlixPersonPositionController.initFlixPersonPositionDetailsView(String.valueOf( list.get(0)),String.valueOf( list.get(1)), String.valueOf( list.get(2)));
+				
+				
+			}else {
+				
+				JOptionPane.showMessageDialog(this, DecoHelper.MSG_ERROR_CHECKER);
+
+			}
+			
+		}else {
+			
+			JOptionPane.showMessageDialog(this, DecoHelper.MSG_ERROR_NULL);
+		
+		}	
 	}
 	
 	private List<Object> getSelectedCodesFromTable() {
@@ -219,8 +245,5 @@ public class FlixPersonPositionEditView extends JDialog {
 		return list;
 	}
 
-	private void reloadTable() {
-		
-		
-	}
+	
 }
