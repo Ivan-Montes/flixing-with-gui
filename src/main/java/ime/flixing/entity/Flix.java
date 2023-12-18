@@ -18,6 +18,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Set;
+
+import ime.flixing.tool.CheckerPattern;
+
 import java.util.HashSet;
 import java.util.Objects;
 
@@ -40,7 +43,7 @@ public class Flix {
 	
 	@Column( nullable = false, length = 50 )
 	@Size(min=1, max=50)
-	@Pattern( regexp = "[a-zA-Z0-9\\s\\-&\\?\\¿\\!\\¡]+")
+	@Pattern( regexp = CheckerPattern.TITLE_FLIX_BASIC)
 	private String title;
 		
 	@ManyToOne
