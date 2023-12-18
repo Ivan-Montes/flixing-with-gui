@@ -21,6 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 import java.awt.Dimension;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public class FlixDeleteView extends JDialog {
 
@@ -38,10 +40,11 @@ public class FlixDeleteView extends JDialog {
 	public static void main(String[] args) {
 		try {
 			FlixDeleteView dialog = new FlixDeleteView();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+		    final Logger logger = Logger.getLogger(FlixDeleteView.class.getName());
+            logger.log(Level.SEVERE, DecoHelper.MSG_SHIT_HAPPENS, e);
 		}
 	}
 
@@ -50,7 +53,7 @@ public class FlixDeleteView extends JDialog {
 	 */
 	public FlixDeleteView() {
 		setModal(true);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 		setAlwaysOnTop(true);
 		setBounds(100, 100, 450, 300);
 		SpringLayout springLayout = new SpringLayout();
@@ -61,72 +64,72 @@ public class FlixDeleteView extends JDialog {
 		getContentPane().setLayout(springLayout);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
-		SpringLayout sl_contentPanel = new SpringLayout();
-		contentPanel.setLayout(sl_contentPanel);
+		SpringLayout slContentPanel = new SpringLayout();
+		contentPanel.setLayout(slContentPanel);
 		{
 			lblFlixCod = new JLabel("Flix Code");
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, lblFlixCod, 10, SpringLayout.NORTH, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.WEST, lblFlixCod, 10, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.NORTH, lblFlixCod, 10, SpringLayout.NORTH, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.WEST, lblFlixCod, 10, SpringLayout.WEST, contentPanel);
 			contentPanel.add(lblFlixCod);
 		}
 
 		SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(0, 0, 33, 1);
 		spFlixCod = new JSpinner(spinnerNumberModel);
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, spFlixCod, 0, SpringLayout.NORTH, lblFlixCod);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, spFlixCod, 40, SpringLayout.EAST, lblFlixCod);
+		slContentPanel.putConstraint(SpringLayout.NORTH, spFlixCod, 0, SpringLayout.NORTH, lblFlixCod);
+		slContentPanel.putConstraint(SpringLayout.WEST, spFlixCod, 40, SpringLayout.EAST, lblFlixCod);
 		contentPanel.add(spFlixCod);
 		
 		JButton btnSearch = new JButton("Search");
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, btnSearch, 0, SpringLayout.NORTH, lblFlixCod);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, btnSearch, 28, SpringLayout.EAST, spFlixCod);
+		slContentPanel.putConstraint(SpringLayout.NORTH, btnSearch, 0, SpringLayout.NORTH, lblFlixCod);
+		slContentPanel.putConstraint(SpringLayout.WEST, btnSearch, 28, SpringLayout.EAST, spFlixCod);
 		btnSearch.addActionListener( a -> searchAndShow() );
 		contentPanel.add(btnSearch);
 		
 		JButton btnClean = new JButton("Clean");
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, btnClean, 0, SpringLayout.NORTH, lblFlixCod);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, btnClean, 42, SpringLayout.EAST, btnSearch);
+		slContentPanel.putConstraint(SpringLayout.NORTH, btnClean, 0, SpringLayout.NORTH, lblFlixCod);
+		slContentPanel.putConstraint(SpringLayout.WEST, btnClean, 42, SpringLayout.EAST, btnSearch);
 		btnClean.addActionListener( a -> cleanFields() );
 		contentPanel.add(btnClean);
 		
 		tfFlixName = new JTextField();
-		sl_contentPanel.putConstraint(SpringLayout.EAST, tfFlixName, 256, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.EAST, tfFlixName, 256, SpringLayout.WEST, contentPanel);
 		tfFlixName.setMinimumSize(new Dimension(20, 20));
 		tfFlixName.setPreferredSize(new Dimension(20, 20));
 		tfFlixName.setEditable(false);
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, tfFlixName, 30, SpringLayout.SOUTH, btnSearch);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, tfFlixName, 87, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.NORTH, tfFlixName, 30, SpringLayout.SOUTH, btnSearch);
+		slContentPanel.putConstraint(SpringLayout.WEST, tfFlixName, 87, SpringLayout.WEST, contentPanel);
 		tfFlixName.setColumns(10);
 		contentPanel.add(tfFlixName);
 		
 		tfGenreName = new JTextField();
-		sl_contentPanel.putConstraint(SpringLayout.WEST, tfGenreName, 87, SpringLayout.WEST, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, tfGenreName, 256, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.WEST, tfGenreName, 87, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.EAST, tfGenreName, 256, SpringLayout.WEST, contentPanel);
 		tfGenreName.setEditable(false);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, tfGenreName, -55, SpringLayout.SOUTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.SOUTH, tfGenreName, -55, SpringLayout.SOUTH, contentPanel);
 		contentPanel.add(tfGenreName);
 		tfGenreName.setColumns(10);
 		
 		spGenreCod = new JSpinner();
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, spGenreCod, 20, SpringLayout.SOUTH, tfFlixName);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, spGenreCod, 0, SpringLayout.WEST, tfFlixName);
+		slContentPanel.putConstraint(SpringLayout.NORTH, spGenreCod, 20, SpringLayout.SOUTH, tfFlixName);
+		slContentPanel.putConstraint(SpringLayout.WEST, spGenreCod, 0, SpringLayout.WEST, tfFlixName);
 		spGenreCod.setEnabled(false);
 		contentPanel.add(spGenreCod);
 		
 		JLabel lblFlixName = new JLabel("Flix Name");
 		lblFlixName.setLabelFor(tfFlixName);
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, lblFlixName, 0, SpringLayout.NORTH, tfFlixName);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, lblFlixName, 0, SpringLayout.WEST, lblFlixCod);
+		slContentPanel.putConstraint(SpringLayout.NORTH, lblFlixName, 0, SpringLayout.NORTH, tfFlixName);
+		slContentPanel.putConstraint(SpringLayout.WEST, lblFlixName, 0, SpringLayout.WEST, lblFlixCod);
 		contentPanel.add(lblFlixName);
 		
 		JLabel lblGenreCod = new JLabel("Genre Code");
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, lblGenreCod, 3, SpringLayout.NORTH, spGenreCod);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, lblGenreCod, 0, SpringLayout.WEST, lblFlixCod);
+		slContentPanel.putConstraint(SpringLayout.NORTH, lblGenreCod, 3, SpringLayout.NORTH, spGenreCod);
+		slContentPanel.putConstraint(SpringLayout.WEST, lblGenreCod, 0, SpringLayout.WEST, lblFlixCod);
 		lblGenreCod.setLabelFor(spGenreCod);
 		contentPanel.add(lblGenreCod);
 		
 		JLabel lblGenreName = new JLabel("Genre Name");
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, lblGenreName, 3, SpringLayout.NORTH, tfGenreName);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, lblGenreName, 0, SpringLayout.WEST, lblFlixCod);
+		slContentPanel.putConstraint(SpringLayout.NORTH, lblGenreName, 3, SpringLayout.NORTH, tfGenreName);
+		slContentPanel.putConstraint(SpringLayout.WEST, lblGenreName, 0, SpringLayout.WEST, lblFlixCod);
 		lblGenreName.setLabelFor(tfGenreName);
 		contentPanel.add(lblGenreName);
 		{
@@ -163,7 +166,7 @@ public class FlixDeleteView extends JDialog {
 			 if ( JOptionPane.showConfirmDialog(this, DecoHelper.MSG_CONFIRM_OPTION, DecoHelper.MSG_CONFIRM_TITLE, JOptionPane.YES_NO_OPTION )
 					 == JOptionPane.OK_OPTION ){
 				 
-				 showInfoAboutDelete( FlixController.deleteFlix(txtFlixCod) );
+				 showInfoAboutDelete( new FlixController().deleteFlix(txtFlixCod) );
 				 cleanFields();
 			 }
 			
@@ -177,7 +180,7 @@ public class FlixDeleteView extends JDialog {
 		
 			if ( Checker.checkDigits(spFlixCod.getValue().toString()) ){
 			
-			Optional<Flix> optFlix = FlixController.searchFlixCod( spFlixCod.getValue().toString() );
+			Optional<Flix> optFlix = new FlixController().getFlixById( spFlixCod.getValue().toString() );
 			
 			
 			if ( optFlix.isPresent() ) {				
