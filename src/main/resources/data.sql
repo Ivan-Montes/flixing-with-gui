@@ -1,10 +1,10 @@
-INSERT INTO GENRES(name, description) VALUES('Fantasia','Mundos imaginarios con criaturas misteriosas');
-INSERT INTO GENRES(name, description) VALUES('Aventura','Acción y desafio para los protagonistas');
-INSERT INTO GENRES(name, description) VALUES('Comedia','Humor y situaciones graciosas');
+INSERT INTO GENRES(name, description) VALUES('Fantasy','Imaginary worlds with mysterious creatures');
+INSERT INTO GENRES(name, description) VALUES('Adventure','Action and challenge for the protagonists');
+INSERT INTO GENRES(name, description) VALUES('Comedy','Humor and funny situations');
 
 INSERT INTO FLIXES(title, genre_id) VALUES('Willow',1);
-INSERT INTO FLIXES(title, genre_id) VALUES('La princesa prometida',2);
-INSERT INTO FLIXES(title, genre_id) VALUES('Cazafantasmas',3);
+INSERT INTO FLIXES(title, genre_id) VALUES('The Princess Bride',2);
+INSERT INTO FLIXES(title, genre_id) VALUES('Ghostbusters',3);
 
 INSERT INTO PEOPLE(name, surname) VALUES('Warwick','Davis');
 INSERT INTO PEOPLE(name, surname) VALUES('Joanne','Whalley');
@@ -19,9 +19,9 @@ INSERT INTO PEOPLE(name, surname) VALUES('Harold','Ramis');
 INSERT INTO PEOPLE(name, surname) VALUES('Bill','Murray');
 INSERT INTO PEOPLE(name, surname) VALUES('Sigourney','Weaver');
 
-INSERT INTO POSITIONS(name, description) VALUES('Actuar','Emociones reales en situaciones imaginarias');
-INSERT INTO POSITIONS(name, description) VALUES('Dirigir','Organiza a todos, Director de Orquesta');
-INSERT INTO POSITIONS(name, description) VALUES('Guionizar','Encargado de plasmar en papel o adaptar el texto');
+INSERT INTO POSITIONS(name, description) VALUES('Acting','Real emotions in imaginary situations');
+INSERT INTO POSITIONS(name, description) VALUES('Direction','Organize everyone, Orchestra Conductor');
+INSERT INTO POSITIONS(name, description) VALUES('Scripting','Responsible for putting on paper or adapting the text');
 
 INSERT INTO FLIX_PERSON_POSITION(fx_id, per_id, pos_id) VALUES(1,1,1);
 INSERT INTO FLIX_PERSON_POSITION(fx_id, per_id, pos_id) VALUES(1,2,1);
