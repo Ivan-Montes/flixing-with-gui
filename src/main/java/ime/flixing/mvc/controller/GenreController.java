@@ -3,19 +3,27 @@ package ime.flixing.mvc.controller;
 import java.util.List;
 import java.util.Optional;
 
-import ime.flixing.dao.GenreDao;
+import ime.flixing.dao.GenericDao;
 import ime.flixing.dao.impl.GenreDaoImpl;
 import ime.flixing.entity.Genre;
 import ime.flixing.mvc.view.GenreView;
 import ime.flixing.mvc.view.genre.*;
 import ime.flixing.tool.Checker;
 
-import lombok.NoArgsConstructor;
-import lombok.AccessLevel;
-
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GenreController {
 	
+	private GenericDao<Genre> dao;
+	
+	public GenreController() {
+		super();
+		this.dao = new GenreDaoImpl();
+	}
+	
+	public GenreController(GenericDao<Genre> dao) {
+		super();
+		this.dao = dao;
+	}
+
 	public static final void initGenreController() {
 		
 		GenreView genreView = new GenreView();
@@ -58,14 +66,19 @@ public class GenreController {
 		
 	}
 	
-	public static Optional<Genre> getGenreById(String strGenreCod){
+	public Optional<List<Genre>> getAllGenre(){
+		
+		return Optional.ofNullable( dao.getAll() );
+		
+	}
+
+	public Optional<Genre> getGenreById(String strGenreCod){
 		
 		Optional<Genre>optGenre = Optional.empty();
 		
 		if ( Checker.checkDigits(strGenreCod) ) {
 			
-			GenreDao genreDao = new GenreDaoImpl();
-			optGenre = Optional.ofNullable( genreDao.getGenreById(Long.parseLong(strGenreCod)) );			
+			optGenre = Optional.ofNullable( dao.getById(Long.parseLong(strGenreCod)) );			
 			
 		}
 		
@@ -73,24 +86,18 @@ public class GenreController {
 		
 	}
 	
-	public static Optional<List<Genre>> getAllGenre(){
+	public Optional<Genre> saveGenre(String genreName, String genreDescription){
 		
-		return Optional.ofNullable(new GenreDaoImpl().getAllGenre() );
-		
-	}
-	
-	public static Optional<Genre> saveGenre(String genreName, String genreDescription){
-		
-		Optional<Genre>optGenre = Optional.empty();
+		Optional<Genre>optGenre;
 		Genre genre = new Genre();
 		
 		if( Checker.checkName(genreName) && Checker.checkDescription(genreDescription) ) {			
 			
-			if ( new GenreDaoImpl().getGenreByName(genreName).isEmpty() ) {
+			if ( dao.getByName(genreName).isEmpty() ) {
 				
 				genre.setName(genreName);
 				genre.setDescription(genreDescription);
-				optGenre = Optional.ofNullable( new GenreDaoImpl().saveGenre(genre) );
+				optGenre = Optional.ofNullable( dao.save(genre) );
 				
 			}else {
 				genre.setGenreId(-1L);
@@ -105,26 +112,24 @@ public class GenreController {
 		return optGenre;
 	}
 	
-	public static Optional<Genre> updateGenre(String strGenreCod, String genreName, String genreDescription){
+	public Optional<Genre> updateGenre(String strGenreCod, String genreName, String genreDescription){
 		
-		Optional<Genre>optGenre = Optional.empty();
+		Optional<Genre>optGenre;
 		Genre genre = new Genre();
 		
 		if( Checker.checkDigits(strGenreCod)  &&
 				Checker.checkName(genreName) 
 				&& Checker.checkDescription(genreDescription) ) {
-			
-			GenreDao genreDao = new GenreDaoImpl();			
-			List<Genre>list = genreDao.getGenreByName(genreName);
+				
+			List<Genre>list = dao.getByName(genreName);
 			
 			if ( list.isEmpty() || list.stream()
-									.filter( g -> g.getGenreId().equals(Long.parseLong(strGenreCod) ) )
-									.findFirst()
-									.isPresent() ) {
+									.filter( e -> e.getGenreId() != null )
+									.anyMatch( g -> g.getGenreId().equals(Long.parseLong(strGenreCod) ) ) ) {
 				
 				genre.setName(genreName);
 				genre.setDescription(genreDescription);
-				optGenre = Optional.ofNullable( new GenreDaoImpl().updateGenre( Long.parseLong(strGenreCod), genre) );
+				optGenre = Optional.ofNullable( dao.update( Long.parseLong(strGenreCod), genre) );
 				
 			}else {
 				
@@ -143,20 +148,19 @@ public class GenreController {
 		return optGenre;
 	}
 	
-	public static final int deleteGenre(String strGenreCod) {
+	public final int deleteGenre(String strGenreCod) {
 
 		int returnValue = -1;
 		
-		if ( Checker.checkDigits(strGenreCod) ) {
+		if ( Checker.checkDigits(strGenreCod) ) {			
 			
-			GenreDao genreDao = new GenreDaoImpl();
-			Optional<Genre> optGenre = Optional.ofNullable( genreDao.getGenreByIdEagger(Long.parseLong(strGenreCod)) );
+			Optional<Genre> optGenre = Optional.ofNullable( dao.getByIdEagger(Long.parseLong(strGenreCod)) );
 			
 			if (optGenre.isPresent() ) {
 				
 				if ( optGenre.get().getFlixes().isEmpty() ) {
 					
-					genreDao.deleteGenre( Long.parseLong(strGenreCod) );
+					dao.delete( Long.parseLong(strGenreCod) );
 					returnValue = 0;
 				
 				}
