@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -136,10 +135,10 @@ class PositionControllerTest {
 	}
 	
 	@Test
-	void PositionController_getAllPosition_ReturnOptListPosition() {
+	void PositionController_getAll_ReturnOptListPosition() {
 			
 		list.add(positionTest);
-		doReturn(list).when(positionDaoImpl).getAllPosition();
+		doReturn(list).when(positionDaoImpl).getAll();
 		
 		Optional<List<Position>>optListPos = positionController.getAllPosition();
 		
@@ -149,7 +148,7 @@ class PositionControllerTest {
 				()->Assertions.assertThat(optListPos.get().get(0).getPositionId()).isEqualTo(positionTestId),
 				()->Assertions.assertThat(optListPos.get().get(0).getName()).isEqualTo(positionTestName)
 				);
-		verify(positionDaoImpl,times(1)).getAllPosition();		
+		verify(positionDaoImpl,times(1)).getAll();		
 	
 	}
 	
@@ -158,7 +157,7 @@ class PositionControllerTest {
 		
 		try (MockedStatic<Checker>mockChecker = Mockito.mockStatic(Checker.class)){
 			mockChecker.when( () -> Checker.checkDigits(Mockito.anyString()) ).thenReturn(true);
-			doReturn(positionTest).when(positionDaoImpl).getPositionById(Mockito.anyLong());
+			doReturn(positionTest).when(positionDaoImpl).getById(Mockito.anyLong());
 			
 			Optional<Position>optPos = positionController.getPositionById(positionStrTestId);
 			
@@ -167,7 +166,7 @@ class PositionControllerTest {
 					()->Assertions.assertThat(optPos.get().getPositionId()).isEqualTo(positionTestId),
 					()->Assertions.assertThat(optPos.get().getName()).isEqualTo(positionTestName)
 					);
-			verify(positionDaoImpl,times(1)).getPositionById(Mockito.anyLong());
+			verify(positionDaoImpl,times(1)).getById(Mockito.anyLong());
 			mockChecker.verify(() -> Checker.checkDigits(Mockito.anyString()), times(1));
 		}
 	}
@@ -178,8 +177,8 @@ class PositionControllerTest {
 		try(MockedStatic<Checker>mockChecker = Mockito.mockStatic(Checker.class)){
 			mockChecker.when( () -> Checker.checkName(Mockito.anyString())).thenReturn(true);
 			mockChecker.when( () -> Checker.checkDescription(Mockito.anyString())).thenReturn(true);
-			doReturn( Collections.emptyList() ).when(positionDaoImpl).getPositionByNameId(Mockito.anyString());
-			doReturn( positionTest ).when(positionDaoImpl).savePosition(Mockito.any(Position.class));
+			doReturn( Collections.emptyList() ).when(positionDaoImpl).getByName(Mockito.anyString());
+			doReturn( positionTest ).when(positionDaoImpl).save(Mockito.any(Position.class));
 			
 			Optional<Position>optPos = positionController.savePosition("","");
 			
@@ -189,8 +188,8 @@ class PositionControllerTest {
 					()->Assertions.assertThat(optPos.get().getName()).isEqualTo(positionTestName),
 					()->Assertions.assertThat(optPos.get().getDescription()).isEqualTo(positionTestDes)
 					);
-			verify(positionDaoImpl,times(1)).getPositionByNameId(Mockito.anyString());
-			verify(positionDaoImpl,times(1)).savePosition(Mockito.any(Position.class));
+			verify(positionDaoImpl,times(1)).getByName(Mockito.anyString());
+			verify(positionDaoImpl,times(1)).save(Mockito.any(Position.class));
 			mockChecker.verify(() -> Checker.checkName(Mockito.anyString()), times(1));
 			mockChecker.verify(() -> Checker.checkDescription(Mockito.anyString()), times(1));
 		}
@@ -220,7 +219,7 @@ class PositionControllerTest {
 		try(MockedStatic<Checker>mockChecker = Mockito.mockStatic(Checker.class)){
 			mockChecker.when( () -> Checker.checkName(Mockito.anyString())).thenReturn(true);
 			mockChecker.when( () -> Checker.checkDescription(Mockito.anyString())).thenReturn(true);
-			doReturn( List.of(positionTest) ).when(positionDaoImpl).getPositionByNameId(Mockito.anyString());
+			doReturn( List.of(positionTest) ).when(positionDaoImpl).getByName(Mockito.anyString());
 			
 			Optional<Position>optPos = positionController.savePosition("", "");
 			
@@ -228,7 +227,7 @@ class PositionControllerTest {
 					()->Assertions.assertThat(optPos).isNotNull(),
 					()->Assertions.assertThat(optPos.get().getPositionId()).isEqualTo(-2L)
 					);
-			verify(positionDaoImpl,times(1)).getPositionByNameId(Mockito.anyString());
+			verify(positionDaoImpl,times(1)).getByName(Mockito.anyString());
 			mockChecker.verify(() -> Checker.checkName(Mockito.anyString()), times(1));
 			mockChecker.verify(() -> Checker.checkDescription(Mockito.anyString()), times(1));
 		}
@@ -241,9 +240,9 @@ class PositionControllerTest {
 			mockChecker.when( () -> Checker.checkDigits(Mockito.anyString())).thenReturn(true);
 			mockChecker.when( () -> Checker.checkName(Mockito.anyString())).thenReturn(true);
 			mockChecker.when( () -> Checker.checkDescription(Mockito.anyString())).thenReturn(true);
-			doReturn( Collections.emptyList() ).when(positionDaoImpl).getPositionByNameId(Mockito.anyString());
-			doReturn(positionTest).when(positionDaoImpl).getPositionById(Mockito.anyLong());
-			doReturn(positionTest).when(positionDaoImpl).updatePosition(Mockito.anyLong(), Mockito.any(Position.class));
+			doReturn( Collections.emptyList() ).when(positionDaoImpl).getByName(Mockito.anyString());
+			doReturn(positionTest).when(positionDaoImpl).getById(Mockito.anyLong());
+			doReturn(positionTest).when(positionDaoImpl).update(Mockito.anyLong(), Mockito.any(Position.class));
 			
 			Optional<Position>optPos = positionController.updatePosition(positionStrTestId, "",  "") ;
 			
@@ -253,9 +252,9 @@ class PositionControllerTest {
 					()->Assertions.assertThat(optPos.get().getName()).isEqualTo(positionTestName),
 					()->Assertions.assertThat(optPos.get().getDescription()).isEqualTo(positionTestDes)
 					);
-			verify(positionDaoImpl,times(1)).getPositionByNameId(Mockito.anyString());
-			verify(positionDaoImpl,times(1)).getPositionById(Mockito.anyLong());
-			verify(positionDaoImpl,times(1)).updatePosition(Mockito.anyLong(), Mockito.any(Position.class));
+			verify(positionDaoImpl,times(1)).getByName(Mockito.anyString());
+			verify(positionDaoImpl,times(1)).getById(Mockito.anyLong());
+			verify(positionDaoImpl,times(1)).update(Mockito.anyLong(), Mockito.any(Position.class));
 			mockChecker.verify(() -> Checker.checkDigits(Mockito.anyString()), times(1));
 			mockChecker.verify(() -> Checker.checkName(Mockito.anyString()), times(1));
 			mockChecker.verify(() -> Checker.checkDescription(Mockito.anyString()), times(1));
@@ -291,7 +290,7 @@ class PositionControllerTest {
 			mockChecker.when( () -> Checker.checkName(Mockito.anyString())).thenReturn(true);
 			mockChecker.when( () -> Checker.checkDescription(Mockito.anyString())).thenReturn(true);
 			positionTest.setPositionId(33L);
-			doReturn( List.of( positionTest ) ).when(positionDaoImpl).getPositionByNameId(Mockito.anyString());
+			doReturn( List.of( positionTest ) ).when(positionDaoImpl).getByName(Mockito.anyString());
 			
 			Optional<Position>optPos = positionController.updatePosition(positionStrTestId, "",  "") ;
 			
@@ -299,7 +298,7 @@ class PositionControllerTest {
 					()->Assertions.assertThat(optPos).isNotNull(),
 					()->Assertions.assertThat(optPos.get().getPositionId()).isEqualTo(-2L)
 					);
-			verify(positionDaoImpl,times(1)).getPositionByNameId(Mockito.anyString());
+			verify(positionDaoImpl,times(1)).getByName(Mockito.anyString());
 			mockChecker.verify(() -> Checker.checkDigits(Mockito.anyString()), times(1));
 			mockChecker.verify(() -> Checker.checkName(Mockito.anyString()), times(1));
 			mockChecker.verify(() -> Checker.checkDescription(Mockito.anyString()), times(1));
@@ -313,8 +312,8 @@ class PositionControllerTest {
 			mockChecker.when( () -> Checker.checkDigits(Mockito.anyString())).thenReturn(true);
 			mockChecker.when( () -> Checker.checkName(Mockito.anyString())).thenReturn(true);
 			mockChecker.when( () -> Checker.checkDescription(Mockito.anyString())).thenReturn(true);
-			doReturn( Collections.emptyList() ).when(positionDaoImpl).getPositionByNameId(Mockito.anyString());
-			doReturn(null).when(positionDaoImpl).getPositionById(Mockito.anyLong());
+			doReturn( Collections.emptyList() ).when(positionDaoImpl).getByName(Mockito.anyString());
+			doReturn(null).when(positionDaoImpl).getById(Mockito.anyLong());
 			
 			Optional<Position>optPos = positionController.updatePosition(positionStrTestId, "",  "") ;
 			
@@ -322,8 +321,8 @@ class PositionControllerTest {
 					()->Assertions.assertThat(optPos).isNotNull(),
 					()->Assertions.assertThat(optPos.get().getPositionId()).isEqualTo(-3l)
 					);
-			verify(positionDaoImpl,times(1)).getPositionByNameId(Mockito.anyString());
-			verify(positionDaoImpl,times(1)).getPositionById(Mockito.anyLong());
+			verify(positionDaoImpl,times(1)).getByName(Mockito.anyString());
+			verify(positionDaoImpl,times(1)).getById(Mockito.anyLong());
 			mockChecker.verify(() -> Checker.checkDigits(Mockito.anyString()), times(1));
 			mockChecker.verify(() -> Checker.checkName(Mockito.anyString()), times(1));
 			mockChecker.verify(() -> Checker.checkDescription(Mockito.anyString()), times(1));
@@ -335,8 +334,8 @@ class PositionControllerTest {
 		
 		try(MockedStatic<Checker>mockChecker = Mockito.mockStatic(Checker.class)){
 			mockChecker.when( () -> Checker.checkDigits(Mockito.anyString())).thenReturn(true);
-			doReturn(positionTest).when(positionDaoImpl).getPositionByIdEagger(Mockito.anyLong());			
-			doNothing().when(positionDaoImpl).deletePosition(Mockito.anyLong());			
+			doReturn(positionTest).when(positionDaoImpl).getByIdEagger(Mockito.anyLong());			
+			doNothing().when(positionDaoImpl).delete(Mockito.anyLong());			
 			
 			int returnValue = positionController.deletePerson(positionStrTestId);
 			
@@ -344,8 +343,8 @@ class PositionControllerTest {
 					()->Assertions.assertThat(returnValue).isZero()
 					);
 			mockChecker.verify(() -> Checker.checkDigits(Mockito.anyString()), times(1));
-			verify(positionDaoImpl,times(1)).getPositionByIdEagger(Mockito.anyLong());
-			verify(positionDaoImpl,times(1)).deletePosition(Mockito.anyLong());
+			verify(positionDaoImpl,times(1)).getByIdEagger(Mockito.anyLong());
+			verify(positionDaoImpl,times(1)).delete(Mockito.anyLong());
 		}
 	}
 
@@ -369,7 +368,7 @@ class PositionControllerTest {
 		
 		try(MockedStatic<Checker>mockChecker = Mockito.mockStatic(Checker.class)){
 			mockChecker.when( () -> Checker.checkDigits(Mockito.anyString())).thenReturn(true);
-			doReturn(null).when(positionDaoImpl).getPositionByIdEagger(Mockito.anyLong());
+			doReturn(null).when(positionDaoImpl).getByIdEagger(Mockito.anyLong());
 			
 			
 			int returnValue = positionController.deletePerson(positionStrTestId);
@@ -378,7 +377,7 @@ class PositionControllerTest {
 					()->Assertions.assertThat(returnValue).isEqualTo(-3L)
 					);
 			mockChecker.verify(() -> Checker.checkDigits(Mockito.anyString()), times(1));
-			verify(positionDaoImpl,times(1)).getPositionByIdEagger(Mockito.anyLong());
+			verify(positionDaoImpl,times(1)).getByIdEagger(Mockito.anyLong());
 		}
 	}
 
@@ -388,7 +387,7 @@ class PositionControllerTest {
 		try(MockedStatic<Checker>mockChecker = Mockito.mockStatic(Checker.class)){
 			mockChecker.when( () -> Checker.checkDigits(Mockito.anyString())).thenReturn(true);
 			positionTest.getFlixPersonPosition().add(new FlixPersonPosition());
-			doReturn(positionTest).when(positionDaoImpl).getPositionByIdEagger(Mockito.anyLong());			
+			doReturn(positionTest).when(positionDaoImpl).getByIdEagger(Mockito.anyLong());			
 			
 			int returnValue = positionController.deletePerson(positionStrTestId);
 			
@@ -396,7 +395,7 @@ class PositionControllerTest {
 					()->Assertions.assertThat(returnValue).isEqualTo(-4L)
 					);
 			mockChecker.verify(() -> Checker.checkDigits(Mockito.anyString()), times(1));
-			verify(positionDaoImpl,times(1)).getPositionByIdEagger(Mockito.anyLong());
+			verify(positionDaoImpl,times(1)).getByIdEagger(Mockito.anyLong());
 		}
 	}
 
