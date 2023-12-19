@@ -10,11 +10,14 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.AbstractDocument;
 
 import ime.flixing.entity.Person;
 import ime.flixing.mvc.controller.PersonController;
 import ime.flixing.tool.Checker;
+import ime.flixing.tool.CheckerPattern;
 import ime.flixing.tool.DecoHelper;
+import ime.flixing.tool.DocumentFilterFactory;
 
 import javax.swing.SpringLayout;
 import javax.swing.JLabel;
@@ -76,6 +79,8 @@ public class PersonSaveView extends JDialog {
 		}
 		{
 			tfPersonName = new JTextField();
+			((AbstractDocument)tfPersonName.getDocument()).setDocumentFilter(
+					DocumentFilterFactory.createDocumentFilter(CheckerPattern.NAME_FULL));
 			slContentPanel.putConstraint(SpringLayout.NORTH, tfPersonName, -3, SpringLayout.NORTH, lblPersonName);
 			slContentPanel.putConstraint(SpringLayout.WEST, tfPersonName, 27, SpringLayout.EAST, lblPersonName);
 			slContentPanel.putConstraint(SpringLayout.EAST, tfPersonName, -32, SpringLayout.EAST, contentPanel);
@@ -84,6 +89,8 @@ public class PersonSaveView extends JDialog {
 		}
 		{
 			tfPersonSurname = new JTextField();
+			((AbstractDocument)tfPersonSurname.getDocument()).setDocumentFilter(
+					DocumentFilterFactory.createDocumentFilter(CheckerPattern.SURNAME_FULL));
 			slContentPanel.putConstraint(SpringLayout.NORTH, tfPersonSurname, -3, SpringLayout.NORTH, lblPersonSurname);
 			slContentPanel.putConstraint(SpringLayout.WEST, tfPersonSurname, 12, SpringLayout.EAST, lblPersonSurname);
 			slContentPanel.putConstraint(SpringLayout.EAST, tfPersonSurname, 0, SpringLayout.EAST, tfPersonName);
@@ -149,7 +156,7 @@ public class PersonSaveView extends JDialog {
 			if ( JOptionPane.showConfirmDialog(this, DecoHelper.MSG_CONFIRM_OPTION, DecoHelper.MSG_CONFIRM_TITLE, JOptionPane.YES_NO_OPTION )
 					 == JOptionPane.OK_OPTION ){
 				
-				Optional<Person>optPerson = PersonController.savePerson(strPersonName, strPersonSurname);
+				Optional<Person>optPerson = new PersonController().savePerson(strPersonName, strPersonSurname);
 				
 				if (optPerson.isPresent() ) {
 					
