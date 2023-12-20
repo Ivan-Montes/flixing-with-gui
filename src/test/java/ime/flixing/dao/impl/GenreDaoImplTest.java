@@ -23,10 +23,11 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import ime.flixing.entity.Genre;
-import ime.flixing.util.HibernateUtil;
+import ime.flixing.util.HibernateUtilTest;
 
 @ExtendWith(MockitoExtension.class)
 class GenreDaoImplTest {
+	
 	@Mock
 	private SessionFactory sessionFactory;
 	
@@ -58,14 +59,14 @@ class GenreDaoImplTest {
 	@Test
 	void genreDaoImpl_getAllGenre_ReturnList() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
-			doReturn(query).when(session).createQuery(Mockito.anyString(),Mockito.any());	
+			doReturn(query).when(session).createQuery(Mockito.anyString(), Mockito.any());	
 			doReturn(List.of(genreTest)).when(query).list();	
 			doNothing().when(session).close();
 			
-			List<Genre>list = genreDaoImpl.getAllGenre();
+			List<Genre>list = genreDaoImpl.getAll();
 			
 			assertAll(
 					()->assertNotNull(list),
@@ -81,13 +82,13 @@ class GenreDaoImplTest {
 	@Test
 	void genreDaoImpl_getGenreById_ReturnGenre() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(genreTest).when(session).get(Genre.class, genreTestId);
 			doNothing().when(session).close();
 			
-			Genre genre = genreDaoImpl.getGenreById(genreTestId);
+			Genre genre = genreDaoImpl.getById(genreTestId);
 			
 			assertAll(
 					()->assertNotNull(genre),
@@ -102,13 +103,13 @@ class GenreDaoImplTest {
 	@Test
 	void genreDaoImpl_getGenreById_ReturnNull() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(null).when(session).get(Genre.class, genreTestId);
 			doNothing().when(session).close();
 			
-			Genre genre = genreDaoImpl.getGenreById(genreTestId);
+			Genre genre = genreDaoImpl.getById(genreTestId);
 			
 			assertAll(
 					()->assertNull(genre)
@@ -122,14 +123,14 @@ class GenreDaoImplTest {
 	@Test
 	void genreDaoImpl_getGenreByIdEagger_ReturnGenre() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();		
 			doReturn(query).when(session).createQuery(Mockito.anyString(),Mockito.any());	
 			doReturn(genreTest).when(query).uniqueResult();
 			doNothing().when(session).close();
 			
-			Genre genre = genreDaoImpl.getGenreByIdEagger(genreTestId);
+			Genre genre = genreDaoImpl.getByIdEagger(genreTestId);
 			
 			assertAll(
 					()->assertNotNull(genre),
@@ -144,8 +145,8 @@ class GenreDaoImplTest {
 	@Test
 	void genreDaoImpl_saveGenre_ReturnGenre() {
 				
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(transTest).when(session).beginTransaction();	
 			doNothing().when(session).persist(Mockito.any(Genre.class));			
@@ -154,7 +155,7 @@ class GenreDaoImplTest {
 			doReturn(genreTest).when(session).get(Genre.class, genreTestId);
 			doNothing().when(session).close();
 		
-			Genre genre = genreDaoImpl.saveGenre(genreTest);
+			Genre genre = genreDaoImpl.save(genreTest);
 			
 			assertAll(
 					()->assertNotNull(genre),
@@ -175,8 +176,8 @@ class GenreDaoImplTest {
 	@Test
 	void genreDaoImpl_updateGenre_ReturnGenre() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(transTest).when(session).beginTransaction();
 			doReturn(genreTest).when(session).get(Genre.class, genreTestId);	
@@ -185,7 +186,7 @@ class GenreDaoImplTest {
 			doNothing().when(transTest).commit();
 			doNothing().when(session).close();
 			
-			Genre genre = genreDaoImpl.updateGenre(genreTestId, genreTest);
+			Genre genre = genreDaoImpl.update(genreTestId, genreTest);
 			
 			assertAll(
 					()->assertNotNull(genre),
@@ -205,8 +206,8 @@ class GenreDaoImplTest {
 	@Test
 	void genreDaoImpl_deleteGenre_ReturnVoid() {		
 	
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(transTest).when(session).beginTransaction();
 			doReturn(genreTest).when(session).get(Genre.class, genreTestId);
@@ -215,7 +216,7 @@ class GenreDaoImplTest {
 			doNothing().when(transTest).commit();
 			doNothing().when(session).close();
 			
-			genreDaoImpl.deleteGenre(genreTestId);
+			genreDaoImpl.delete(genreTestId);
 			
 			verify(sessionFactory,times(1)).openSession();
 			verify(session,times(1)).beginTransaction();
@@ -230,14 +231,14 @@ class GenreDaoImplTest {
 	@Test
 	void genreDaoImpl_getGenreByName_ReturnList(){
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();			
 			doReturn(query).when(session).createQuery(Mockito.anyString(),Mockito.any());	
 			doReturn(List.of(genreTest)).when(query).list();	
 			doNothing().when(session).close();
 			
-			List<Genre>list = genreDaoImpl.getGenreByName(genreTest.getName());
+			List<Genre>list = genreDaoImpl.getByName(genreTest.getName());
 			
 			assertAll(
 					()->assertNotNull(list),
