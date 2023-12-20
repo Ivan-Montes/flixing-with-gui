@@ -72,7 +72,7 @@ public class PositionController {
 	
 	public final Optional<List<Position>>getAllPosition(){
 				
-		return Optional.ofNullable( positionDaoImpl.getAllPosition() );
+		return Optional.ofNullable( positionDaoImpl.getAll() );
 		
 	}
 	
@@ -82,7 +82,7 @@ public class PositionController {
 		
 		if ( Checker.checkDigits(strPositionCod) ) {
 			
-			optPosition = Optional.ofNullable( positionDaoImpl.getPositionById(Long.parseLong(strPositionCod)));
+			optPosition = Optional.ofNullable( positionDaoImpl.getById(Long.parseLong(strPositionCod)));
 		}
 		
 		return optPosition;
@@ -96,13 +96,13 @@ public class PositionController {
 		if ( Checker.checkName(strName)
 				&& Checker.checkDescription(strDescription) ) {
 			
-			List<Position>listPosition = positionDaoImpl.getPositionByNameId(strName) ;
+			List<Position>listPosition = positionDaoImpl.getByName(strName) ;
 			
 			if ( listPosition != null && listPosition.isEmpty() ) {				
 				
 				position.setName(strName);
 				position.setDescription(strDescription);
-				position = positionDaoImpl.savePosition(position);
+				position = positionDaoImpl.save(position);
 				
 			}else {
 				position.setPositionId(-2L);
@@ -124,7 +124,7 @@ public class PositionController {
 				&& Checker.checkName(strName)
 				&& Checker.checkDescription(strDescription) ) {			
 			
-			List<Position>listPosition = positionDaoImpl.getPositionByNameId(strName) ;
+			List<Position>listPosition = positionDaoImpl.getByName(strName) ;
 
 			if ( ( listPosition != null && listPosition.isEmpty() )
 					||  ( listPosition != null && listPosition
@@ -132,13 +132,13 @@ public class PositionController {
 														.anyMatch( p -> p.getPositionId() == (Long.parseLong(strPositionCod) ) ) )
 					) {
 				
-				optPositionFound = Optional.ofNullable( positionDaoImpl.getPositionById(Long.parseLong(strPositionCod)));
+				optPositionFound = Optional.ofNullable( positionDaoImpl.getById(Long.parseLong(strPositionCod)));
 				
 				if( optPositionFound.isPresent() ) {
 
 					position.setName(strName);
 					position.setDescription(strDescription);
-					position = positionDaoImpl.updatePosition(Long.parseLong(strPositionCod), position);
+					position = positionDaoImpl.update(Long.parseLong(strPositionCod), position);
 					
 				}else {
 					position.setPositionId(-3L);
@@ -164,13 +164,13 @@ public class PositionController {
 		
 		if ( Checker.checkDigits(strPositionCod) ) {
 			
-			optPositionFound = Optional.ofNullable( positionDaoImpl.getPositionByIdEagger(Long.parseLong(strPositionCod)));
+			optPositionFound = Optional.ofNullable( positionDaoImpl.getByIdEagger(Long.parseLong(strPositionCod)));
 			
 			if( optPositionFound.isPresent() ) {
 			
 				if ( optPositionFound.get().getFlixPersonPosition().isEmpty() ) {
 					
-					positionDaoImpl.deletePosition( Long.parseLong(strPositionCod) );
+					positionDaoImpl.delete( Long.parseLong(strPositionCod) );
 					returnValue =  0;
 			
 				}
