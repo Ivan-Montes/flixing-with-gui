@@ -150,7 +150,7 @@ public class PersonDeleteView extends JDialog {
 		
 		if ( Checker.checkDigits(strPersonCod) ) {
 			
-			Optional<Person>optPerson = PersonController.getPersonById(strPersonCod);
+			Optional<Person>optPerson = new PersonController().getPersonById(strPersonCod);
 			
 			if ( optPerson.isPresent() ) {
 				
@@ -186,7 +186,7 @@ public class PersonDeleteView extends JDialog {
 			 if ( JOptionPane.showConfirmDialog(this, DecoHelper.MSG_CONFIRM_OPTION, DecoHelper.MSG_CONFIRM_TITLE, JOptionPane.YES_NO_OPTION )
 					 == JOptionPane.OK_OPTION ){
 
-					showResultInfo(PersonController.deletePerson(strPersonCod));
+					showResultInfo(new PersonController().deletePerson(strPersonCod));
 					cleanFields();
 			 }
 			
