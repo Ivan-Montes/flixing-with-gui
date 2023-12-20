@@ -34,7 +34,7 @@ Then you need you clone the project and run a MAVEN package command in order to 
 
 #### MySql Database Schema
 
-<img src="./Esquema_Flixingdb.png" style="width: 800px; max-width: 1024px; flex-grow: 1;" />
+<img src="../warehouse/Esquema_Flixingdb.png" style="width: 800px; max-width: 1024px; flex-grow: 1;" />
 
 
 
