@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import ime.flixing.tool.CheckerPattern;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,12 +39,12 @@ public class Person {
 	
 	@Column( nullable = false, length = 50 )
 	@Size( min = 1, max = 50)
-	@Pattern( regexp = "[a-zA-Z\\s\\-&]+")
+	@Pattern( regexp = CheckerPattern.NAME_BASIC)
 	private String name;
 	
 	@Column( nullable = false, length = 50 )
 	@Size( min = 1, max = 50 )
-	@Pattern( regexp = "[a-zA-Z\\s\\-&]+" )
+	@Pattern( regexp = CheckerPattern.SURNAME_BASIC)
 	private String surname;
 	
 	@OneToMany( mappedBy = "person")
