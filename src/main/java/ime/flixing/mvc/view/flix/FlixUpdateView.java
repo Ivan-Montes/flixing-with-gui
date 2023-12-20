@@ -1,17 +1,22 @@
 package ime.flixing.mvc.view.flix;
 
 import java.awt.BorderLayout;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.AbstractDocument;
 
 import ime.flixing.entity.Flix;
 import ime.flixing.mvc.controller.FlixController;
 import ime.flixing.tool.Checker;
+import ime.flixing.tool.CheckerPattern;
 import ime.flixing.tool.DecoHelper;
+import ime.flixing.tool.DocumentFilterFactory;
 
 import javax.swing.SpringLayout;
 import javax.swing.JLabel;
@@ -38,10 +43,11 @@ public class FlixUpdateView extends JDialog {
 	public static void main(String[] args) {
 		try {
 			FlixUpdateView dialog = new FlixUpdateView();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			final Logger logger = Logger.getLogger(FlixUpdateView.class.getName());
+			logger.log(Level.SEVERE, DecoHelper.MSG_SHIT_HAPPENS, e);
 		}
 	}
 
@@ -50,47 +56,49 @@ public class FlixUpdateView extends JDialog {
 	 */
 	public FlixUpdateView() {
 		setModal(true);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 		setAlwaysOnTop(true);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		SpringLayout sl_contentPanel = new SpringLayout();
-		contentPanel.setLayout(sl_contentPanel);
+		SpringLayout slContentPanel = new SpringLayout();
+		contentPanel.setLayout(slContentPanel);
 		
 		JLabel lblFlixCod = new JLabel("Flix Code");
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, lblFlixCod, 10, SpringLayout.NORTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, lblFlixCod, 10, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.NORTH, lblFlixCod, 10, SpringLayout.NORTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.WEST, lblFlixCod, 10, SpringLayout.WEST, contentPanel);
 		contentPanel.add(lblFlixCod);
 		
 		
 		spFlixCod = new JSpinner(new SpinnerNumberModel(0, 0, 33, 1));
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, spFlixCod, 0, SpringLayout.NORTH, lblFlixCod);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, spFlixCod, 28, SpringLayout.EAST, lblFlixCod);
+		slContentPanel.putConstraint(SpringLayout.NORTH, spFlixCod, 0, SpringLayout.NORTH, lblFlixCod);
+		slContentPanel.putConstraint(SpringLayout.WEST, spFlixCod, 28, SpringLayout.EAST, lblFlixCod);
 		contentPanel.add(spFlixCod);
 		
 		btnSearch = new JButton("Search");
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, btnSearch, -1, SpringLayout.NORTH, spFlixCod);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, btnSearch, 42, SpringLayout.EAST, spFlixCod);
+		slContentPanel.putConstraint(SpringLayout.NORTH, btnSearch, -1, SpringLayout.NORTH, spFlixCod);
+		slContentPanel.putConstraint(SpringLayout.WEST, btnSearch, 42, SpringLayout.EAST, spFlixCod);
 		btnSearch.addActionListener( e -> searchFlix() );
 		contentPanel.add(btnSearch);
 		
 		tfFlixName = new JTextField();
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, tfFlixName, 21, SpringLayout.SOUTH, btnSearch);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, tfFlixName, 0, SpringLayout.WEST, spFlixCod);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, tfFlixName, -172, SpringLayout.EAST, contentPanel);
+		((AbstractDocument)tfFlixName.getDocument()).setDocumentFilter(
+				DocumentFilterFactory.createDocumentFilter(CheckerPattern.TITLE_FLIX_FULL));
+		slContentPanel.putConstraint(SpringLayout.NORTH, tfFlixName, 21, SpringLayout.SOUTH, btnSearch);
+		slContentPanel.putConstraint(SpringLayout.WEST, tfFlixName, 0, SpringLayout.WEST, spFlixCod);
+		slContentPanel.putConstraint(SpringLayout.EAST, tfFlixName, -172, SpringLayout.EAST, contentPanel);
 		contentPanel.add(tfFlixName);
 		tfFlixName.setColumns(10);
 		
 		spGenreCod = new JSpinner(new SpinnerNumberModel(0, 0, 33, 1));
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, spGenreCod, 95, SpringLayout.NORTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, spGenreCod, 80, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.NORTH, spGenreCod, 95, SpringLayout.NORTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.WEST, spGenreCod, 80, SpringLayout.WEST, contentPanel);
 		contentPanel.add(spGenreCod);
 		
 		JButton btnClean = new JButton("Clean");
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, btnClean, -1, SpringLayout.NORTH, spFlixCod);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, btnClean, 49, SpringLayout.EAST, btnSearch);
+		slContentPanel.putConstraint(SpringLayout.NORTH, btnClean, -1, SpringLayout.NORTH, spFlixCod);
+		slContentPanel.putConstraint(SpringLayout.WEST, btnClean, 49, SpringLayout.EAST, btnSearch);
 		btnClean.addActionListener( a -> cleanFields() );
 		contentPanel.add(btnClean);
 		{
@@ -117,7 +125,7 @@ public class FlixUpdateView extends JDialog {
 		
 		if ( Checker.checkDigits(spFlixCod.getValue().toString()) ){
 			
-			Optional<Flix> optFlix = FlixController.searchFlixCod( spFlixCod.getValue().toString() );
+			Optional<Flix> optFlix = new FlixController().getFlixById( spFlixCod.getValue().toString() );
 			
 			
 			if ( optFlix.isPresent() ) {				
@@ -145,16 +153,19 @@ public class FlixUpdateView extends JDialog {
 				&& Checker.checkFlixTitle( txtFlixName ) 
 				&& Checker.checkDigits( txtSpGenreCod) ) {
 			
-			// Ask confirmation
-			Optional<Flix>optFlixSaved = FlixController.updateFlix(txtFlixCod, txtFlixName, txtSpGenreCod);
-			
-			if ( optFlixSaved.isPresent() ) {
+			if ( JOptionPane.showConfirmDialog(this, DecoHelper.MSG_CONFIRM_OPTION, DecoHelper.MSG_CONFIRM_TITLE, JOptionPane.YES_NO_OPTION )
+					 == JOptionPane.OK_OPTION ){
 				
-				JOptionPane.showMessageDialog(this, DecoHelper.MSG_SUCCESSFULLY);	
-				cleanFields();
+				Optional<Flix>optFlixSaved = new FlixController().updateFlix(txtFlixCod, txtFlixName, txtSpGenreCod);
 				
-			}else {
-				JOptionPane.showMessageDialog(this, DecoHelper.MSG_ERROR_NULL);
+				if ( optFlixSaved.isPresent() ) {
+					
+					JOptionPane.showMessageDialog(this, DecoHelper.MSG_SUCCESSFULLY);	
+					cleanFields();
+					
+				}else {
+					JOptionPane.showMessageDialog(this, DecoHelper.MSG_ERROR_NULL);
+				}				
 			}
 			
 		}else {
