@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor( access= AccessLevel.PRIVATE )
 public class DocumentFilterFactory {
 
-	public static final DocumentFilter createDocumentFilter(int type) {
-		
-        String regex = (type == 1) ? CheckerPattern.CHECKERPATTERN_NAME_BASIC : CheckerPattern.CHECKERPATTERN_DESCRIPTION_BASIC;
+	public static final DocumentFilter createDocumentFilter(String regex) {		
         
         return new DocumentFilter() {
             @Override
