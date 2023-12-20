@@ -1,14 +1,43 @@
 # Flixing-with-gui
 
- Some films with Java Swing GUI. Variant project from [flixing](https://github.com/Ivan-Montes/flixing)
+ Some films with Java Swing GUI in JavaSE 17. Improved variant project from [flixing](https://github.com/Ivan-Montes/flixing)
  
 ## Table of contents
  
+- [Usage](#usage)
+- [It's not a bug, it's a feature](#features)
 - [Maintainers](#maintainers)
 - [Contributing](#contributing)
 - [License](#license)
  
  
+## Usage
+
+To create a local MySql database, I have used XAMPP for this. The default name is "flixingdb", but you could use a different name if you edit the file HibernateUtil.java. Database credentials are stored in system variables, so you need add them as well.
+
+Then you need you clone the project and run a MAVEN package command in order to get an runnable jar file. A different option is just use your preferred IDE for running the project.
+
+
+## Features
+
+#### Unitary test with JUnit5 and Mockito 
+
+#### HibernateUtil configured programmatically 
+
+#### Hibernate validator included
+
+#### DAO and MVC patterns adopted
+
+#### Dependency injection and Clean Code respected
+
+#### Used Sonarqube community for checking the project
+
+#### MySql Database Schema
+
+<img src="./Esquema_Flixingdb.png" style="width: 800px; max-width: 1024px; flex-grow: 1;" />
+
+
+
 ## Maintainers
 
 Just me, [Iván](https://github.com/Ivan-Montes)
