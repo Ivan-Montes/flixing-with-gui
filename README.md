@@ -13,7 +13,7 @@
  
 ## Usage
 
-To create a local MySql database, I have used XAMPP for this. The default name is "flixingdb", but you could use a different name if you edit the file HibernateUtil.java. Database credentials are stored in system variables, so you need add them as well.
+To create a empty local MySql database, I have used XAMPP. The default name is "flixingdb", but you could use a different name if you edit the file HibernateUtil.java. Database credentials are stored in system variables, so you need add them as well.
 
 Then you need you clone the project and run a MAVEN package command in order to get an runnable jar file. A different option is just use your preferred IDE for running the project.
 
@@ -50,7 +50,9 @@ Contributions are always welcome!
 
 ## License
 
-[![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://choosealicense.com/licenses/gpl-3.0/)
-[![Maven](https://badgen.net/badge/icon/maven?icon=maven&label)](https://https://maven.apache.org/)
-[![Eclipse](https://badgen.net/badge/icon/eclipse?icon=eclipse&label)](https://https://eclipse.org/)
+[![Java](https://badgen.net/static/JavaSE/17/orange)](https://www.java.com/es/)
+[![Maven](https://badgen.net/badge/icon/maven?icon=maven&label&color=red)](https://https://maven.apache.org/)
+[![Hibernate](https://badgen.net/static/Hibernate/6.3/green)](https://hibernate.org/)
 [![GitHub](https://badgen.net/badge/icon/github?icon=github&label)](https://github.com)
+[![Eclipse](https://badgen.net/badge/icon/eclipse?icon=eclipse&label)](https://https://eclipse.org/)
+[![SonarQube](https://badgen.net/badge/icon/sonarqube?icon=sonarqube&label)](https://www.sonarsource.com/products/sonarqube/downloads/)
