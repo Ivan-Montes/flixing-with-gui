@@ -20,19 +20,19 @@ Then you need you clone the project and run a MAVEN package command in order to 
 
 ## Features
 
-#### Unitary test with JUnit5 and Mockito 
+ #### - Unitary Testing with JUnit 5 and Mockito using an H2 in-memory database
 
-#### HibernateUtil configured programmatically 
+ #### - DAO and MVC patterns adopted
 
-#### Hibernate validator included
+ #### - Dependency injection and Clean Code respected
 
-#### DAO and MVC patterns adopted
+ #### - Used Sonarqube community for checking the project
 
-#### Dependency injection and Clean Code respected
+ #### - HibernateUtil configured programmatically 
 
-#### Used Sonarqube community for checking the project
+ #### - Hibernate validator included
 
-#### MySql Database Schema
+ #### - MySql Database Schema
 
 <img src="../warehouse/Esquema_Flixingdb.png" style="width: 800px; max-width: 1024px; flex-grow: 1;" />
 
