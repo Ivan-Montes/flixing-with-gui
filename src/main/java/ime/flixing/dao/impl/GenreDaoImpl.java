@@ -2,91 +2,93 @@ package ime.flixing.dao.impl;
 
 import java.util.List;
 
-import ime.flixing.dao.GenreDao;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+
+import ime.flixing.dao.GenericDao;
 import ime.flixing.entity.Genre;
 import ime.flixing.util.HibernateUtil;
 
-import org.hibernate.Session;
-import org.hibernate.query.Query;
+public class GenreDaoImpl implements GenericDao<Genre> {
 
+	private final SessionFactory sessionFactory;	
+	
+	public GenreDaoImpl() {
+		super();
+		this.sessionFactory = HibernateUtil.getSession();
+	}
 
-public class GenreDaoImpl implements GenreDao{
-
-	@Override
-	public List<Genre> getAllGenre() {
-		
-		Session session = HibernateUtil.getSession().openSession();
-		Query<Genre> query = session.createQuery("FROM Genre", Genre.class);
-		List<Genre>list = query.list();
-		session.close();
-		return list;
+	public GenreDaoImpl(SessionFactory sessionFactory) {
+		super();
+		this.sessionFactory = sessionFactory;
 	}
 
 	@Override
-	public Genre getGenreById(Long id) {
-		
-		Session session = HibernateUtil.getSession().openSession();
-		Genre genreFound = session.get(Genre.class, id);
-		session.close();
-		return genreFound;
+	public List<Genre> getAll() {
+		try( Session session = sessionFactory.openSession() ){
+			Query<Genre> query = session.createQuery("FROM Genre", Genre.class);
+			return query.list();
+		}
 	}
 
 	@Override
-	public Genre saveGenre(Genre genre) {
-		
-		Session session = HibernateUtil.getSession().openSession();
-		session.beginTransaction();
-		session.persist(genre);
-		session.getTransaction().commit();
-		Genre genreFound = session.get(Genre.class, genre.getGenreId());
-		session.close();
-		return genreFound;
+	public Genre getById(Long id) {
+		try( Session session = sessionFactory.openSession() ){
+		return session.get(Genre.class, id);
+		}
 	}
 
 	@Override
-	public Genre updateGenre(Long id, Genre genre) {
-		
-		Session session = HibernateUtil.getSession().openSession();
-		session.beginTransaction();
-		Genre genredo = session.get(Genre.class, id);
-		genredo.setName(genre.getName());
-		genredo.setDescription(genre.getDescription());
-		session.persist(genredo);
-		session.getTransaction().commit();
-		Genre genreFound = session.get(Genre.class, id);
-		session.close();
-		return genreFound;
+	public Genre getByIdEagger(Long id) {
+		try( Session session = sessionFactory.openSession() ){
+			Query<Genre> query = session.createQuery("SELECT g FROM Genre g LEFT JOIN FETCH g.flixes WHERE g.genreId = :id", Genre.class);
+			query.setParameter("id", id);
+			return query.uniqueResult();
+		}		
 	}
 
 	@Override
-	public void deleteGenre(Long id) {
-		
-		Session session = HibernateUtil.getSession().openSession();
-		session.beginTransaction();
-		Genre genreFound = session.get(Genre.class, id);
-		session.remove(genreFound);
-		session.getTransaction().commit();
-        session.close();	
-		
+	public Genre save(Genre entity) {
+		try( Session session = sessionFactory.openSession() ){
+			session.beginTransaction();
+			session.persist(entity);
+			session.getTransaction().commit();
+			return session.get(Genre.class, entity.getGenreId());
+		}
 	}
 
 	@Override
-	public Genre getGenreByIdEagger(Long id) {
-		Session session = HibernateUtil.getSession().openSession();
-		Query<Genre> query = session.createQuery("SELECT g FROM Genre g LEFT JOIN FETCH g.flixes WHERE g.genreId = :id", Genre.class);
-		query.setParameter("id", id);
-		Genre genreFound = query.uniqueResult();
-		session.close();
-		return genreFound;
+	public Genre update(Long id, Genre entity) {
+		try( Session session = sessionFactory.openSession() ){
+			session.beginTransaction();
+			Genre genredo = session.get(Genre.class, id);
+			genredo.setName(entity.getName());
+			genredo.setDescription(entity.getDescription());
+			session.persist(genredo);
+			session.getTransaction().commit();
+			return session.get(Genre.class, id);
+		}		
 	}
 
 	@Override
-	public List<Genre> getGenreByName(String name) {
-		Session session = HibernateUtil.getSession().openSession();
-		Query<Genre> query = session.createQuery("FROM Genre g WHERE g.name = :name", Genre.class);
-		query.setParameter("name", name);
-		List<Genre>list = query.list();
-		session.close();
-		return list;
+	public void delete(Long id) {
+		try( Session session = sessionFactory.openSession() ){
+			session.beginTransaction();
+			Genre genreFound = session.get(Genre.class, id);
+			session.remove(genreFound);
+			session.getTransaction().commit();
+		}		
 	}
+
+	@Override
+	public List<Genre> getByName(String name) {
+		try( Session session = sessionFactory.openSession() ){
+			Query<Genre> query = session.createQuery("FROM Genre g WHERE g.name = :name", Genre.class);
+			query.setParameter("name", name);
+			return query.list();
+		}
+	}
+
+
 }
