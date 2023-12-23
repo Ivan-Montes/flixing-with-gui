@@ -1,6 +1,8 @@
 package ime.flixing.mvc.view.flix;
 
 import java.awt.BorderLayout;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.awt.FlowLayout;
 import java.util.Optional;
@@ -9,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.AbstractDocument;
 
 import ime.flixing.entity.Flix;
 import ime.flixing.mvc.controller.FlixController;
@@ -36,10 +39,11 @@ public class FlixSaveView extends JDialog {
 	public static void main(String[] args) {
 		try {
 			FlixSaveView dialog = new FlixSaveView();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			final Logger logger = Logger.getLogger(FlixSaveView.class.getName());
+			logger.log(Level.SEVERE, DecoHelper.MSG_SHIT_HAPPENS, e);
 		}
 	}
 
@@ -48,36 +52,38 @@ public class FlixSaveView extends JDialog {
 	 */
 	public FlixSaveView() {
 		setModal(true);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 		setAlwaysOnTop(true);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		SpringLayout sl_contentPanel = new SpringLayout();
-		contentPanel.setLayout(sl_contentPanel);
+		SpringLayout slContentPanel = new SpringLayout();
+		contentPanel.setLayout(slContentPanel);
 		{
 			lblFlixName = new JLabel("Flix Name");
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, lblFlixName, 10, SpringLayout.NORTH, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.WEST, lblFlixName, 10, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.NORTH, lblFlixName, 10, SpringLayout.NORTH, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.WEST, lblFlixName, 10, SpringLayout.WEST, contentPanel);
 			contentPanel.add(lblFlixName);
 		}
 		
 		tfFlixName = new JTextField();
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, tfFlixName, -3, SpringLayout.NORTH, lblFlixName);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, tfFlixName, -17, SpringLayout.EAST, contentPanel);
+		((AbstractDocument)tfFlixName.getDocument()).setDocumentFilter(
+				DocumentFilterFactory.createDocumentFilter(CheckerPattern.TITLE_FLIX_FULL));
+		slContentPanel.putConstraint(SpringLayout.NORTH, tfFlixName, -3, SpringLayout.NORTH, lblFlixName);
+		slContentPanel.putConstraint(SpringLayout.EAST, tfFlixName, -17, SpringLayout.EAST, contentPanel);
 		contentPanel.add(tfFlixName);
 		tfFlixName.setColumns(10);
 
 		spGenreId = new JSpinner(new SpinnerNumberModel(0, 0, 33, 1));
-		sl_contentPanel.putConstraint(SpringLayout.WEST, tfFlixName, 0, SpringLayout.WEST, spGenreId);
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, spGenreId, 48, SpringLayout.NORTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, spGenreId, 79, SpringLayout.WEST, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.WEST, tfFlixName, 0, SpringLayout.WEST, spGenreId);
+		slContentPanel.putConstraint(SpringLayout.NORTH, spGenreId, 48, SpringLayout.NORTH, contentPanel);
+		slContentPanel.putConstraint(SpringLayout.WEST, spGenreId, 79, SpringLayout.WEST, contentPanel);
 		contentPanel.add(spGenreId);
 		
 		JLabel lblGenreId = new JLabel("Genre Id");
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, lblGenreId, 0, SpringLayout.NORTH, spGenreId);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, lblGenreId, 0, SpringLayout.EAST, lblFlixName);
+		slContentPanel.putConstraint(SpringLayout.NORTH, lblGenreId, 0, SpringLayout.NORTH, spGenreId);
+		slContentPanel.putConstraint(SpringLayout.EAST, lblGenreId, 0, SpringLayout.EAST, lblFlixName);
 		contentPanel.add(lblGenreId);
 		{
 			JPanel buttonPane = new JPanel();
@@ -106,17 +112,21 @@ public class FlixSaveView extends JDialog {
 		
 		if ( Checker.checkFlixTitle(strFlixName) && Checker.checkDigits(strGenreId) ) {
 
-			Optional<Flix> optFlixSaved = FlixController.saveFlix(strFlixName, strGenreId);
-			
-			if (optFlixSaved.isPresent() ) {
+			if ( JOptionPane.showConfirmDialog(this, DecoHelper.MSG_CONFIRM_OPTION, DecoHelper.MSG_CONFIRM_TITLE, JOptionPane.YES_NO_OPTION )
+					 == JOptionPane.OK_OPTION ){
+
+				Optional<Flix> optFlixSaved = new FlixController().saveFlix(strFlixName, strGenreId);
 				
-				JOptionPane.showMessageDialog(this, DecoHelper.MSG_SUCCESSFULLY);
-				cleanFields();
+				if (optFlixSaved.isPresent() ) {
+					
+					JOptionPane.showMessageDialog(this, DecoHelper.MSG_SUCCESSFULLY);
+					cleanFields();
+					
+				}else {
+					JOptionPane.showMessageDialog(this, DecoHelper.MSG_ERROR_PROCESS);
+				}		
 				
-			}else {
-				JOptionPane.showMessageDialog(this, DecoHelper.MSG_ERROR_PROCESS);
-			}		
-			
+			}
 			
 		}else {
 			JOptionPane.showMessageDialog(this, "\t" + DecoHelper.MSG_ERROR_DATA);
