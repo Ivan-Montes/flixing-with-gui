@@ -23,11 +23,6 @@ public class FlixController {
 		this.genreDaoImpl = new GenreDaoImpl();
 	}
 
-	public FlixController(FlixDaoImpl flixDaoImpl) {
-		super();
-		this.flixDaoImpl = flixDaoImpl;
-	}
-
 	public FlixController(FlixDaoImpl flixDaoImpl, GenreDaoImpl genreDaoImpl) {
 		super();
 		this.flixDaoImpl = flixDaoImpl;
@@ -80,7 +75,7 @@ public class FlixController {
 	 
 	 public final Optional<List<Flix>> getAllFlix() {
 		
-		return Optional.ofNullable(flixDaoImpl.getAllFlix());			
+		return Optional.ofNullable(flixDaoImpl.getAll());			
 		
 	 }
 
@@ -88,7 +83,7 @@ public class FlixController {
 		 
 		 if ( Checker.checkDigits(strFlixCod) ) {
 			
-			return Optional.ofNullable( flixDaoImpl.getFlixById( Long.parseLong(strFlixCod) ) ); 
+			return Optional.ofNullable( flixDaoImpl.getById( Long.parseLong(strFlixCod) ) ); 
 		 }		
 		 
 		 return Optional.ofNullable(null);
@@ -108,7 +103,7 @@ public class FlixController {
 				 Flix flix = new Flix();
 				 flix.setTitle(strFlixName);
 				 flix.setGenre( optGenre.get() );
-				 result = Optional.ofNullable(flixDaoImpl.saveFlix(flix));
+				 result = Optional.ofNullable(flixDaoImpl.save(flix));
 			 } 
 		 }
 		 
@@ -132,7 +127,7 @@ public class FlixController {
 				 Flix flix = new Flix();
 				 flix.setTitle( strFlixName );
 				 flix.setGenre( optGenre.get() );
-				 result = Optional.ofNullable(flixDaoImpl.updateFlix(Long.parseLong(strFlixCod), flix));
+				 result = Optional.ofNullable(flixDaoImpl.update(Long.parseLong(strFlixCod), flix));
 			 }	 
 		 }
 		 
@@ -145,13 +140,13 @@ public class FlixController {
 		
 		if ( Checker.checkDigits( strFlixCod ) ) {
 			
-			Optional<Flix> optFlixFound = Optional.ofNullable(flixDaoImpl.getFlixByIdEagger(Long.parseLong(strFlixCod)));
+			Optional<Flix> optFlixFound = Optional.ofNullable(flixDaoImpl.getByIdEagger(Long.parseLong(strFlixCod)));
 			
 			if ( optFlixFound.isPresent() ) {
 				
 				if ( optFlixFound.get().getFlixPersonPosition().isEmpty() ) {
 					
-					flixDaoImpl.deleteFlix( Long.parseLong(strFlixCod) );
+					flixDaoImpl.delete( Long.parseLong(strFlixCod) );
 					returnValue =  0;
 					
 				}else {
