@@ -15,6 +15,7 @@ import ime.flixing.entity.Genre;
 import ime.flixing.mvc.controller.GenreController;
 import ime.flixing.tool.Checker;
 import ime.flixing.tool.DecoHelper;
+import ime.flixing.tool.MsgBox;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -165,7 +166,7 @@ public class GenreDeleteView extends JDialog {
 			 }
 			
 		}else {
-			JOptionPane.showMessageDialog(this, DecoHelper.MSG_ERROR_COD);
+			new MsgBox().showBasicDialog(this, DecoHelper.MSG_ERROR_COD);
 		}
 	}
 
@@ -218,11 +219,11 @@ public class GenreDeleteView extends JDialog {
 				
 				
 			}else {
-				JOptionPane.showMessageDialog(this, DecoHelper.MSG_ERROR_NULL);
+				new MsgBox().showBasicDialog(this, DecoHelper.MSG_ERROR_NULL);
 			}
 			
 		}else {			
-			JOptionPane.showMessageDialog(this, DecoHelper.MSG_ERROR_COD);
+			new MsgBox().showBasicDialog(this, DecoHelper.MSG_ERROR_COD);
 		}
 	}
 }
