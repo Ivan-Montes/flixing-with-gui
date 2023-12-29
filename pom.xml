@@ -16,7 +16,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <sonar-java-binaries>target/classes</sonar-java-binaries>
     <sonar.exclusions></sonar.exclusions>
-    <sonar.coverage.exclusions>src/main/java/ime/flixing/mvc/view/*,src/main/java/ime/flixing/mvc/view/**/*,src/main/java/ime/flixing/exception/*</sonar.coverage.exclusions>
+    <sonar.coverage.exclusions>src/main/java/ime/flixing/mvc/view/*,src/main/java/ime/flixing/mvc/view/**/*,src/main/java/ime/flixing/tool/MsgBox.java</sonar.coverage.exclusions>
   </properties>
 
   <dependencies>
@@ -72,6 +72,11 @@
 	    <groupId>org.hibernate.validator</groupId>
 	    <artifactId>hibernate-validator</artifactId>
 	    <version>8.0.1.Final</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.glassfish.expressly</groupId>
+	    <artifactId>expressly</artifactId>
+	    <version>5.0.0</version>
 	</dependency>
 	<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 	<dependency>
