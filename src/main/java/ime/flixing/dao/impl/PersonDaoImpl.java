@@ -3,74 +3,91 @@ package ime.flixing.dao.impl;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
-import ime.flixing.dao.PersonDao;
+import ime.flixing.dao.GenericDao;
 import ime.flixing.entity.Person;
 import ime.flixing.util.HibernateUtil;
 
-public class PersonDaoImpl implements PersonDao{
+public class PersonDaoImpl implements GenericDao<Person>{
 
-	@Override
-	public List<Person> getAllPerson() {
-		Session session = HibernateUtil.getSession().openSession();
-		Query<Person> query = session.createQuery("FROM Person", Person.class);
-		List<Person>list = query.list();
-		session.close();
-		return list;
+	private final SessionFactory sessionFactory;	
+	
+	public PersonDaoImpl() {
+		super();
+		this.sessionFactory = HibernateUtil.getSession();
+	}
+
+	public PersonDaoImpl(SessionFactory sessionFactory) {
+		super();
+		this.sessionFactory = sessionFactory;
 	}
 
 	@Override
-	public Person getPersonById(Long id) {
-		Session session = HibernateUtil.getSession().openSession();
-		Person personFound = session.get(Person.class, id);
-		session.close();
-		return personFound;
+	public List<Person> getAll() {
+		try( Session session = sessionFactory.openSession() ){
+			Query<Person> query = session.createQuery("FROM Person", Person.class);
+			return query.list();
+		}
 	}
 
 	@Override
-	public Person getPersonByIdEagger(Long id) {
-		Session session = HibernateUtil.getSession().openSession();
-		Query<Person> query = session.createQuery("SELECT p FROM Person p LEFT JOIN FETCH p.flixPersonPosition WHERE p.personId = :id", Person.class);
-		query.setParameter("id", id);
-		Person personFound = query.uniqueResult();
-		session.close();
-		return personFound;
+	public Person getById(Long id) {
+		try( Session session = sessionFactory.openSession() ){
+			return session.get(Person.class, id);
+		}
 	}
 
 	@Override
-	public Person savePerson(Person person) {
-		Session session = HibernateUtil.getSession().openSession();
-		session.beginTransaction();
-		session.persist(person);
-		session.getTransaction().commit();
-		Person personFound = session.get(Person.class, person.getPersonId());
-		session.close();
-		return personFound;
+	public Person getByIdEagger(Long id) {
+		try( Session session = sessionFactory.openSession() ){
+			Query<Person> query = session.createQuery("SELECT p FROM Person p LEFT JOIN FETCH p.flixPersonPosition WHERE p.personId = :id", Person.class);
+			query.setParameter("id", id);
+			return query.uniqueResult();	
+		}
 	}
 
 	@Override
-	public Person updatePerson(Long id, Person person) {
-		Session session = HibernateUtil.getSession().openSession();
-		session.beginTransaction();
-		Person personedo = session.get(Person.class, id);
-		personedo.setName(person.getName());
-		personedo.setSurname(person.getSurname());
-		session.persist(personedo);
-		session.getTransaction().commit();
-		Person personFound = session.get(Person.class, id);
-		session.close();
-		return personFound;
+	public Person save(Person entity) {
+		try( Session session = sessionFactory.openSession() ){
+			session.beginTransaction();
+			session.persist(entity);
+			session.getTransaction().commit();
+			return session.get(Person.class, entity.getPersonId());
+		}
 	}
 
 	@Override
-	public void deletePerson(Long id) {
-		Session session = HibernateUtil.getSession().openSession();
-		session.beginTransaction();
-		Person personFound = session.get(Person.class, id);
-		session.remove(personFound);
-		session.getTransaction().commit();
-        session.close();
+	public Person update(Long id, Person entity) {
+		try( Session session = sessionFactory.openSession() ){
+			session.beginTransaction();
+			Person personedo = session.get(Person.class, id);
+			personedo.setName(entity.getName());
+			personedo.setSurname(entity.getSurname());
+			session.persist(personedo);
+			session.getTransaction().commit();
+			return session.get(Person.class, id);	
+		}
+	}
+
+	@Override
+	public void delete(Long id) {
+		try( Session session = sessionFactory.openSession() ){
+			session.beginTransaction();
+			Person personFound = session.get(Person.class, id);
+			session.remove(personFound);
+			session.getTransaction().commit();
+		}
+	}
+
+	@Override
+	public List<Person> getByName(String name) {
+		try( Session session = sessionFactory.openSession() ){
+			Query<Person> query = session.createQuery("FROM Person p WHERE p.name = :name", Person.class);
+			query.setParameter("name", name);
+			return query.list();
+		}
 	}
 
 }
