@@ -68,7 +68,7 @@ public class PersonController {
 
 	public final Optional<List<Person>> getAllPerson() {
 
-		return Optional.ofNullable( personDaoImpl.getAllPerson() );
+		return Optional.ofNullable( personDaoImpl.getAll() );
 		
 	}
 	
@@ -78,7 +78,7 @@ public class PersonController {
 		
 		if ( Checker.checkDigits(strPersonCod) ) {
 			
-			optPerson = Optional.ofNullable( personDaoImpl.getPersonById(Long.parseLong(strPersonCod)) );
+			optPerson = Optional.ofNullable( personDaoImpl.getById(Long.parseLong(strPersonCod)) );
 		}
 		
 		return optPerson;
@@ -94,7 +94,7 @@ public class PersonController {
 			Person person = new Person();
 			person.setName(strName);
 			person.setSurname(strSurname);
-			optPerson = Optional.ofNullable(personDaoImpl.savePerson(person));
+			optPerson = Optional.ofNullable(personDaoImpl.save(person));
 			
 		}
 		
@@ -110,14 +110,14 @@ public class PersonController {
 				Checker.checkName(strName)
 				&& Checker.checkSurname(strSurname) ){
 						
-			Optional<Person> optPersonFound = Optional.ofNullable(personDaoImpl.getPersonById(Long.parseLong(strPersonCod)));
+			Optional<Person> optPersonFound = Optional.ofNullable(personDaoImpl.getById(Long.parseLong(strPersonCod)));
 			
 			if ( optPersonFound.isPresent() ) {
 				
 				Person person = new Person();
 				person.setName(strName);
 				person.setSurname(strSurname);
-				optPersonSaved = Optional.ofNullable(personDaoImpl.updatePerson(Long.parseLong(strPersonCod), person));
+				optPersonSaved = Optional.ofNullable(personDaoImpl.update(Long.parseLong(strPersonCod), person));
 				
 			}
 			
@@ -132,13 +132,13 @@ public class PersonController {
 		
 		if ( Checker.checkDigits(strPersonCod) ) {
 						
-			Optional<Person>optPerson = Optional.ofNullable( personDaoImpl.getPersonByIdEagger(Long.parseLong(strPersonCod)) );
+			Optional<Person>optPerson = Optional.ofNullable( personDaoImpl.getByIdEagger(Long.parseLong(strPersonCod)) );
 		
 			if (optPerson.isPresent() ) {
 				
 					if ( optPerson.get().getFlixPersonPosition().isEmpty() ) {
 					
-						personDaoImpl.deletePerson( Long.parseLong(strPersonCod) );
+						personDaoImpl.delete( Long.parseLong(strPersonCod) );
 						returnValue =  0;
 				
 					}
