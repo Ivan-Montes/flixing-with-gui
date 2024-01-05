@@ -6,8 +6,8 @@ public class MainController {
 
 	public void init() {		
 		
-		MainView viewJFrametype = new MainView();		
-		viewJFrametype.setVisible(true);		
+		MainView view = new MainView();		
+		view.setVisible(true);		
 		
 	}
 	
