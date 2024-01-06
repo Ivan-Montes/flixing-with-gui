@@ -23,7 +23,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import ime.flixing.entity.Position;
-import ime.flixing.util.HibernateUtil;
+import ime.flixing.util.HibernateUtilTest;
 
 @ExtendWith(MockitoExtension.class)
 class PositionDaoImplTest {
@@ -57,14 +57,14 @@ class PositionDaoImplTest {
 	@Test
 	void positionDaoImpl_getAllFlix_ReturnList() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(query).when(session).createQuery(Mockito.anyString(),Mockito.any());	
 			doReturn(List.of(positionTest)).when(query).list();	
 			doNothing().when(session).close();
 			
-			List<Position>list = positionDaoImpl.getAllPosition();
+			List<Position>list = positionDaoImpl.getAll();
 			
 			assertAll(
 					()->assertNotNull(list),
@@ -80,13 +80,13 @@ class PositionDaoImplTest {
 	@Test
 	void positionDaoImpl_getPositionById_ReturnPosition() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(positionTest).when(session).get(Position.class, positionTestId);
 			doNothing().when(session).close();
 			
-			Position flix = positionDaoImpl.getPositionById(1L);
+			Position flix = positionDaoImpl.getById(1L);
 			
 			assertAll(
 					()->assertNotNull(flix),
@@ -102,13 +102,13 @@ class PositionDaoImplTest {
 	@Test
 	void positionDaoImpl_getPositionById_ReturnNull() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(null).when(session).get(Position.class, positionTestId);
 			doNothing().when(session).close();
 			
-			Position flix = positionDaoImpl.getPositionById(1L);
+			Position flix = positionDaoImpl.getById(1L);
 			
 			assertAll(
 					()->assertNull(flix)
@@ -122,14 +122,14 @@ class PositionDaoImplTest {
 	@Test
 	void positionDaoImpl_getPositionByIdEagger_ReturnPosition() {
 
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(query).when(session).createQuery(Mockito.anyString(), Mockito.any());	
 			doReturn(positionTest).when(query).uniqueResult();
 			doNothing().when(session).close();
 			
-			Position flix = positionDaoImpl.getPositionByIdEagger(1L);
+			Position flix = positionDaoImpl.getByIdEagger(1L);
 			
 			assertAll(
 					()->assertNotNull(flix),
@@ -144,8 +144,8 @@ class PositionDaoImplTest {
 	@Test
 	void positionDaoImpl_savePosition_ReturnPosition() {
 				
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(transTest).when(session).beginTransaction();	
 			doNothing().when(session).persist(Mockito.any(Position.class));			
@@ -154,7 +154,7 @@ class PositionDaoImplTest {
 			doReturn(positionTest).when(session).get(Position.class, positionTestId);
 			doNothing().when(session).close();
 		
-			Position flix = positionDaoImpl.savePosition(positionTest);
+			Position flix = positionDaoImpl.save(positionTest);
 			
 			assertAll(
 					()->assertNotNull(flix),
@@ -175,8 +175,8 @@ class PositionDaoImplTest {
 	@Test
 	void positionDaoImpl_updatePosition_ReturnPosition() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(transTest).when(session).beginTransaction();
 			doReturn(positionTest).when(session).get(Position.class, positionTestId);	
@@ -185,7 +185,7 @@ class PositionDaoImplTest {
 			doNothing().when(transTest).commit();
 			doNothing().when(session).close();
 			
-			Position flix = positionDaoImpl.updatePosition(positionTestId, positionTest);
+			Position flix = positionDaoImpl.update(positionTestId, positionTest);
 			
 			assertAll(
 					()->assertNotNull(flix),
@@ -205,8 +205,8 @@ class PositionDaoImplTest {
 	@Test
 	void positionDaoImpl_deletePosition_ReturnVoid() {		
 	
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(transTest).when(session).beginTransaction();
 			doReturn(positionTest).when(session).get(Position.class, positionTestId);
@@ -215,7 +215,7 @@ class PositionDaoImplTest {
 			doNothing().when(transTest).commit();
 			doNothing().when(session).close();
 			
-			positionDaoImpl.deletePosition(positionTestId);
+			positionDaoImpl.delete(positionTestId);
 			
 			verify(sessionFactory,times(1)).openSession();
 			verify(session,times(1)).beginTransaction();
@@ -230,14 +230,14 @@ class PositionDaoImplTest {
 	@Test
 	void positionDaoImpl_getPositionByNameId_ReturnList() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(query).when(session).createQuery(Mockito.anyString(),Mockito.any());	
 			doReturn(List.of(positionTest)).when(query).list();	
 			doNothing().when(session).close();
 			
-			List<Position>list = positionDaoImpl.getPositionByNameId(positionTest.getName());
+			List<Position>list = positionDaoImpl.getByName(positionTest.getName());
 			
 			assertAll(
 					()->assertNotNull(list),
