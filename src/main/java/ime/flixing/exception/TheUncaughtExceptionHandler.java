@@ -5,49 +5,56 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ime.flixing.tool.DecoHelper;
+import ime.flixing.tool.MsgBox;
 
-public class TheUncaughtExceptionHandler implements UncaughtExceptionHandler {
+public final class TheUncaughtExceptionHandler implements UncaughtExceptionHandler {
 	
-	private final Logger logger = Logger.getLogger(getClass().getName());
+	private final MsgBox msgBox;
+	private final Logger logger;
+	
+	
+	public TheUncaughtExceptionHandler() {
+		super();
+		this.msgBox = new MsgBox();
+		this.logger = Logger.getLogger(getClass().getName());
+	}
+
+
+	public TheUncaughtExceptionHandler(MsgBox msgBox, Logger logger) {
+		super();
+		this.msgBox = msgBox;
+		this.logger = logger;
+	}
 
 	@Override
-    public void uncaughtException(Thread t, Throwable e) {
+    public final void uncaughtException(Thread t, Throwable e) {
 		
-        if (e instanceof NullPointerException nullE) {
-            handleNullPointerException( nullE );
+		String msg = "";
+		
+        if (e instanceof NullPointerException ex) {
+        	
+        	msg = String.format(DecoHelper.EX_MSG_TEMPLATE, DecoHelper.EX_NULL, ex.getMessage());
             
-        } else if (e instanceof java.lang.IllegalStateException illegalE) {
-            handleIllegalStateException( illegalE );
+        } else if (e instanceof java.lang.IllegalStateException ex) {
+        	
+        	msg = String.format(DecoHelper.EX_MSG_TEMPLATE, DecoHelper.EX_ILLEGAL_STATE, ex.getMessage());
             
-        } else if (e instanceof org.hibernate.service.spi.ServiceException serviceE) {
-            handleIllegalServiceException( serviceE );
+        } else if (e instanceof org.hibernate.service.spi.ServiceException ex) {
+        	
+        	msg = String.format(DecoHelper.EX_MSG_TEMPLATE, DecoHelper.EX_ILLEGAL_SERVICE, ex.getMessage());
             
-        }else if (e instanceof org.hibernate.engine.jdbc.env.spi.JdbcEnvironment jdbcE) {
-            handleJdbcEnvironmentException( jdbcE );
+        }else if (e instanceof jakarta.validation.ConstraintViolationException ex) {
+        	
+        	msg = String.format(DecoHelper.EX_MSG_TEMPLATE, DecoHelper.EX_CONSTRAINT_VIOLATION, ex.getMessage());
+        	msgBox.showExeptionDialog(ex);
         }
         else {
-            handleGenericException(e);
+        	
+        	msg = String.format(DecoHelper.EX_MSG_TEMPLATE, DecoHelper.EX_UNKNOWN, e.getMessage());
         }
-    }
-
-    private void handleNullPointerException(NullPointerException e) {
-        logger.log(Level.SEVERE, String.format("Error: %s.  Description: %s", DecoHelper.EX_NULL, e.getMessage() ) );
-    }
-
-    private void handleIllegalStateException(java.lang.IllegalStateException e) {
-        logger.log(Level.SEVERE, String.format("Error: %s.  Description: %s", DecoHelper.EX_ILLEGAL_STATE, e.getMessage() ) );
-    }
-
-    private void handleIllegalServiceException(org.hibernate.service.spi.ServiceException e) {
-        logger.log(Level.SEVERE, String.format("Error: %s.  Description: %s", DecoHelper.EX_ILLEGAL_SERVICE, e.getMessage() ) );
-    }
-
-    private void handleJdbcEnvironmentException(org.hibernate.engine.jdbc.env.spi.JdbcEnvironment e) {
-        logger.log(Level.SEVERE, String.format("Error: %s.  Description: %s", DecoHelper.EX_HIBERNATE_JDBC, ((Throwable) e).getMessage() ) );
-    }
-
-    private void handleGenericException(Throwable e) {
-        logger.log(Level.SEVERE, String.format("Error: %s.  Description: %s", DecoHelper.EX_UNKNOWN, e.getMessage() ) );
+        
+        
+        logger.log(Level.SEVERE, msg );
     }
 
 }
