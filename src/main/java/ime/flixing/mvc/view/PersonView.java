@@ -1,6 +1,8 @@
 package ime.flixing.mvc.view;
 
 import java.awt.BorderLayout;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
@@ -9,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import ime.flixing.mvc.controller.PersonController;
+import ime.flixing.tool.DecoHelper;
 
 import javax.swing.SpringLayout;
 import javax.swing.JLabel;
@@ -30,10 +33,11 @@ public class PersonView extends JDialog {
 	public static void main(String[] args) {
 		try {
 			PersonView dialog = new PersonView();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			final Logger logger = Logger.getLogger(PersonView.class.getName());
+			logger.log(Level.SEVERE, DecoHelper.MSG_SHIT_HAPPENS, e);
 		}
 	}
 
@@ -43,18 +47,18 @@ public class PersonView extends JDialog {
 	public PersonView() {
 		setModal(true);
 		setAlwaysOnTop(true);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		SpringLayout sl_contentPanel = new SpringLayout();
-		contentPanel.setLayout(sl_contentPanel);
+		SpringLayout slContentPanel = new SpringLayout();
+		contentPanel.setLayout(slContentPanel);
 		{
 			lblPerson = new JLabel("PERSON");
 			lblPerson.setFont(new Font("Tahoma", Font.BOLD, 14));
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, lblPerson, 10, SpringLayout.NORTH, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.WEST, lblPerson, 171, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.NORTH, lblPerson, 10, SpringLayout.NORTH, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.WEST, lblPerson, 171, SpringLayout.WEST, contentPanel);
 			contentPanel.add(lblPerson);
 		}
 		{
@@ -64,31 +68,31 @@ public class PersonView extends JDialog {
 		}
 		{
 			btnGetPersonById = new JButton("Get By Id");
-			sl_contentPanel.putConstraint(SpringLayout.WEST, btnGetPersonById, 161, SpringLayout.WEST, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.WEST, btnGetAllPerson, 0, SpringLayout.WEST, btnGetPersonById);
-			sl_contentPanel.putConstraint(SpringLayout.SOUTH, btnGetAllPerson, -6, SpringLayout.NORTH, btnGetPersonById);
+			slContentPanel.putConstraint(SpringLayout.WEST, btnGetPersonById, 161, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.WEST, btnGetAllPerson, 0, SpringLayout.WEST, btnGetPersonById);
+			slContentPanel.putConstraint(SpringLayout.SOUTH, btnGetAllPerson, -6, SpringLayout.NORTH, btnGetPersonById);
 			btnGetPersonById.addActionListener( e -> PersonController.initPersonGetByIdView() );
 			contentPanel.add(btnGetPersonById);
 		}
 		{
 			btnSavePerson = new JButton("Save");
-			sl_contentPanel.putConstraint(SpringLayout.WEST, btnSavePerson, 161, SpringLayout.WEST, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.SOUTH, btnGetPersonById, -6, SpringLayout.NORTH, btnSavePerson);
+			slContentPanel.putConstraint(SpringLayout.WEST, btnSavePerson, 161, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.SOUTH, btnGetPersonById, -6, SpringLayout.NORTH, btnSavePerson);
 			btnSavePerson.addActionListener( e -> PersonController.initPersonSaveView() );
 			contentPanel.add(btnSavePerson);
 		}
 		{
 			btnUpdatePerson = new JButton("Update");
-			sl_contentPanel.putConstraint(SpringLayout.WEST, btnUpdatePerson, 161, SpringLayout.WEST, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.SOUTH, btnSavePerson, -6, SpringLayout.NORTH, btnUpdatePerson);
+			slContentPanel.putConstraint(SpringLayout.WEST, btnUpdatePerson, 161, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.SOUTH, btnSavePerson, -6, SpringLayout.NORTH, btnUpdatePerson);
 			btnUpdatePerson.addActionListener( e -> PersonController.initPersonUpdateView() );
 			contentPanel.add(btnUpdatePerson);
 		}
 		{
 			JButton btnDeletePerson = new JButton("Delete");
-			sl_contentPanel.putConstraint(SpringLayout.NORTH, btnDeletePerson, 162, SpringLayout.NORTH, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.WEST, btnDeletePerson, 161, SpringLayout.WEST, contentPanel);
-			sl_contentPanel.putConstraint(SpringLayout.SOUTH, btnUpdatePerson, -6, SpringLayout.NORTH, btnDeletePerson);
+			slContentPanel.putConstraint(SpringLayout.NORTH, btnDeletePerson, 162, SpringLayout.NORTH, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.WEST, btnDeletePerson, 161, SpringLayout.WEST, contentPanel);
+			slContentPanel.putConstraint(SpringLayout.SOUTH, btnUpdatePerson, -6, SpringLayout.NORTH, btnDeletePerson);
 			btnDeletePerson.addActionListener( e -> PersonController.initPersonDeleteView() );
 			contentPanel.add(btnDeletePerson);
 		}
