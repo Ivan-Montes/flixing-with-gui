@@ -4,10 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import ime.flixing.dao.FlixDao;
 import ime.flixing.dao.FlixPersonPositionDao;
 import ime.flixing.dao.GenericDao;
-import ime.flixing.dao.PersonDao;
 import ime.flixing.dao.impl.FlixDaoImpl;
 import ime.flixing.dao.impl.FlixPersonPositionDaoImpl;
 import ime.flixing.dao.impl.PersonDaoImpl;
@@ -21,12 +19,30 @@ import ime.flixing.mvc.view.FlixPersonPositionView;
 import ime.flixing.mvc.view.flix_person_position.*;
 
 
-import lombok.NoArgsConstructor;
-import lombok.AccessLevel;
-
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FlixPersonPositionController {
 	
+	private FlixPersonPositionDao flixPersonPositionDaoImpl;
+	private GenericDao<Flix> flixDao;	
+	private GenericDao<Person> personDao;
+	private GenericDao<Position> positionDao;
+	
+	public FlixPersonPositionController() {
+		super();
+		this.flixPersonPositionDaoImpl = new FlixPersonPositionDaoImpl();
+		this.flixDao = new FlixDaoImpl();
+		this.personDao = new PersonDaoImpl();
+		this.positionDao = new PositionDaoImpl();
+	}
+
+	public FlixPersonPositionController(FlixPersonPositionDao flixPersonPositionDaoImpl, FlixDaoImpl flixDao,
+			PersonDaoImpl personDao, PositionDaoImpl positionDao) {
+		super();
+		this.flixPersonPositionDaoImpl = flixPersonPositionDaoImpl;
+		this.flixDao = flixDao;
+		this.personDao = personDao;
+		this.positionDao = positionDao;
+	}
+
 	public static final void initFlixPersonPositionController() {
 		
 		FlixPersonPositionView view = new FlixPersonPositionView();
@@ -46,9 +62,9 @@ public class FlixPersonPositionController {
 		view.setVisible(true);
 	}
 	
-	public static final void initFlixPersonPositionDetailsView(String strFlixCod, String strPersonCod, String strPositionCod) {
+	public final void initFlixPersonPositionDetailsView(String strFlixCod, String strPersonCod, String strPositionCod) {
 		
-		FlixPersonPosition flixPersonPosition = new FlixPersonPositionDaoImpl().getFlixPersonPositionById(
+		FlixPersonPosition flixPersonPosition = flixPersonPositionDaoImpl.getFlixPersonPositionById(
 				Long.parseLong(strFlixCod), 
 				Long.parseLong(strPersonCod), 
 				Long.parseLong(strPositionCod) ) ;
@@ -58,32 +74,28 @@ public class FlixPersonPositionController {
 		view.setVisible(true);
 	}
 
-	public static final Optional<FlixPersonPosition> saveFlixPersonPosition(String strFlixCod, String strPersonCod, String strPositionCod){
+	public final Optional<FlixPersonPosition> saveFlixPersonPosition(String strFlixCod, String strPersonCod, String strPositionCod){
 		
 		Optional<FlixPersonPosition>optFlixPersonPosition = Optional.empty();		
 		List<Boolean>checkCodsList = Arrays.asList(Checker.checkDigits(strFlixCod),Checker.checkDigits(strPersonCod),Checker.checkDigits(strPositionCod));
 		
 		if ( checkCodsList.stream().allMatch( b -> b.equals(true) ) ) {
 			
-			FlixDao flixDao = new FlixDaoImpl();
-			Flix flixFound = flixDao.getFlixById(Long.parseLong(strFlixCod));
+			Flix flixFound = flixDao.getById(Long.parseLong(strFlixCod));
 			
-			PersonDao personDao = new PersonDaoImpl();
-			Person personFound = personDao.getPersonById(Long.parseLong(strPersonCod));			
+			Person personFound = personDao.getById(Long.parseLong(strPersonCod));			
 
-			GenericDao<Position> positionDao = new PositionDaoImpl();
 			Position positionFound = positionDao.getById(Long.parseLong(strPositionCod));
 			
 			if ( flixFound != null && personFound != null && positionFound != null ) {
 				
-				FlixPersonPositionDao flixPersonPositionDao = new FlixPersonPositionDaoImpl();
-				FlixPersonPosition flixPersonPositionFound = flixPersonPositionDao.getFlixPersonPositionById(Long.parseLong( strFlixCod ), 
+				FlixPersonPosition flixPersonPositionFound = flixPersonPositionDaoImpl.getFlixPersonPositionById(Long.parseLong( strFlixCod ), 
 																											Long.parseLong( strPersonCod ),																									
 																											Long.parseLong( strPositionCod ) );
 				
 					if( flixPersonPositionFound == null ) {
 					
-					FlixPersonPosition flixPersonPositionSaved = flixPersonPositionDao.saveFlixPersonPosition(Long.parseLong(strFlixCod), 
+					FlixPersonPosition flixPersonPositionSaved = flixPersonPositionDaoImpl.saveFlixPersonPosition(Long.parseLong(strFlixCod), 
 							Long.parseLong(strPersonCod), 
 							Long.parseLong(strPositionCod) );
 					
@@ -97,37 +109,33 @@ public class FlixPersonPositionController {
 		return optFlixPersonPosition;
 	}
 
-	public static final Optional<List<FlixPersonPosition>> getAllFlixPersonPosition() {
+	public final Optional<List<FlixPersonPosition>> getAllFlixPersonPosition() {
 		
-		return Optional.ofNullable(new FlixPersonPositionDaoImpl().getAllFlixPersonPosition());
+		return Optional.ofNullable(flixPersonPositionDaoImpl.getAllFlixPersonPosition());
 		
 	}
 	
-	public static final int deleteFlixPersonPosition(String strFlixCod, String strPersonCod, String strPositionCod) {
+	public final int deleteFlixPersonPosition(String strFlixCod, String strPersonCod, String strPositionCod) {
 		
 		int returnValue;
 		
 		if ( Checker.checkDigits(strFlixCod) && Checker.checkDigits(strPersonCod) && Checker.checkDigits(strPositionCod)  ) {
 			
-			FlixDao flixDao = new FlixDaoImpl();
-			Flix flixFound = flixDao.getFlixById(Long.parseLong(strFlixCod));
+			Flix flixFound = flixDao.getById(Long.parseLong(strFlixCod));
 			
-			PersonDao personDao = new PersonDaoImpl();
-			Person personFound = personDao.getPersonById(Long.parseLong(strPersonCod));			
+			Person personFound = personDao.getById(Long.parseLong(strPersonCod));			
 
-			GenericDao<Position> positionDao = new PositionDaoImpl();
 			Position positionFound = positionDao.getById(Long.parseLong(strPositionCod));
 			
 			if ( flixFound != null && personFound != null && positionFound != null ) {
 				
-				FlixPersonPositionDao flixPersonPositionDao = new FlixPersonPositionDaoImpl();
-				FlixPersonPosition flixPersonPositionFound = flixPersonPositionDao.getFlixPersonPositionById(Long.parseLong(strFlixCod), 
+				FlixPersonPosition flixPersonPositionFound = flixPersonPositionDaoImpl.getFlixPersonPositionById(Long.parseLong(strFlixCod), 
 																										Long.parseLong(strPersonCod), 
 																										Long.parseLong(strPositionCod) );
 				
 				if ( flixPersonPositionFound != null) {	
 					
-					flixPersonPositionDao.deleteFlixPersonPosition(Long.parseLong(strFlixCod), 
+					flixPersonPositionDaoImpl.deleteFlixPersonPosition(Long.parseLong(strFlixCod), 
 							Long.parseLong(strPersonCod), 
 							Long.parseLong(strPositionCod) );
 					returnValue = 0;
