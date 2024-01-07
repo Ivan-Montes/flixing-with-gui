@@ -111,7 +111,7 @@ public class FlixPersonPositionEditView extends JDialog {
 	
 	private void searchAndShow() {
 		
-		Optional<List<FlixPersonPosition>>optFlixPersonPosition = FlixPersonPositionController.getAllFlixPersonPosition();
+		Optional<List<FlixPersonPosition>>optFlixPersonPosition = new FlixPersonPositionController().getAllFlixPersonPosition();
 		
 		if ( optFlixPersonPosition.isPresent() ) {
 			
@@ -175,7 +175,7 @@ public class FlixPersonPositionEditView extends JDialog {
 						 == JOptionPane.OK_OPTION ){					
 					
 					
-					int returnValue = FlixPersonPositionController.deleteFlixPersonPosition(
+					int returnValue = new FlixPersonPositionController().deleteFlixPersonPosition(
 							String.valueOf( list.get(0) ), 
 									String.valueOf( list.get(1) ), 
 											String.valueOf( list.get(2) )
@@ -209,7 +209,7 @@ public class FlixPersonPositionEditView extends JDialog {
 					&& Checker.checkDigits( String.valueOf( list.get(2) ) )
 					) {
 				
-				FlixPersonPositionController.initFlixPersonPositionDetailsView(String.valueOf( list.get(0)),String.valueOf( list.get(1)), String.valueOf( list.get(2)));
+				new FlixPersonPositionController().initFlixPersonPositionDetailsView(String.valueOf( list.get(0)),String.valueOf( list.get(1)), String.valueOf( list.get(2)));
 				
 				
 			}else {
