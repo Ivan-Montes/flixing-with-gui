@@ -137,7 +137,7 @@ public class PersonGetByIdView extends JDialog {
 		
 		if (Checker.checkDigits(strPersonCod)) {
 			
-			Optional<Person>optPerson = PersonController.getPersonById(strPersonCod);
+			Optional<Person>optPerson = new PersonController().getPersonById(strPersonCod);
 			
 			if ( optPerson.isPresent() ) {
 				
