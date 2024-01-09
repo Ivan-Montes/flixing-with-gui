@@ -10,11 +10,15 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.AbstractDocument;
 
 import ime.flixing.entity.Genre;
 import ime.flixing.mvc.controller.GenreController;
 import ime.flixing.tool.Checker;
+import ime.flixing.tool.CheckerPattern;
 import ime.flixing.tool.DecoHelper;
+import ime.flixing.tool.DocumentFilterFactory;
+import ime.flixing.tool.MsgBox;
 
 import javax.swing.SpringLayout;
 import javax.swing.JLabel;
@@ -66,6 +70,8 @@ public class GenreSaveView extends JDialog {
 		}
 		
 		tfGenreName = new JTextField();
+		((AbstractDocument)tfGenreName.getDocument()).setDocumentFilter(
+				DocumentFilterFactory.createDocumentFilter(CheckerPattern.NAME_FULL));
 		lblGenreName.setLabelFor(tfGenreName);
 		slContentPanel.putConstraint(SpringLayout.NORTH, tfGenreName, -3, SpringLayout.NORTH, lblGenreName);
 		slContentPanel.putConstraint(SpringLayout.WEST, tfGenreName, 25, SpringLayout.EAST, lblGenreName);
@@ -81,6 +87,8 @@ public class GenreSaveView extends JDialog {
 		contentPanel.add(spDescription);
 		
 		taDescription = new JTextArea();
+		((AbstractDocument)taDescription.getDocument()).setDocumentFilter(
+				DocumentFilterFactory.createDocumentFilter(CheckerPattern.DESCRIPTION_FULL));
 		taDescription.setWrapStyleWord(true);
 		taDescription.setLineWrap(true);
 		spDescription.setViewportView(taDescription);
@@ -134,12 +142,12 @@ public class GenreSaveView extends JDialog {
 					cleanFields();
 					
 				}else {
-					JOptionPane.showMessageDialog(this, DecoHelper.MSG_ERROR_PROCESS);
+					new MsgBox().showBasicDialog(this, DecoHelper.MSG_ERROR_PROCESS);
 				}	
 			}
 			
 		}else {
-			JOptionPane.showMessageDialog(this, DecoHelper.MSG_ERROR_DATA);
+			new MsgBox().showBasicDialog(this, DecoHelper.MSG_ERROR_DATA);
 		}
 		
 	}
