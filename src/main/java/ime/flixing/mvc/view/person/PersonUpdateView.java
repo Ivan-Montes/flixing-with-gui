@@ -10,11 +10,14 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.AbstractDocument;
 
 import ime.flixing.entity.Person;
 import ime.flixing.mvc.controller.PersonController;
 import ime.flixing.tool.Checker;
+import ime.flixing.tool.CheckerPattern;
 import ime.flixing.tool.DecoHelper;
+import ime.flixing.tool.DocumentFilterFactory;
 
 import javax.swing.SpringLayout;
 import javax.swing.JLabel;
@@ -116,6 +119,8 @@ public class PersonUpdateView extends JDialog {
 		tfPersonCod.setColumns(10);
 		
 		tfPersonName = new JTextField();
+		((AbstractDocument)tfPersonName.getDocument()).setDocumentFilter(
+				DocumentFilterFactory.createDocumentFilter(CheckerPattern.NAME_FULL));
 		slContentPanel.putConstraint(SpringLayout.EAST, tfPersonName, 316, SpringLayout.EAST, lblPersonName);
 		slContentPanel.putConstraint(SpringLayout.WEST, tfPersonName, 55, SpringLayout.EAST, lblPersonName);
 		slContentPanel.putConstraint(SpringLayout.NORTH, tfPersonName, 0, SpringLayout.NORTH, lblPersonName);
@@ -123,6 +128,8 @@ public class PersonUpdateView extends JDialog {
 		tfPersonName.setColumns(10);
 		
 		tfPersonSurname = new JTextField();
+		((AbstractDocument)tfPersonSurname.getDocument()).setDocumentFilter(
+				DocumentFilterFactory.createDocumentFilter(CheckerPattern.SURNAME_FULL));
 		slContentPanel.putConstraint(SpringLayout.NORTH, tfPersonSurname, 0, SpringLayout.NORTH, lblPersonSurname);
 		slContentPanel.putConstraint(SpringLayout.WEST, tfPersonSurname, 40, SpringLayout.EAST, lblPersonSurname);
 		slContentPanel.putConstraint(SpringLayout.EAST, tfPersonSurname, 0, SpringLayout.EAST, separator);
@@ -163,7 +170,7 @@ public class PersonUpdateView extends JDialog {
 		
 		if ( Checker.checkDigits(strPersonCod)) {
 			
-			Optional<Person>optPerson = PersonController.getPersonById(strPersonCod);
+			Optional<Person>optPerson = new PersonController().getPersonById(strPersonCod);
 			
 			if ( optPerson.isPresent() ) {
 				
@@ -194,7 +201,7 @@ public class PersonUpdateView extends JDialog {
 			if ( JOptionPane.showConfirmDialog(this, DecoHelper.MSG_CONFIRM_OPTION, DecoHelper.MSG_CONFIRM_TITLE, JOptionPane.YES_NO_OPTION )
 					 == JOptionPane.OK_OPTION ){
 				
-				Optional<Person>optPerson = PersonController.updatePerson(strPersonCod, strPersonName, strPersonSurname);
+				Optional<Person>optPerson = new PersonController().updatePerson(strPersonCod, strPersonName, strPersonSurname);
 				
 				if ( optPerson.isPresent() ) {
 					
