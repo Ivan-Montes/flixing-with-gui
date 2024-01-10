@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import ime.flixing.tool.CheckerPattern;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,12 +39,12 @@ public class Position {
 	
 	@Column(unique = true, nullable = false, length = 50)
 	@Size( min = 1, max = 50)
-	@Pattern( regexp = "[a-zA-Z\\s\\-&]+")
+	@Pattern( regexp = CheckerPattern.NAME_BASIC)
 	private String name;
 	
 	@Column(nullable = true, length = 100)
 	@Size( min = 0, max = 100)
-	@Pattern( regexp = "[a-zA-Z0-9\\s\\-&]+")
+	@Pattern( regexp = CheckerPattern.DESCRIPTION_BASIC)
 	private String description;
 	
 	@OneToMany( mappedBy = "position")
