@@ -16,6 +16,7 @@ import ime.flixing.entity.Genre;
 import ime.flixing.mvc.controller.GenreController;
 import ime.flixing.tool.Checker;
 import ime.flixing.tool.DecoHelper;
+import ime.flixing.tool.MsgBox;
 
 import javax.swing.SpringLayout;
 import javax.swing.JLabel;
@@ -23,8 +24,6 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
-
 import javax.swing.JTextArea;
 import javax.swing.JSeparator;
 
@@ -160,11 +159,11 @@ public class GenreGetByIdView extends JDialog {
 				textAreaDescription.setText( optGenreFound.get().getDescription() );
 				
 			}else {
-				JOptionPane.showMessageDialog(this, "\t" + DecoHelper.MSG_ERROR_NULL);
+				new MsgBox().showBasicDialog(this, DecoHelper.MSG_ERROR_NULL);
 			}
 			
 		}else {
-			JOptionPane.showMessageDialog(this, "\t" + DecoHelper.MSG_ERROR_DATA);
+			new MsgBox().showBasicDialog(this, DecoHelper.MSG_ERROR_DATA);
 		}
 		
 	}
