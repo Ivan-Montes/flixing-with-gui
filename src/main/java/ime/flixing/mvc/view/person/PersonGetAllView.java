@@ -122,7 +122,7 @@ public class PersonGetAllView extends JDialog {
 
 	private void searchAll() {
 		
-		Optional<List<Person>> optListPerson = PersonController.getAllPerson();
+		Optional<List<Person>> optListPerson = new PersonController().getAllPerson();
 		
 		if (optListPerson.isPresent() ) {
 			
