@@ -37,11 +37,13 @@ public class DecoHelper {
 	public static final String MSG_CONFIRM_OPTION = "Please, confirm option";
 	public static final String MSG_CONFIRM_TITLE = "Confirmation box";
 	public static final String BTN_SEARCH = "Search";
-	public static final String EX_NULL = "Se ha producido una excepción de puntero nulo: ";
-	public static final String EX_ILLEGAL_STATE = "Se ha producido una excepción de java.lang.IllegalStateException: ";
-	public static final String EX_ILLEGAL_SERVICE = "Se ha producido una excepción de org.hibernate.service.spi.ServiceException: ";
-	public static final String EX_HIBERNATE_JDBC = "Se ha producido una excepción de org.hibernate.engine.jdbc.env.spi.JdbcEnvironment: ";
-	public static final String EX_UNKNOWN = "Se ha producido una excepción desconocida: ";
+	public static final String EX_NULL = "Se ha producido una excepción de puntero nulo.";
+	public static final String EX_ILLEGAL_STATE = "Se ha producido una excepción de java.lang.IllegalStateException.";
+	public static final String EX_ILLEGAL_SERVICE = "Se ha producido una excepción de org.hibernate.service.spi.ServiceException.";
+	public static final String EX_HIBERNATE_JDBC = "Se ha producido una excepción de org.hibernate.engine.jdbc.env.spi.JdbcEnvironment.";
+	public static final String EX_CONSTRAINT_VIOLATION = "Se ha producido una excepción jakarta.validation.constraintviolation.";
+	public static final String EX_UNKNOWN = "Se ha producido una excepción desconocida.";
+	public static final String EX_MSG_TEMPLATE = "Error => %s  Description => %s";
 	public static final String MSG_SHIT_HAPPENS = "An error has occurred";
 	
 	
