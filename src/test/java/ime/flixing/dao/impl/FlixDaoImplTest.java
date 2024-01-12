@@ -24,7 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import ime.flixing.entity.Flix;
 import ime.flixing.entity.Genre;
-import ime.flixing.util.HibernateUtil;
+import ime.flixing.util.HibernateUtilTest;
 
 @ExtendWith(MockitoExtension.class)
 class FlixDaoImplTest {
@@ -59,14 +59,14 @@ class FlixDaoImplTest {
 	@Test
 	void flixDaoImpl_getAllFlix_ReturnList() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(query).when(session).createQuery(Mockito.anyString(),Mockito.any());	
 			doReturn(List.of(flixTest)).when(query).list();	
 			doNothing().when(session).close();
 			
-			List<Flix>list = flixDaoImpl.getAllFlix();
+			List<Flix>list = flixDaoImpl.getAll();
 			
 			assertAll(
 					()->assertNotNull(list),
@@ -82,13 +82,13 @@ class FlixDaoImplTest {
 	@Test
 	void flixDaoImpl_getFlixById_ReturnFlix() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(flixTest).when(session).get(Flix.class, flixTestId);
 			doNothing().when(session).close();
 			
-			Flix flix = flixDaoImpl.getFlixById(1L);
+			Flix flix = flixDaoImpl.getById(1L);
 			
 			assertAll(
 					()->assertNotNull(flix),
@@ -103,13 +103,13 @@ class FlixDaoImplTest {
 	@Test
 	void flixDaoImpl_getFlixById_ReturnNull() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(null).when(session).get(Flix.class, flixTestId);
 			doNothing().when(session).close();
 			
-			Flix flix = flixDaoImpl.getFlixById(1L);
+			Flix flix = flixDaoImpl.getById(1L);
 			
 			assertAll(
 					()->assertNull(flix)
@@ -123,15 +123,15 @@ class FlixDaoImplTest {
 	@Test
 	void flixDaoImpl_getFlixByIdEagger_ReturnFlix() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
 			
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(query).when(session).createQuery(Mockito.anyString(),Mockito.any());			
 			doReturn(flixTest).when(query).uniqueResult();
 			doNothing().when(session).close();
 			
-			Flix flix = flixDaoImpl.getFlixByIdEagger(1L);
+			Flix flix = flixDaoImpl.getByIdEagger(1L);
 			
 			assertAll(
 					()->assertNotNull(flix),
@@ -146,8 +146,8 @@ class FlixDaoImplTest {
 	@Test
 	void flixDaoImpl_saveFlix_ReturnFlix() {
 				
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(transTest).when(session).beginTransaction();	
 			doNothing().when(session).persist(Mockito.any(Flix.class));			
@@ -156,7 +156,7 @@ class FlixDaoImplTest {
 			doReturn(flixTest).when(session).get(Flix.class, flixTestId);
 			doNothing().when(session).close();
 		
-			Flix flix = flixDaoImpl.saveFlix(flixTest);
+			Flix flix = flixDaoImpl.save(flixTest);
 			
 			assertAll(
 					()->assertNotNull(flix),
@@ -177,8 +177,8 @@ class FlixDaoImplTest {
 	@Test
 	void flixDaoImpl_updateFlix_ReturnFlix() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(transTest).when(session).beginTransaction();
 			doReturn(flixTest).when(session).get(Flix.class, flixTestId);	
@@ -187,7 +187,7 @@ class FlixDaoImplTest {
 			doNothing().when(transTest).commit();
 			doNothing().when(session).close();
 			
-			Flix flix = flixDaoImpl.updateFlix(flixTestId, flixTest);
+			Flix flix = flixDaoImpl.update(flixTestId, flixTest);
 			
 			assertAll(
 					()->assertNotNull(flix),
@@ -207,8 +207,8 @@ class FlixDaoImplTest {
 	@Test
 	void flixDaoImpl_deleteFlix_ReturnVoid() {		
 	
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(transTest).when(session).beginTransaction();
 			doReturn(flixTest).when(session).get(Flix.class, flixTestId);
@@ -217,7 +217,7 @@ class FlixDaoImplTest {
 			doNothing().when(transTest).commit();
 			doNothing().when(session).close();
 			
-			flixDaoImpl.deleteFlix(flixTestId);
+			flixDaoImpl.delete(flixTestId);
 			
 			verify(sessionFactory,times(1)).openSession();
 			verify(session,times(1)).beginTransaction();
@@ -230,4 +230,27 @@ class FlixDaoImplTest {
 	}		
 	
 
+	@Test
+	void flixDaoImpl_getPersonByNameId_ReturnList() {
+		
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
+			doReturn(session).when(sessionFactory).openSession();	
+			doReturn(query).when(session).createQuery(Mockito.anyString(),Mockito.any());	
+			doReturn(List.of(flixTest)).when(query).list();	
+			doNothing().when(session).close();
+			
+			List<Flix>list = flixDaoImpl.getByName(flixTest.getTitle());
+			
+			assertAll(
+					()->assertNotNull(list),
+					()->Assertions.assertThat(list).hasSize(1)					
+					);
+			verify(sessionFactory,times(1)).openSession();
+			verify(session,times(1)).createQuery(Mockito.anyString(), Mockito.any());
+			verify(query,times(1)).list();
+			verify(session,times(1)).close();
+		}
+		
+	}
 }
