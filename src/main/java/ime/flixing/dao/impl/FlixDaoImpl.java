@@ -2,75 +2,100 @@ package ime.flixing.dao.impl;
 
 import java.util.List;
 
-import ime.flixing.dao.FlixDao;
+
+import ime.flixing.dao.GenericDao;
 import ime.flixing.entity.Flix;
 import ime.flixing.util.HibernateUtil;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
-public class FlixDaoImpl implements FlixDao{
+public class FlixDaoImpl implements GenericDao<Flix>{
 
-	@Override
-	public List<Flix> getAllFlix() {
-		Session session = HibernateUtil.getSession().openSession();
-		Query<Flix> query = session.createQuery("FROM Flix", Flix.class);
-		List<Flix>list = query.list();
-		session.close();
-		return list;
+	private final SessionFactory sessionFactory;	
+	
+	public FlixDaoImpl() {
+		super();
+		this.sessionFactory = HibernateUtil.getSession();
+	}
+
+	public FlixDaoImpl(SessionFactory sessionFactory) {
+		super();
+		this.sessionFactory = sessionFactory;
 	}
 
 	@Override
-	public Flix getFlixById(Long id) {
-		Session session = HibernateUtil.getSession().openSession();
-		Flix flixFound = session.get(Flix.class, id);
-		session.close();
-		return flixFound;
+	public List<Flix> getAll() {
+		
+		try(Session session = sessionFactory.openSession()){
+			Query<Flix> query = session.createQuery("FROM Flix", Flix.class);
+			return query.list();
+		}
 	}
 
 	@Override
-	public Flix saveFlix(Flix flix) {
-		Session session = HibernateUtil.getSession().openSession();
-		session.beginTransaction();
-		session.persist(flix);
-		session.getTransaction().commit();
-		Flix flixFound = session.get(Flix.class, flix.getFlixId());
-		session.close();
-		return flixFound;
+	public Flix getById(Long id) {
+		
+		try(Session session = sessionFactory.openSession()){
+			return session.get(Flix.class, id);
+		}
 	}
 
 	@Override
-	public Flix updateFlix(Long id, Flix flix) {
-		Session session = HibernateUtil.getSession().openSession();
-		session.beginTransaction();
-		Flix flixedo = session.get(Flix.class, id);
-		flixedo.setGenre(flix.getGenre());
-		flixedo.setTitle(flix.getTitle());
-		session.persist(flixedo);
-		session.getTransaction().commit();
-		Flix flixFound = session.get(Flix.class, id);
-		session.close();
-		return flixFound;
+	public Flix getByIdEagger(Long id) {
+
+		try(Session session = sessionFactory.openSession()){
+			Query<Flix> query = session.createQuery("SELECT f FROM Flix f LEFT JOIN FETCH f.flixPersonPosition WHERE f.flixId = :id", Flix.class);
+			query.setParameter("id", id);
+			return query.uniqueResult();
+		}
 	}
 
 	@Override
-	public void deleteFlix(Long id) {
-		Session session = HibernateUtil.getSession().openSession();
-		session.beginTransaction();
-		Flix flixFound = session.get(Flix.class, id);
-		session.remove(flixFound);
-		session.getTransaction().commit();
-        session.close();		
+	public Flix save(Flix entity) {
+
+		try(Session session = sessionFactory.openSession()){
+			session.beginTransaction();
+			session.persist(entity);
+			session.getTransaction().commit();
+			return session.get(Flix.class, entity.getFlixId());
+		}
 	}
 
 	@Override
-	public Flix getFlixByIdEagger(Long id) {
-		Session session = HibernateUtil.getSession().openSession();
-		Query<Flix> query = session.createQuery("SELECT f FROM Flix f LEFT JOIN FETCH f.flixPersonPosition WHERE f.flixId = :id", Flix.class);
-		query.setParameter("id", id);
-		Flix flixFound = query.uniqueResult();
-		session.close();
-		return flixFound;
+	public Flix update(Long id, Flix entity) {
+
+		try(Session session = sessionFactory.openSession()){
+			session.beginTransaction();
+			Flix flixedo = session.get(Flix.class, id);
+			flixedo.setGenre(entity.getGenre());
+			flixedo.setTitle(entity.getTitle());
+			session.persist(flixedo);
+			session.getTransaction().commit();
+			return session.get(Flix.class, id);
+		}
+	}
+
+	@Override
+	public void delete(Long id) {
+
+		try(Session session = sessionFactory.openSession()){
+			session.beginTransaction();
+			Flix flixFound = session.get(Flix.class, id);
+			session.remove(flixFound);
+			session.getTransaction().commit();
+		}
+	}
+
+	@Override
+	public List<Flix> getByName(String name) {
+
+		try(Session session = sessionFactory.openSession()){
+			Query<Flix> query = session.createQuery("FROM Flix f WHERE f.title = :name", Flix.class);
+			query.setParameter("name", name);
+			return query.list();
+		}
 	}
 
 }
