@@ -23,7 +23,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import ime.flixing.entity.Person;
-import ime.flixing.util.HibernateUtil;
+import ime.flixing.util.HibernateUtilTest;
 
 @ExtendWith(MockitoExtension.class)
 class PersonDaoImplTest {
@@ -58,14 +58,14 @@ class PersonDaoImplTest {
 	@Test
 	void personDaoImpl_getAllPerson_ReturnList() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(query).when(session).createQuery(Mockito.anyString(),Mockito.any());	
 			doReturn(List.of(personTest)).when(query).list();	
 			doNothing().when(session).close();
 			
-			List<Person>list = personDaoImpl.getAllPerson();
+			List<Person>list = personDaoImpl.getAll();
 			
 			assertAll(
 					()->assertNotNull(list),
@@ -81,13 +81,13 @@ class PersonDaoImplTest {
 	@Test
 	void personDaoImpl_getPersonById_ReturnPerson() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(personTest).when(session).get(Person.class, personTestId);
 			doNothing().when(session).close();
 			
-			Person person = personDaoImpl.getPersonById(personTestId);
+			Person person = personDaoImpl.getById(personTestId);
 			
 			assertAll(
 					()->assertNotNull(person),
@@ -102,13 +102,13 @@ class PersonDaoImplTest {
 	@Test
 	void personDaoImpl_getPersonById_ReturnNull() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(null).when(session).get(Person.class, personTestId);
 			doNothing().when(session).close();
 			
-			Person person = personDaoImpl.getPersonById(personTestId);
+			Person person = personDaoImpl.getById(personTestId);
 			
 			assertAll(
 					()->assertNull(person)
@@ -122,14 +122,14 @@ class PersonDaoImplTest {
 	@Test
 	void personDaoImpl_getPersonByIdEagger_ReturnPerson() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();		
 			doReturn(query).when(session).createQuery(Mockito.anyString(),Mockito.any());	
 			doReturn(personTest).when(query).uniqueResult();
 			doNothing().when(session).close();
 			
-			Person person = personDaoImpl.getPersonByIdEagger(personTestId);
+			Person person = personDaoImpl.getByIdEagger(personTestId);
 			
 			assertAll(
 					()->assertNotNull(person),
@@ -145,8 +145,8 @@ class PersonDaoImplTest {
 	@Test
 	void personDaoImpl_savePerson_ReturnPerson() {
 				
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(transTest).when(session).beginTransaction();	
 			doNothing().when(session).persist(Mockito.any(Person.class));			
@@ -155,7 +155,7 @@ class PersonDaoImplTest {
 			doReturn(personTest).when(session).get(Person.class, personTestId);
 			doNothing().when(session).close();
 		
-			Person person = personDaoImpl.savePerson(personTest);
+			Person person = personDaoImpl.save(personTest);
 			
 			assertAll(
 					()->assertNotNull(person),
@@ -176,8 +176,8 @@ class PersonDaoImplTest {
 	@Test
 	void personDaoImpl_updatePerson_ReturnPerson() {
 		
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(transTest).when(session).beginTransaction();
 			doReturn(personTest).when(session).get(Person.class, personTestId);	
@@ -186,7 +186,7 @@ class PersonDaoImplTest {
 			doNothing().when(transTest).commit();
 			doNothing().when(session).close();
 			
-			Person person = personDaoImpl.updatePerson(personTestId, personTest);
+			Person person = personDaoImpl.update(personTestId, personTest);
 			
 			assertAll(
 					()->assertNotNull(person),
@@ -206,8 +206,8 @@ class PersonDaoImplTest {
 	@Test
 	void personDaoImpl_deletePerson_ReturnVoid() {		
 	
-		try ( MockedStatic<HibernateUtil>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtil.class) ){
-			hibernateUtilAsserts.when(HibernateUtil::getSession).thenReturn(sessionFactory);
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
 			doReturn(session).when(sessionFactory).openSession();	
 			doReturn(transTest).when(session).beginTransaction();
 			doReturn(personTest).when(session).get(Person.class, personTestId);
@@ -216,7 +216,7 @@ class PersonDaoImplTest {
 			doNothing().when(transTest).commit();
 			doNothing().when(session).close();
 			
-			personDaoImpl.deletePerson(personTestId);
+			personDaoImpl.delete(personTestId);
 			
 			verify(sessionFactory,times(1)).openSession();
 			verify(session,times(1)).beginTransaction();
@@ -228,4 +228,28 @@ class PersonDaoImplTest {
 		}		
 	}
 
+
+	@Test
+	void personDaoImpl_getPersonByNameId_ReturnList() {
+		
+		try ( MockedStatic<HibernateUtilTest>hibernateUtilAsserts = Mockito.mockStatic(HibernateUtilTest.class) ){
+			hibernateUtilAsserts.when(HibernateUtilTest::getSession).thenReturn(sessionFactory);
+			doReturn(session).when(sessionFactory).openSession();	
+			doReturn(query).when(session).createQuery(Mockito.anyString(),Mockito.any());	
+			doReturn(List.of(personTest)).when(query).list();	
+			doNothing().when(session).close();
+			
+			List<Person>list = personDaoImpl.getByName(personTest.getName());
+			
+			assertAll(
+					()->assertNotNull(list),
+					()->Assertions.assertThat(list).hasSize(1)					
+					);
+			verify(sessionFactory,times(1)).openSession();
+			verify(session,times(1)).createQuery(Mockito.anyString(), Mockito.any());
+			verify(query,times(1)).list();
+			verify(session,times(1)).close();
+		}
+		
+	}
 }
