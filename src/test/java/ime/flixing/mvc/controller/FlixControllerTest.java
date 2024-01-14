@@ -147,7 +147,7 @@ class FlixControllerTest {
 	@Test
 	void PositionController_getAllFlix_ReturnOptListFlix() {
 		
-		doReturn(List.of(flixTest)).when(flixDaoImpl).getAllFlix();
+		doReturn(List.of(flixTest)).when(flixDaoImpl).getAll();
 		
 		Optional<List<Flix>>optListFlix = flixController.getAllFlix();
 		
@@ -157,7 +157,7 @@ class FlixControllerTest {
 				()->Assertions.assertThat(optListFlix.get().get(0).getFlixId()).isEqualTo(flixTestId),
 				()->Assertions.assertThat(optListFlix.get().get(0).getTitle()).isEqualTo(flixTestTitle)
 				);
-		verify(flixDaoImpl,times(1)).getAllFlix();		
+		verify(flixDaoImpl,times(1)).getAll();		
 		
 		
 	}
@@ -169,7 +169,7 @@ class FlixControllerTest {
 		
 		try (MockedStatic<Checker>mockChecker = Mockito.mockStatic(Checker.class)){
 			mockChecker.when( () -> Checker.checkDigits(Mockito.anyString()) ).thenReturn(true);
-			doReturn(flixTest).when(flixDaoImpl).getFlixById(Mockito.anyLong());
+			doReturn(flixTest).when(flixDaoImpl).getById(Mockito.anyLong());
 			
 			Optional<Flix>optFlix = flixController.getFlixById(flixTestIdStr);
 			
@@ -178,7 +178,7 @@ class FlixControllerTest {
 					()->Assertions.assertThat(optFlix.get().getFlixId()).isEqualTo(flixTestId),
 					()->Assertions.assertThat(optFlix.get().getTitle()).isEqualTo(flixTestTitle)
 					);
-			verify(flixDaoImpl,times(1)).getFlixById(Mockito.anyLong());
+			verify(flixDaoImpl,times(1)).getById(Mockito.anyLong());
 			mockChecker.verify(() -> Checker.checkDigits(Mockito.anyString()), times(1));
 		}		
 	}
@@ -207,7 +207,7 @@ class FlixControllerTest {
 			mockChecker.when( () -> Checker.checkFlixTitle(Mockito.anyString()) ).thenReturn(true);
 			doReturn(genreTest).when(genreDaoImpl).getById(Mockito.anyLong());
 			flixTest.setGenre(genreTest);
-			doReturn(flixTest).when(flixDaoImpl).saveFlix(Mockito.any(Flix.class));
+			doReturn(flixTest).when(flixDaoImpl).save(Mockito.any(Flix.class));
 			
 			Optional<Flix>optFlix = flixController.saveFlix(Mockito.anyString(), genreTestIdStr);
 
@@ -217,7 +217,7 @@ class FlixControllerTest {
 					()->Assertions.assertThat(optFlix.get().getGenre().getGenreId()).isEqualTo(genreTestId)
 					);
 			verify(genreDaoImpl,times(1)).getById(Mockito.anyLong());
-			verify(flixDaoImpl,times(1)).saveFlix(Mockito.any(Flix.class));
+			verify(flixDaoImpl,times(1)).save(Mockito.any(Flix.class));
 			mockChecker.verify(() -> Checker.checkFlixTitle(Mockito.anyString()), times(1));	
 			mockChecker.verify(() -> Checker.checkDigits(Mockito.anyString()), times(1));	
 		}
@@ -233,7 +233,7 @@ class FlixControllerTest {
 			mockChecker.when( () -> Checker.checkFlixTitle(Mockito.anyString()) ).thenReturn(true);	
 			doReturn(genreTest).when(genreDaoImpl).getById(Mockito.anyLong());
 			flixTest.setGenre(genreTest);
-			doReturn(flixTest).when(flixDaoImpl).updateFlix( Mockito.anyLong(), Mockito.any(Flix.class) );
+			doReturn(flixTest).when(flixDaoImpl).update( Mockito.anyLong(), Mockito.any(Flix.class) );
 			
 			Optional<Flix>optFlix = flixController.updateFlix(genreTestIdStr, "", flixTestIdStr);
 			
@@ -243,7 +243,7 @@ class FlixControllerTest {
 					()->Assertions.assertThat(optFlix.get().getGenre().getGenreId()).isEqualTo(genreTestId)
 					);
 			verify(genreDaoImpl,times(1)).getById(Mockito.anyLong());
-			verify(flixDaoImpl,times(1)).updateFlix( Mockito.anyLong(), Mockito.any(Flix.class) );
+			verify(flixDaoImpl,times(1)).update( Mockito.anyLong(), Mockito.any(Flix.class) );
 			mockChecker.verify(() -> Checker.checkFlixTitle(Mockito.anyString()), times(1));	
 			mockChecker.verify(() -> Checker.checkDigits(Mockito.anyString()), times(2));	
 		}		
@@ -255,15 +255,15 @@ class FlixControllerTest {
 		
 		try (MockedStatic<Checker>mockChecker = Mockito.mockStatic(Checker.class)){
 			mockChecker.when( () -> Checker.checkDigits(Mockito.anyString()) ).thenReturn(true);
-			doReturn(flixTest).when(flixDaoImpl).getFlixByIdEagger(Mockito.anyLong());
+			doReturn(flixTest).when(flixDaoImpl).getByIdEagger(Mockito.anyLong());
 			
 			int returnValue = flixController.deleteFlix(flixTestIdStr);
 			
 			assertAll(
 					()->Assertions.assertThat(returnValue).isZero()
 					);
-			verify(flixDaoImpl,times(1)).getFlixByIdEagger(Mockito.anyLong());
-			verify(flixDaoImpl,times(1)).deleteFlix(Mockito.anyLong());
+			verify(flixDaoImpl,times(1)).getByIdEagger(Mockito.anyLong());
+			verify(flixDaoImpl,times(1)).delete(Mockito.anyLong());
 			mockChecker.verify(() -> Checker.checkDigits(Mockito.anyString()), times(1));
 		}
 	}
@@ -274,14 +274,14 @@ class FlixControllerTest {
 		try (MockedStatic<Checker>mockChecker = Mockito.mockStatic(Checker.class)){
 			mockChecker.when( () -> Checker.checkDigits(Mockito.anyString()) ).thenReturn(true);
 			flixTest.getFlixPersonPosition().add(new FlixPersonPosition());
-			doReturn(flixTest).when(flixDaoImpl).getFlixByIdEagger(Mockito.anyLong());
+			doReturn(flixTest).when(flixDaoImpl).getByIdEagger(Mockito.anyLong());
 			
 			int returnValue = flixController.deleteFlix(flixTestIdStr);
 			
 			assertAll(
 					()->Assertions.assertThat(returnValue).isEqualTo(-2L)
 					);
-			verify(flixDaoImpl,times(1)).getFlixByIdEagger(Mockito.anyLong());
+			verify(flixDaoImpl,times(1)).getByIdEagger(Mockito.anyLong());
 			mockChecker.verify(() -> Checker.checkDigits(Mockito.anyString()), times(1));
 		}
 	}
